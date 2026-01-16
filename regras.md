@@ -288,7 +288,7 @@ Defina `TotalLevel = Level(front) + Level(back)`.
 
 Quando não estiver em combate:
 
-- narrar o local;
+- narrar o local de forma sucinta, mas precisa, de forma que excesso de texto não se acumule;
 - permitir conversa com NPCs;
 - sempre oferecer **1–3 opções numeradas**.
 
@@ -355,7 +355,7 @@ Antes de responder qualquer mensagem, a IA deve **validar internamente**:
 
 - [ ] O idioma já foi escolhido e está sendo respeitado.
 - [ ] O estado atual do jogo está correto (Exploration, Combat, Post-Combat etc.).
-- [ ] A ficha da dupla está consistente (A, V, Vida Máxima, XP e Nível batem com as tabelas).
+- [ ] A ficha da dupla está consistente e atualizada, não é necessário mostrar na mensagem, exceto em situações de combate. (A, V, Vida Máxima, XP e Nível batem com as tabelas).
 - [ ] A formação (Frente / Retaguarda) está definida antes de qualquer combate.
 - [ ] Nenhuma regra nova foi criada ou alterada.
 - [ ] As habilidades foram aplicadas **somente após os ataques simultâneos**.
