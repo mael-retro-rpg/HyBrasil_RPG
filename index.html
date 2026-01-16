@@ -99,6 +99,60 @@
         
         .error-msg { color: #ff5555; border: 1px solid #ff5555; padding: 10px; margin-top: 10px; border-radius: 5px; }
         .system-msg { color: #888; font-style: italic; font-size: 0.9em; text-align: center; margin: 10px 0; }
+
+        /* --- VERSÃO MOBILE / TABLET (Responsividade) --- */
+        @media (max-width: 900px) {
+            /* Muda o layout do corpo para coluna (um em cima do outro) */
+            body { 
+                flex-direction: column; 
+                padding: 10px; 
+                align-items: center;
+            }
+
+            /* O HUD deixa de flutuar na direita e vai para o topo */
+            #hud-container {
+                position: relative;
+                top: auto; right: auto;
+                width: 100%;
+                flex-direction: row; /* Personagens lado a lado */
+                margin-bottom: 15px;
+                gap: 10px;
+            }
+
+            /* Ajusta os cartões para dividir o espaço igualmente */
+            .char-card {
+                flex: 1; /* Ocupa 50% cada */
+                font-size: 0.9em; /* Texto um pouco menor */
+            }
+
+            /* Imagens menores para economizar tela */
+            .char-portrait {
+                height: 100px; 
+                object-position: top center; /* Foca no rosto */
+            }
+
+            /* Remove o espaço que era reservado para o HUD no Desktop */
+            #main-container {
+                padding-right: 0;
+                width: 100%;
+            }
+
+            /* Ajusta altura do chat para sobrar espaço para o teclado virtual */
+            #chat-box {
+                height: 50vh; 
+            }
+
+            /* Botões do menu menores e roláveis se precisar */
+            #menu-bar {
+                justify-content: space-between;
+                overflow-x: auto;
+            }
+            
+            /* Previne zoom automático irritante no iPhone ao clicar no input */
+            input[type="text"], input[type="password"] {
+                font-size: 16px; 
+            }
+        }
     </style>
 </head>
 <body>
@@ -447,6 +501,7 @@
 </body>
 
 </html>
+
 
 
 
