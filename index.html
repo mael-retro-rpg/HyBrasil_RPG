@@ -56,8 +56,13 @@
         }
 
         .char-portrait {
-            width: 100%; height: 200px; object-fit: cover; object-position: top center;
-            background-color: #000; border-radius: 4px; margin-bottom: 8px; border-bottom: 1px solid #444;
+            width: 100%; 
+            height: 200px; 
+            object-fit: contain; /* Mudei de cover para contain para não cortar o personagem */
+            object-position: bottom center; /* Alinha o personagem na base */
+            background-color: transparent; /* AQUI ESTÁ O SEGREDO */
+            margin-bottom: 0;
+            filter: drop-shadow(0px 5px 5px rgba(236, 64, 122, 0.8)); /* Adiciona sombra no recorte do PNG */
         }
 
         .char-card h3 { margin: 0 0 2px 0; font-size: 1.1em; color: #fff; }
@@ -400,4 +405,5 @@
         checkSavedKey();
     </script>
 </body>
+
 </html>
