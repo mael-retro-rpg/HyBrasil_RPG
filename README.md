@@ -4,7 +4,11 @@
 [![Engine](https://img.shields.io/badge/Powered%20By-Google%20Gemini-blue)](https://deepmind.google/technologies/gemini/)
 [![License](https://img.shields.io/badge/License-MIT-green)]()
 
-[Page/Página](https://mael-retro-rpg.github.io/HyBrasil_RPG/)
+<div align="center">
+
+[![PLAY NOW](https://img.shields.io/badge/🎮%20PLAY%20NOW-Click%20Here%20to%20Start-red?style=for-the-badge&logo=google-chrome)](https://SEU_USUARIO.github.io/NOME_DO_REPOSITORIO/)
+
+</div>
 
 [🇺🇸 English](#english) | [🇧🇷 Português](#português)
 
