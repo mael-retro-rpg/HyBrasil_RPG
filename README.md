@@ -6,7 +6,7 @@
 
 <div align="center">
 
-[![PLAY NOW](https://img.shields.io/badge/🎮%20PLAY%20NOW-Click%20Here%20to%20Start-red?style=for-the-badge&logo=google-chrome)](https://SEU_USUARIO.github.io/NOME_DO_REPOSITORIO/)
+[![PLAY NOW](https://img.shields.io/badge/🎮%20PLAY%20NOW-Click%20Here%20to%20Start-red?style=for-the-badge&logo=google-chrome)](https://mael-retro-rpg.github.io/HyBrasil_RPG/)
 
 </div>
 
