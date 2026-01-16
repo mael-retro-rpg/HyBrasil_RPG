@@ -419,7 +419,7 @@
             c = c.toLowerCase();
             let l = 'W';
             if (c.includes('caça') || c.includes('hunt')) l = 'H';
-            else if (c.includes('mago') || c.includes('mage')) l = 'M';
+            else if (c.includes('mag') || c.includes('mage')) l = 'M';
             else if (c.includes('clér') || c.includes('cler')) l = 'C';
             else if (c.includes('pala')) l = 'P';
             return `${l}_${(g && g.toUpperCase() === 'F') ? 'F' : 'M'}.png`;
@@ -462,4 +462,5 @@
 </body>
 
 </html>
+
 
