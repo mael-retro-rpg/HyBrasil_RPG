@@ -1,14 +1,14 @@
 # ⚔️ HyBrasil RPG - AI Text Adventure Engine
 
-[![Author](https://img.shields.io/badge/Author-Mael%20Retro%20RPG-purple)](https://github.com/mael-retro-rpg)
-[![Engine](https://img.shields.io/badge/Powered%20By-Google%20Gemini-blue)](https://deepmind.google/technologies/gemini/)
-[![License](https://img.shields.io/badge/License-MIT-green)]()
-
 <div align="center">
 
 [![PLAY NOW](https://img.shields.io/badge/🎮%20PLAY%20NOW-Click%20Here%20to%20Start-red?style=for-the-badge&logo=google-chrome)](https://mael-retro-rpg.github.io/HyBrasil_RPG/)
 
 </div>
+
+[![Author](https://img.shields.io/badge/Author-Mael%20Retro%20RPG-purple)](https://github.com/mael-retro-rpg)
+[![Engine](https://img.shields.io/badge/Powered%20By-Google%20Gemini-blue)](https://deepmind.google/technologies/gemini/)
+[![License](https://img.shields.io/badge/License-MIT-green)]()
 
 [🇺🇸 English](#english) | [🇧🇷 Português](#português)
 
@@ -32,11 +32,8 @@ Developed by **Mael Retro RPG**, this project demonstrates how to integrate Gene
 
 ### 🚀 How to Play
 1.  **Get an API Key:** You need a free Google Gemini API Key from [Google AI Studio](https://aistudio.google.com/app/apikey).
-2.  **Run the Game:**
-    * **Option A (Online):** Access the GitHub Pages link (if configured).
-    * **Option B (Local):** Clone this repository and open it using a local server (like Live Server for VS Code or Python `http.server`).
-    * *Note: Due to browser security (CORS), you cannot simply double-click the `index.html` file to run it locally if it fetches external files.*
-3.  **Enter Key:** Paste your API Key on the login screen.
+2.  **Start the Game:** Click the **PLAY NOW** button at the top of this page.
+3.  **Login:** Paste your API Key on the login screen.
 4.  **Play:** Create your party (e.g., "Warrior and Mage") and explore HyBrasil!
 
 ### 📂 File Structure
@@ -64,10 +61,7 @@ Desenvolvido por **Mael Retro RPG**, este projeto demonstra como integrar IA Gen
 
 ### 🚀 Como Jogar
 1.  **Obtenha uma Chave API:** Você precisa de uma chave gratuita do Google Gemini no [Google AI Studio](https://aistudio.google.com/app/apikey).
-2.  **Rode o Jogo:**
-    * **Opção A (Online):** Acesse o link do GitHub Pages (se configurado).
-    * **Opção B (Local):** Clone este repositório e abra usando um servidor local (como a extensão "Live Server" do VS Code ou Python).
-    * *Nota: Devido à segurança dos navegadores (CORS), o jogo pode não carregar as regras se você apenas clicar duas vezes no arquivo `index.html`.*
+2.  **Inicie o Jogo:** Clique no botão vermelho **PLAY NOW** no topo desta página.
 3.  **Login:** Cole sua Chave API na tela inicial.
 4.  **Jogue:** Crie sua dupla (ex: "Guerreiro e Mago") e explore HyBrasil!
 
