@@ -295,6 +295,7 @@ Quando não estiver em combate:
 ### 11.2 Gatilho de combate
 
 - Combate deve acontecer quando o jogador escolher uma opção arriscada **ou** após 1–3 interações de exploração.
+- O jogador deve ser avisado do combate para que haja a opção de combater ou fugir.
 
 ### 11.3 NPCs
 
