@@ -144,7 +144,7 @@ Em cada turno:
 
 > As habilidades são sempre ativas. **Efeitos de dano/cura são aplicados após os ataques** (fase “After Attacks”), para evitar ambiguidades de alvo quando a linha de frente cai.
 
-- **Fury (Warrior):** a partir do segundo ataque da dupla no combate, causa **dano adicional** igual ao **Nível** (aplicado após os ataques) ao inimigo na Frente (ou ao próximo da fila se a Frente cair).
+- **Fury (Warrior):** aumenta o **Ataque** do próprio personagem em um valor igual ao **Nível**, esse bônus não é acumulativo.
 - **Precision (Hunter):** ataca da retaguarda causando dano igual ao **Nível** (após os ataques) ao inimigo na Frente (ou ao próximo da fila se a Frente cair).
 - **Magic (Mage):** ataca da retaguarda causando dano igual ao **Ataque** (após os ataques) ao inimigo na Frente (ou ao próximo da fila se a Frente cair).
 - **Cure (Cleric):** recupera Vida igual ao **Nível** (após os ataques) de quem estiver na Frente.
