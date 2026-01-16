@@ -238,11 +238,13 @@
             document.getElementById('img-2').style.display = 'none';
 
             addRawMessage("⚔️ Iniciando nova aventura...", "system-msg");
-            // Função auxiliar para o código "dormir" (esperar)
+            CallGemini()
+
+            // Função auxiliar para esperar (sleep)
         const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
         async function callGemini(retryCount = 0) {
-            // Trava os botões
+            // Trava os botões para você não clicar de novo sem querer
             inputField.disabled = true; 
             sendBtn.disabled = true;
 
@@ -257,18 +259,52 @@
 
                 const data = await response.json();
 
-                // --- LÓGICA DE AUTO-RETRY (A Mágica acontece aqui) ---
+                // --- LÓGICA DE AUTO-RETRY (ATUALIZADA) ---
                 if (!response.ok) {
-                    // Se o erro for "Too Many Requests" (429) ou erro de Cota
+                    // Erro 429 = Muitas requisições (Quota Exceeded)
                     if (response.status === 429 || (data.error && data.error.message.includes("quota"))) {
-                        if (retryCount < 3) { // Tenta no máximo 3 vezes
-                            addRawMessage(`⏳ Limite de velocidade atingido. Aguardando 10 segundos para tentar novamente... (Tentativa ${retryCount + 1}/3)`, "system-msg");
-                            await sleep(20000); // Espera 20 segundos
+                        if (retryCount < 2) { // Tenta mais 2 vezes
+                            // O erro pediu 35s, então vamos esperar 40s para garantir
+                            let waitTime = 40; 
+                            
+                            // Cria uma mensagem temporária de contagem regressiva
+                            addRawMessage(`⏳ Limite do Google atingido. Resfriando motores...`, "system-msg");
+                            const countdownDiv = chatBox.lastElementChild; // Pega a última msg para atualizar
+                            
+                            while (waitTime > 0) {
+                                countdownDiv.innerText = `⏳ Limite do Google atingido. Retomando em ${waitTime}s...`;
+                                await sleep(1000); // Espera 1 segundo real
+                                waitTime--;
+                            }
+
+                            countdownDiv.innerText = `🔄 Retomando conexão agora...`;
                             return callGemini(retryCount + 1); // Tenta de novo!
                         }
                     }
                     throw new Error(data.error?.message || "Erro API");
                 }
+                // -----------------------------------------------------
+
+                let aiText = data.candidates[0].content.parts[0].text;
+                aiText = processHUD(aiText);
+                history.push({ role: "model", parts: [{ text: aiText }] });
+                await typeWriterEffect(aiText, "ai-msg");
+
+            } catch (error) {
+                console.error(error);
+                addRawMessage(`❌ Erro: ${error.message}`, "error-msg");
+                
+                if(error.message.includes("key") || error.message.includes("403")) {
+                    alert("Erro de autenticação ou Chave inválida.");
+                    loginScreen.style.display = 'flex';
+                }
+            }
+            
+            // Destrava tudo
+            inputField.disabled = false; 
+            sendBtn.disabled = false; 
+            inputField.focus();
+        }
                 // -----------------------------------------------------
 
                 let aiText = data.candidates[0].content.parts[0].text;
@@ -462,5 +498,6 @@
 </body>
 
 </html>
+
 
 
