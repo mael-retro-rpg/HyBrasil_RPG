@@ -238,7 +238,62 @@
             document.getElementById('img-2').style.display = 'none';
 
             addRawMessage("⚔️ Iniciando nova aventura...", "system-msg");
-            callGemini();
+            // Função auxiliar para o código "dormir" (esperar)
+        const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+        async function callGemini(retryCount = 0) {
+            // Trava os botões
+            inputField.disabled = true; 
+            sendBtn.disabled = true;
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: history })
+                });
+
+                const data = await response.json();
+
+                // --- LÓGICA DE AUTO-RETRY (A Mágica acontece aqui) ---
+                if (!response.ok) {
+                    // Se o erro for "Too Many Requests" (429) ou erro de Cota
+                    if (response.status === 429 || (data.error && data.error.message.includes("quota"))) {
+                        if (retryCount < 3) { // Tenta no máximo 3 vezes
+                            addRawMessage(`⏳ Limite de velocidade atingido. Aguardando 10 segundos para tentar novamente... (Tentativa ${retryCount + 1}/3)`, "system-msg");
+                            await sleep(20000); // Espera 20 segundos
+                            return callGemini(retryCount + 1); // Tenta de novo!
+                        }
+                    }
+                    throw new Error(data.error?.message || "Erro API");
+                }
+                // -----------------------------------------------------
+
+                let aiText = data.candidates[0].content.parts[0].text;
+                
+                // Processa o HUD e o Texto
+                aiText = processHUD(aiText);
+                
+                history.push({ role: "model", parts: [{ text: aiText }] });
+                await typeWriterEffect(aiText, "ai-msg");
+
+            } catch (error) {
+                console.error(error);
+                addRawMessage(`❌ Erro: ${error.message}`, "error-msg");
+                
+                if(error.message.includes("key") || error.message.includes("403")) {
+                    alert("Erro de autenticação. Verifique sua chave.");
+                    loginScreen.style.display = 'flex';
+                }
+            }
+            
+            // Destrava os botões
+            inputField.disabled = false; 
+            sendBtn.disabled = false; 
+            inputField.focus();
+        }
         }
 
         // --- SAVE / LOAD ---
@@ -407,3 +462,4 @@
 </body>
 
 </html>
+
