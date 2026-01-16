@@ -123,6 +123,7 @@ Em cada turno:
 
 - Frente do jogador causa dano = `A_front_player` na Frente inimiga.
 - Frente inimiga causa dano = `A_front_enemy` na Frente do jogador.
+- Como os ataques são simultâneos, mesmo que um seja derrotado no turno, ele causa dano.
 
 2. **Aplicar Habilidades (sempre depois dos ataques)**
 
