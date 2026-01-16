@@ -162,10 +162,10 @@
         // --- CONFIGURAÇÃO ---
         let API_KEY = ""; 
         const MODEL_NAME = "gemini-2.5-flash"; 
-        const RULES_FILENAME = "regras.md"; // O NOME DO SEU ARQUIVO AQUI
+        const RULES_FILENAME = "regras.md"; 
 
         // Variáveis Globais
-        let BASE_SYSTEM = ""; // O texto será carregado aqui automaticamente
+        let BASE_SYSTEM = ""; 
         let history = []; 
         
         // Elementos DOM
@@ -184,11 +184,10 @@
                 console.log("Regras carregadas com sucesso!");
             } catch (error) {
                 console.error(error);
-                alert(`ERRO CRÍTICO:\nNão foi possível ler o arquivo '${RULES_FILENAME}'.\n\nMOTIVO:\n1. O arquivo não está na mesma pasta.\n2. Ou você abriu o HTML clicando direto (CORS). Use o GitHub Pages ou um Local Server.`);
+                alert(`ERRO CRÍTICO:\nNão foi possível ler o arquivo '${RULES_FILENAME}'.\n\nCertifique-se de que:\n1. O arquivo 'regras.md' está na mesma pasta.\n2. Você está usando um Servidor Local ou GitHub Pages (não abra clicando direto no arquivo).`);
             }
         }
 
-        // Carrega as regras assim que a página abre
         loadRules();
 
         const TECHNICAL_INSTRUCTION = `
@@ -205,7 +204,7 @@
         \`\`\`
         `;
 
-        // --- FUNÇÕES DE JOGO ---
+        // --- FUNÇÕES DE CONTROLE ---
 
         function confirmNewGame() {
             if (confirm("Isso apagará o progresso atual. Deseja iniciar uma nova aventura?")) {
@@ -225,7 +224,6 @@
                 return;
             }
 
-            // Monta o prompt final juntando o arquivo lido + instruções técnicas
             const FULL_PROMPT = BASE_SYSTEM + "\n" + TECHNICAL_INSTRUCTION;
 
             chatBox.innerHTML = '';
@@ -238,13 +236,16 @@
             document.getElementById('img-2').style.display = 'none';
 
             addRawMessage("⚔️ Iniciando nova aventura...", "system-msg");
-            CallGemini()
+            
+            // Chama a função principal (Corrigido: minúsculo)
+            callGemini();
+        }
 
-            // Função auxiliar para esperar (sleep)
+        // Função auxiliar para esperar (sleep)
         const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
+        // --- CONEXÃO COM GEMINI (Com Retry Automático) ---
         async function callGemini(retryCount = 0) {
-            // Trava os botões para você não clicar de novo sem querer
             inputField.disabled = true; 
             sendBtn.disabled = true;
 
@@ -259,31 +260,26 @@
 
                 const data = await response.json();
 
-                // --- LÓGICA DE AUTO-RETRY (ATUALIZADA) ---
+                // LÓGICA DE AUTO-RETRY (Erro 429/Quota)
                 if (!response.ok) {
-                    // Erro 429 = Muitas requisições (Quota Exceeded)
                     if (response.status === 429 || (data.error && data.error.message.includes("quota"))) {
-                        if (retryCount < 2) { // Tenta mais 2 vezes
-                            // O erro pediu 35s, então vamos esperar 40s para garantir
+                        if (retryCount < 2) { 
                             let waitTime = 40; 
-                            
-                            // Cria uma mensagem temporária de contagem regressiva
                             addRawMessage(`⏳ Limite do Google atingido. Resfriando motores...`, "system-msg");
-                            const countdownDiv = chatBox.lastElementChild; // Pega a última msg para atualizar
+                            const countdownDiv = chatBox.lastElementChild;
                             
                             while (waitTime > 0) {
                                 countdownDiv.innerText = `⏳ Limite do Google atingido. Retomando em ${waitTime}s...`;
-                                await sleep(1000); // Espera 1 segundo real
+                                await sleep(1000); 
                                 waitTime--;
                             }
 
                             countdownDiv.innerText = `🔄 Retomando conexão agora...`;
-                            return callGemini(retryCount + 1); // Tenta de novo!
+                            return callGemini(retryCount + 1); 
                         }
                     }
                     throw new Error(data.error?.message || "Erro API");
                 }
-                // -----------------------------------------------------
 
                 let aiText = data.candidates[0].content.parts[0].text;
                 aiText = processHUD(aiText);
@@ -300,36 +296,9 @@
                 }
             }
             
-            // Destrava tudo
             inputField.disabled = false; 
             sendBtn.disabled = false; 
             inputField.focus();
-        }
-                // -----------------------------------------------------
-
-                let aiText = data.candidates[0].content.parts[0].text;
-                
-                // Processa o HUD e o Texto
-                aiText = processHUD(aiText);
-                
-                history.push({ role: "model", parts: [{ text: aiText }] });
-                await typeWriterEffect(aiText, "ai-msg");
-
-            } catch (error) {
-                console.error(error);
-                addRawMessage(`❌ Erro: ${error.message}`, "error-msg");
-                
-                if(error.message.includes("key") || error.message.includes("403")) {
-                    alert("Erro de autenticação. Verifique sua chave.");
-                    loginScreen.style.display = 'flex';
-                }
-            }
-            
-            // Destrava os botões
-            inputField.disabled = false; 
-            sendBtn.disabled = false; 
-            inputField.focus();
-        }
         }
 
         // --- SAVE / LOAD ---
@@ -372,54 +341,15 @@
             input.value = '';
         }
 
-        // --- CONEXÃO E LÓGICA ---
-        function checkSavedKey() {
-            const savedKey = localStorage.getItem("hybrasil_api_key");
-            if (savedKey) {
-                document.getElementById('api-key-input').value = savedKey;
-                API_KEY = savedKey; 
-            }
-        }
-        
-        function saveKeyAndStart() {
-            const inputKey = document.getElementById('api-key-input').value.trim();
-            if (inputKey.length < 10) return alert("Chave inválida!");
-            API_KEY = inputKey;
-            localStorage.setItem("hybrasil_api_key", API_KEY);
-            loginScreen.style.display = 'none';
-            hudContainer.style.display = 'flex';
-            startNewGame();
-        }
-
-        async function callGemini() {
-            inputField.disabled = true; sendBtn.disabled = true;
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: history })
-                });
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.error?.message || "Erro API");
-                
-                let aiText = data.candidates[0].content.parts[0].text;
-                aiText = processHUD(aiText);
-                history.push({ role: "model", parts: [{ text: aiText }] });
-                await typeWriterEffect(aiText, "ai-msg");
-            } catch (error) {
-                addRawMessage(`❌ Erro: ${error.message}`, "error-msg");
-                if (error.message.includes("key") || error.message.includes("403")) loginScreen.style.display = 'flex';
-            }
-            inputField.disabled = false; sendBtn.disabled = false; inputField.focus();
-        }
-
         // --- HUD E VISUAL ---
         function processHUD(text) {
-            const match = text.match(/```json_stats([\s\S]*?)```/);
+            const regex = /```json_stats([\s\S]*?)```/;
+            const match = text.match(regex);
             if (match && match[1]) {
                 try {
                     const stats = JSON.parse(match[1]);
                     updateCard(1, stats.p1); updateCard(2, stats.p2);
-                    return text.replace(match[0], "").trim();
+                    return text.replace(regex, "").trim();
                 } catch (e) { return text; }
             }
             return text;
@@ -461,6 +391,25 @@
             return `${l}_${(g && g.toUpperCase() === 'F') ? 'F' : 'M'}.png`;
         }
 
+        // --- UTILITÁRIOS ---
+        function checkSavedKey() {
+            const savedKey = localStorage.getItem("hybrasil_api_key");
+            if (savedKey) {
+                document.getElementById('api-key-input').value = savedKey;
+                API_KEY = savedKey; 
+            }
+        }
+        
+        function saveKeyAndStart() {
+            const inputKey = document.getElementById('api-key-input').value.trim();
+            if (inputKey.length < 10) return alert("Chave inválida!");
+            API_KEY = inputKey;
+            localStorage.setItem("hybrasil_api_key", API_KEY);
+            loginScreen.style.display = 'none';
+            hudContainer.style.display = 'flex';
+            startNewGame();
+        }
+
         async function typeWriterEffect(text, className) {
             const div = document.createElement('div');
             div.className = className + " typing-cursor";
@@ -498,6 +447,7 @@
 </body>
 
 </html>
+
 
 
 
