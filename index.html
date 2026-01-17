@@ -73,7 +73,20 @@
         .hp-bar-fill { height: 100%; background: #d32f2f; width: 100%; transition: width 0.5s; }
         .hp-text { font-size: 0.8em; font-weight: bold; }
         .card-back { border-left-color: #2196f3; opacity: 0.85; transform: scale(0.95); transform-origin: right top; }
-
+        
+        /* Imagem do Vilão no Chat */
+        .chat-boss-img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+            margin: 15px auto;
+            display: block;
+            border: 2px solid #ff5555;
+            box-shadow: 0 0 15px rgba(236, 64, 122, 0.8);
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
         /* --- ÁREA DO CHAT --- */
         #main-container { width: 100%; max-width: 800px; padding-right: 0; }
         @media (min-width: 1100px) { #main-container { padding-right: 280px; } }
@@ -239,24 +252,31 @@
                 console.log("Regras carregadas com sucesso!");
             } catch (error) {
                 console.error(error);
-                alert(`ERRO CRÍTICO:\nNão foi possível ler o arquivo '${RULES_FILENAME}'.\n\nCertifique-se de que:\n1. O arquivo 'regras.md' está na mesma pasta.\n2. Você está usando um Servidor Local ou GitHub Pages (não abra clicando direto no arquivo).`);
+                alert(`ERRO CRÍTICO:\nNão foi possível ler o arquivo '${RULES_FILENAME}'.\nCertifique-se de que o arquivo existe e você está usando um servidor local/GitHub Pages.`);
             }
         }
 
         loadRules();
 
         const TECHNICAL_INSTRUCTION = `
-        IMPORTANTE - INTEGRAÇÃO VISUAL:
+        IMPORTANTE - INTEGRAÇÃO VISUAL E NARRATIVA:
         No final ABSOLUTO de cada resposta, inclua um bloco JSON atualizado.
-        Você DEVE incluir o campo "genero" (M ou F) baseado no nome/descrição do personagem.
         
-        Use estritamente este formato:
+        REGRAS DE VILÕES (BOSS):
+        1. Se um dos 4 Grandes Senhores aparecer pela primeira vez, adicione o campo "boss_visual": "NomeEmIngles" (ex: "HiveQueen") no JSON.
+        2. NÃO inicie o combate imediatamente. Inicie uma CENA DE DIÁLOGO/TENSÃO.
+        3. O diálogo/interação pré-combate deve durar NO MÁXIMO 5 rodadas de conversa.
+        4. Se o jogador não atacar antes, no 6º turno o vilão ataca obrigatoriamente.
+        
+        Use estritamente este formato JSON:
         \`\`\`json_stats
         {
           "p1": { "nome": "Nome", "classe": "Classe", "genero": "M", "hp_atual": 3, "hp_max": 3, "posicao": "Frente" },
-          "p2": { "nome": "Nome", "classe": "Classe", "genero": "F", "hp_atual": 4, "hp_max": 4, "posicao": "Trás" }
+          "p2": { "nome": "Nome", "classe": "Classe", "genero": "F", "hp_atual": 4, "hp_max": 4, "posicao": "Trás" },
+          "boss_visual": null 
         }
         \`\`\`
+        (Nota: "boss_visual" deve ser null na maioria das vezes, preencha apenas na rodada de aparição).
         `;
 
         // --- FUNÇÕES DE CONTROLE ---
@@ -275,7 +295,7 @@
             }
 
             if (!BASE_SYSTEM || BASE_SYSTEM.length < 50) {
-                alert("Erro: As regras do jogo não foram carregadas. Verifique se 'regras.md' está na pasta.");
+                alert("Erro: Regras não carregadas. Verifique 'regras.md'.");
                 return;
             }
 
@@ -291,18 +311,15 @@
             document.getElementById('img-2').style.display = 'none';
 
             addRawMessage("⚔️ Iniciando nova aventura...", "system-msg");
-            
-            // Chama a função principal (Corrigido: minúsculo)
             callGemini();
         }
 
         // Função auxiliar para esperar (sleep)
         const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
-        // --- CONEXÃO COM GEMINI (Com Retry Automático) ---
+        // --- CONEXÃO COM GEMINI ---
         async function callGemini(retryCount = 0) {
-            inputField.disabled = true; 
-            sendBtn.disabled = true;
+            inputField.disabled = true; sendBtn.disabled = true;
 
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${API_KEY}`;
 
@@ -315,20 +332,18 @@
 
                 const data = await response.json();
 
-                // LÓGICA DE AUTO-RETRY (Erro 429/Quota)
+                // LÓGICA DE AUTO-RETRY
                 if (!response.ok) {
                     if (response.status === 429 || (data.error && data.error.message.includes("quota"))) {
                         if (retryCount < 2) { 
                             let waitTime = 40; 
                             addRawMessage(`⏳ Limite do Google atingido. Resfriando motores...`, "system-msg");
                             const countdownDiv = chatBox.lastElementChild;
-                            
                             while (waitTime > 0) {
                                 countdownDiv.innerText = `⏳ Limite do Google atingido. Retomando em ${waitTime}s...`;
                                 await sleep(1000); 
                                 waitTime--;
                             }
-
                             countdownDiv.innerText = `🔄 Retomando conexão agora...`;
                             return callGemini(retryCount + 1); 
                         }
@@ -337,77 +352,83 @@
                 }
 
                 let aiText = data.candidates[0].content.parts[0].text;
-                aiText = processHUD(aiText);
-                history.push({ role: "model", parts: [{ text: aiText }] });
-                await typeWriterEffect(aiText, "ai-msg");
+                
+                // 1. Processa JSON (extrai dados e remove do texto)
+                const processed = processHUD(aiText); 
+                
+                // 2. Adiciona texto ao histórico (limpo, sem JSON)
+                history.push({ role: "model", parts: [{ text: processed.cleanText }] });
+                
+                // 3. Verifica se tem Boss para mostrar ANTES do texto ou DEPOIS (optei por antes para impacto)
+                if (processed.bossImage) {
+                    addBossImageToChat(processed.bossImage);
+                }
+
+                // 4. Efeito de digitação
+                await typeWriterEffect(processed.cleanText, "ai-msg");
 
             } catch (error) {
                 console.error(error);
                 addRawMessage(`❌ Erro: ${error.message}`, "error-msg");
-                
                 if(error.message.includes("key") || error.message.includes("403")) {
                     alert("Erro de autenticação ou Chave inválida.");
                     loginScreen.style.display = 'flex';
                 }
             }
             
-            inputField.disabled = false; 
-            sendBtn.disabled = false; 
-            inputField.focus();
+            inputField.disabled = false; sendBtn.disabled = false; inputField.focus();
         }
 
-        // --- SAVE / LOAD ---
-        function saveGame() {
-            if (!API_KEY) return alert("Inicie um jogo primeiro.");
-            const blob = new Blob([JSON.stringify({timestamp: new Date(), apiKey: API_KEY, history: history})], {type: "application/json"});
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `HyBrasil_Save.json`;
-            a.click();
-        }
-
-        function loadGame(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if (!data.apiKey) throw new Error("Save inválido.");
-                    API_KEY = data.apiKey;
-                    history = data.history;
-                    loginScreen.style.display = 'none';
-                    hudContainer.style.display = 'flex';
-                    chatBox.innerHTML = '';
-                    
-                    data.history.forEach(msg => {
-                        if (msg.role === "model") {
-                            processHUD(msg.parts[0].text);
-                            addRawMessage(msg.parts[0].text.replace(/```json_stats[\s\S]*?```/, ""), "ai-msg");
-                        } else if (msg.role === "user" && !msg.parts[0].text.includes("Aja como")) {
-                            addRawMessage(msg.parts[0].text, "user-msg");
-                        }
-                    });
-                    inputField.disabled = false; sendBtn.disabled = false;
-                    alert("Jogo carregado!");
-                } catch (err) { alert("Erro ao carregar: " + err.message); }
-            };
-            reader.readAsText(file);
-            input.value = '';
-        }
-
-        // --- HUD E VISUAL ---
+        // --- HUD, IMAGENS E PROCESSAMENTO ---
         function processHUD(text) {
             const regex = /```json_stats([\s\S]*?)```/;
             const match = text.match(regex);
+            let bossVisual = null;
+
             if (match && match[1]) {
                 try {
                     const stats = JSON.parse(match[1]);
-                    updateCard(1, stats.p1); updateCard(2, stats.p2);
-                    return text.replace(regex, "").trim();
-                } catch (e) { return text; }
+                    
+                    // Atualiza Fichas
+                    updateCard(1, stats.p1); 
+                    updateCard(2, stats.p2);
+
+                    // Verifica se há um Boss novo na cena
+                    if (stats.boss_visual && stats.boss_visual !== "null") {
+                        bossVisual = stats.boss_visual;
+                    }
+
+                    // Remove JSON do texto
+                    return { cleanText: text.replace(regex, "").trim(), bossImage: bossVisual };
+                } catch (e) { 
+                    console.error("Erro JSON", e);
+                    return { cleanText: text, bossImage: null }; 
+                }
             }
-            return text;
+            return { cleanText: text, bossImage: null };
+        }
+
+        // Função para injetar imagem do Boss no chat
+        function addBossImageToChat(bossName) {
+            const div = document.createElement('div');
+            div.style.textAlign = "center";
+            
+            const img = document.createElement('img');
+            // Remove espaços e garante nome do arquivo: BOSS_Nome.png
+            const filename = `BOSS_${bossName.replace(/\s+/g, '')}.png`; 
+            
+            img.src = filename;
+            img.className = "chat-boss-img";
+            img.alt = bossName;
+            
+            // Tratamento de erro se a imagem não existir
+            img.onerror = function() { 
+                this.style.display = 'none'; 
+                console.log(`Imagem ${filename} não encontrada.`);
+            };
+
+            div.appendChild(img);
+            chatBox.appendChild(div);
         }
 
         function updateCard(id, data) {
@@ -446,22 +467,55 @@
             return `${l}_${(g && g.toUpperCase() === 'F') ? 'F' : 'M'}.png`;
         }
 
+        // --- SAVE / LOAD ---
+        function saveGame() {
+            if (!API_KEY) return alert("Inicie um jogo primeiro.");
+            const blob = new Blob([JSON.stringify({timestamp: new Date(), apiKey: API_KEY, history: history})], {type: "application/json"});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `HyBrasil_Save.json`;
+            a.click();
+        }
+
+        function loadGame(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    API_KEY = data.apiKey; history = data.history;
+                    loginScreen.style.display = 'none'; hudContainer.style.display = 'flex';
+                    chatBox.innerHTML = '';
+                    
+                    data.history.forEach(msg => {
+                        if (msg.role === "model") {
+                            const processed = processHUD(msg.parts[0].text);
+                            // Se for carregar jogo salvo, não mostra a imagem do boss de novo pra não poluir, 
+                            // ou mostra se preferir (basta descomentar abaixo)
+                            // if (processed.bossImage) addBossImageToChat(processed.bossImage); 
+                            addRawMessage(processed.cleanText, "ai-msg");
+                        } else if (msg.role === "user" && !msg.parts[0].text.includes("Aja como")) {
+                            addRawMessage(msg.parts[0].text, "user-msg");
+                        }
+                    });
+                    inputField.disabled = false; sendBtn.disabled = false;
+                } catch (err) { alert("Erro: " + err.message); }
+            };
+            reader.readAsText(file); input.value = '';
+        }
+
         // --- UTILITÁRIOS ---
         function checkSavedKey() {
             const savedKey = localStorage.getItem("hybrasil_api_key");
-            if (savedKey) {
-                document.getElementById('api-key-input').value = savedKey;
-                API_KEY = savedKey; 
-            }
+            if (savedKey) { document.getElementById('api-key-input').value = savedKey; API_KEY = savedKey; }
         }
         
         function saveKeyAndStart() {
             const inputKey = document.getElementById('api-key-input').value.trim();
             if (inputKey.length < 10) return alert("Chave inválida!");
-            API_KEY = inputKey;
-            localStorage.setItem("hybrasil_api_key", API_KEY);
-            loginScreen.style.display = 'none';
-            hudContainer.style.display = 'flex';
+            API_KEY = inputKey; localStorage.setItem("hybrasil_api_key", API_KEY);
+            loginScreen.style.display = 'none'; hudContainer.style.display = 'flex';
             startNewGame();
         }
 
@@ -496,12 +550,12 @@
         }
         function handleEnter(e) { if (e.key === 'Enter') sendMessage(); }
 
-        // Inicializa
         checkSavedKey();
     </script>
 </body>
 
 </html>
+
 
 
 
