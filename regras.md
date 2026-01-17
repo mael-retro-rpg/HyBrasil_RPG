@@ -281,6 +281,31 @@ Defina `TotalLevel = Level(front) + Level(back)`.
 - **5:** 3 lacaios + 1 criatura aleatória de outra horda + 1 criatura da horda do vilão
 - **6:** 4 lacaios + 1 criatura aleatória de outra horda + 1 criatura da horda do vilão
 
+### 10.1 Regra de Composição e Escala (obrigatória)
+
+- A composição do encontro respeita o `TotalLevel` (quantidade de inimigos e tipos).
+- Lacaios são considerados inimigos de nível 0 e servem apenas para preencher número e pressão tática.
+- Criaturas Maiores representam o desafio real do encontro.
+
+### 10.2 XP das Criaturas Maiores (obrigatório)
+
+O XP de cada Criatura Maior é definido como:
+
+- `PartyXP = max(XP dos personagens da dupla)`
+- `MaxPartyLevel = max(Nível dos personagens da dupla)`
+- `XPcap` conforme o nível máximo:
+  - Nível 1 → XP máximo 2
+  - Nível 2 → XP máximo 8
+  - Nível 3 → XP máximo 9
+- `XP da Criatura Maior = min(PartyXP, XPcap)`
+
+### 10.3 Ordem da Fila Inimiga (obrigatória)
+
+A fila inimiga deve ser explicitamente definida antes do combate:
+
+- Havendo lacaios, a Frente deve ser ocupada por um lacaio.
+- Criaturas Maiores iniciam o combate na Retaguarda.
+
 ---
 
 ## 11) Exploração e NPCs
