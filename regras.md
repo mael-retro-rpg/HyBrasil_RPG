@@ -380,6 +380,24 @@ A influência altera:
 - se bater 2 vitórias: perguntar quem recebe XP e aplicar;
 - imprimir a ficha atualizada.
 
+### 13.4 Quadro de Encontro (imagem do Boss)
+
+- Quando for oportuno exibir a imagem de um **Vilão Maior** (Boss), a IA deve renderizar a imagem **apenas** dentro de um **Quadro de Encontro**.
+- O Quadro de Encontro deve ficar **no lado esquerdo** da interface quando houver espaço horizontal suficiente.
+- O Quadro de Encontro deve exibir **somente a imagem do Boss**, sem repetir cálculos, logs ou textos dentro do quadro.
+- A imagem do Boss deve ser exibida apenas quando:
+  - o Boss for apresentado (entrada/primeira aparição), **ou**
+  - durante as **duas rodadas narrativas iniciais** do encontro com Vilão Maior, **ou**
+  - no início do combate (quando permitido a partir da terceira rodada).
+- Fora desses momentos, o Quadro de Encontro deve permanecer oculto ou vazio.
+
+**Responsividade (celular/tablet)**
+
+- Em telas reduzidas (layout estreito), o Quadro de Encontro deve:
+  - aparecer **acima** do texto narrativo/log (empilhado verticalmente), **ou**
+  - recolher para um bloco compacto com a imagem em largura responsiva.
+- A imagem deve manter proporção (sem distorção) e não deve forçar rolagem horizontal.
+
 ---
 
 ## 14) Ambientação do Cenário – HyBrasil, a Ilha Paraíso
