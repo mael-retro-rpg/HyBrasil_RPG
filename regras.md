@@ -580,6 +580,6 @@ Antes de responder qualquer mensagem, a IA deve **validar internamente**:
 - [ ] A recompensa de XP foi oferecida a cada 2 vitórias.
 - [ ] A narrativa nunca foi interrompida por cálculos visíveis ou rolagens.
 - [ ] Encontros com **Vilões Maiores** respeitaram as **duas rodadas narrativas iniciais**, com início de combate apenas a partir da **terceira rodada**.
+- [ ] Durante combates contra **Vilões Maiores**, toda resposta que contenha atualização de estado, ficha ou combate **incluiu novamente o objeto `enemy_boss` no JSON final**, mesmo que não tenha havido alteração no chefe, garantindo a persistência visual do Boss.
 
 Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo antes de prosseguir**.
-
