@@ -45,8 +45,10 @@
         /* --- HUD (Fichas) --- */
         #hud-container {
             position: fixed; top: 20px; right: 20px; width: 240px;
-            display: none; /* Escondido até o jogo começar */
+            display: flex; /* Mantido visível; a tela de login cobre com z-index */
             flex-direction: column; gap: 15px; z-index: 1000;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
         }
 
         .char-card {
@@ -73,20 +75,15 @@
         .hp-bar-fill { height: 100%; background: #d32f2f; width: 100%; transition: width 0.5s; }
         .hp-text { font-size: 0.8em; font-weight: bold; }
         .card-back { border-left-color: #2196f3; opacity: 0.85; transform: scale(0.95); transform-origin: right top; }
-        
-        /* Imagem do Vilão no Chat */
-        .chat-boss-img {
-            width: 100%;
-            max-width: 400px;
-            border-radius: 8px;
-            margin: 15px auto;
-            display: block;
-            border: 2px solid #ff5555;
-            box-shadow: 0 0 15px rgba(236, 64, 122, 0.8);
-            animation: fadeIn 1s ease-in;
+
+        /* Cartão do Boss (mesmo estilo dos personagens; fica vazio até ser usado) */
+        .boss-card {
+            border-left-color: #bb86fc;
+            display: none; /* só aparece quando houver chefe */
         }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
+        .boss-card .char-info { color: #c7b3ff; }
+        .boss-card .char-portrait { height: 140px; }
+
         /* --- ÁREA DO CHAT --- */
         #main-container { width: 100%; max-width: 800px; padding-right: 0; }
         @media (min-width: 1100px) { #main-container { padding-right: 280px; } }
@@ -128,14 +125,15 @@
                 position: relative;
                 top: auto; right: auto;
                 width: 100%;
-                flex-direction: row; /* Personagens lado a lado */
+                flex-direction: row; /* Personagens (e boss) lado a lado */
+                flex-wrap: wrap; /* permite quebrar em linhas se necessário */
                 margin-bottom: 15px;
                 gap: 10px;
             }
 
             /* Ajusta os cartões para dividir o espaço igualmente */
             .char-card {
-                flex: 1; /* Ocupa 50% cada */
+                flex: 1 1 30%; /* 3 cartões podem caber; quebra se precisar */
                 font-size: 0.9em; /* Texto um pouco menor */
             }
 
@@ -206,22 +204,34 @@
             </div>
             <div class="char-info" style="font-size:0.75em; color:#888; margin-top:5px;">Posição: <span id="pos-2">Trás</span></div>
         </div>
+
+        <!-- Cartão do Boss (fica vazio/oculto e só aparece quando houver chefe) -->
+        <div id="boss-card" class="char-card boss-card">
+            <img id="img-boss" src="" class="char-portrait" onerror="this.style.display='none'">
+            <h3 id="boss-name">Chefe</h3>
+            <div class="char-info" id="boss-subtitle">...</div>
+            <div class="stat-row">
+                <span class="hp-text" id="boss-hp-text">PV: ?</span>
+                <div class="hp-bar-bg"><div id="boss-hp-bar" class="hp-bar-fill"></div></div>
+            </div>
+            <div class="char-info" id="boss-desc" style="font-size:0.75em; color:#aaa; margin-top:6px;"></div>
+        </div>
     </div>
 
     <div id="main-container">
-        
-        <div id="menu-bar">
-            <button class="menu-btn" onclick="confirmNewGame()">📄 Novo</button>
-            <button class="menu-btn" onclick="saveGame()">💾 Salvar</button>
-            <button class="menu-btn" onclick="document.getElementById('load-file-input').click()">📂 Carregar</button>
-        </div>
+            
+            <div id="menu-bar">
+                <button class="menu-btn" onclick="confirmNewGame()">📄 Novo</button>
+                <button class="menu-btn" onclick="saveGame()">💾 Salvar</button>
+                <button class="menu-btn" onclick="document.getElementById('load-file-input').click()">📂 Carregar</button>
+            </div>
 
-        <h1>HyBrasil RPG</h1>
-        <div id="chat-box"></div>
-        <div id="input-area">
-            <input type="text" id="user-input" placeholder="Sua ação..." onkeypress="handleEnter(event)" disabled>
-            <button id="send-btn" onclick="sendMessage()" disabled>Enviar</button>
-        </div>
+            <h1>HyBrasil RPG</h1>
+            <div id="chat-box"></div>
+            <div id="input-area">
+                <input type="text" id="user-input" placeholder="Sua ação..." onkeypress="handleEnter(event)" disabled>
+                <button id="send-btn" onclick="sendMessage()" disabled>Enviar</button>
+            </div>
     </div>
 
     <input type="file" id="load-file-input" style="display:none" accept=".json" onchange="loadGame(this)">
@@ -243,6 +253,10 @@
         const hudContainer = document.getElementById('hud-container');
         const loginScreen = document.getElementById('login-screen');
 
+        // Cartão do Boss
+        const bossCard = document.getElementById('boss-card');
+        const bossImg = document.getElementById('img-boss');
+
         // --- CARREGAMENTO AUTOMÁTICO DO ARQUIVO .MD ---
         async function loadRules() {
             try {
@@ -263,17 +277,19 @@
         No final ABSOLUTO de cada resposta, inclua um bloco JSON atualizado.
         
         REGRAS DE VILÕES (BOSS):
-        1. Se um dos 4 Grandes Senhores aparecer pela primeira vez, adicione o campo "boss_visual": "NomeEmIngles" (ex: "HiveQueen") no JSON.
-        2. NÃO inicie o combate imediatamente. Inicie uma CENA DE DIÁLOGO/TENSÃO.
-        3. O diálogo/interação pré-combate deve durar NO MÁXIMO 5 rodadas de conversa.
-        4. Se o jogador não atacar antes, no 6º turno o vilão ataca obrigatoriamente.
+        1. Quando houver um chefe (Vilão Maior), inclua o campo "enemy_boss" com os dados do chefe (nome, origem, nivel, xp, ataque, vida, habilidade, descricao).
+        2. Se um dos 4 Grandes Senhores aparecer pela primeira vez, você pode também preencher "boss_visual" com "NomeEmIngles" (ex: "HiveQueen").
+        3. NÃO inicie o combate imediatamente. Inicie uma CENA DE DIÁLOGO/TENSÃO.
+        4. O diálogo/interação pré-combate deve durar NO MÁXIMO 5 rodadas de conversa.
+        5. Se o jogador não atacar antes, no 6º turno o vilão ataca obrigatoriamente.
         
         Use estritamente este formato JSON:
         \`\`\`json_stats
         {
           "p1": { "nome": "Nome", "classe": "Classe", "genero": "M", "hp_atual": 3, "hp_max": 3, "posicao": "Frente" },
           "p2": { "nome": "Nome", "classe": "Classe", "genero": "F", "hp_atual": 4, "hp_max": 4, "posicao": "Trás" },
-          "boss_visual": null 
+          "boss_visual": null,
+          "enemy_boss": null
         }
         \`\`\`
         (Nota: "boss_visual" deve ser null na maioria das vezes, preencha apenas na rodada de aparição).
@@ -309,6 +325,7 @@
             updateCard(2, {nome: "P2", classe: "...", genero: "M", hp_atual: 0, hp_max: 0, posicao: "..."});
             document.getElementById('img-1').style.display = 'none';
             document.getElementById('img-2').style.display = 'none';
+            updateBossCard(null);
 
             addRawMessage("⚔️ Iniciando nova aventura...", "system-msg");
             callGemini();
@@ -359,10 +376,8 @@
                 // 2. Adiciona texto ao histórico (limpo, sem JSON)
                 history.push({ role: "model", parts: [{ text: processed.cleanText }] });
                 
-                // 3. Verifica se tem Boss para mostrar ANTES do texto ou DEPOIS (optei por antes para impacto)
-                if (processed.bossImage) {
-                    addBossImageToChat(processed.bossImage);
-                }
+                // 3. Atualiza o cartão do Boss (se houver)
+                updateBossCard(processed.enemyBoss);
 
                 // 4. Efeito de digitação
                 await typeWriterEffect(processed.cleanText, "ai-msg");
@@ -381,54 +396,170 @@
 
         // --- HUD, IMAGENS E PROCESSAMENTO ---
         function processHUD(text) {
-            const regex = /```json_stats([\s\S]*?)```/;
-            const match = text.match(regex);
-            let bossVisual = null;
+            // Aceita 3 formatos:
+            // 1) ```json_stats { ... }```
+            // 2) ```json { ... }``` (ou qualquer fence de json)
+            // 3) Um objeto JSON puro no final da mensagem
 
-            if (match && match[1]) {
-                try {
-                    const stats = JSON.parse(match[1]);
-                    
-                    // Atualiza Fichas
-                    updateCard(1, stats.p1); 
-                    updateCard(2, stats.p2);
+            // Captura o ÚLTIMO bloco fenced de JSON (modelos às vezes geram mais de um bloco)
+            const fencedGlobal = /```(?:json_stats|json)\s*([\s\S]*?)```/ig;
+            let fencedMatch = null;
+            let m;
+            while ((m = fencedGlobal.exec(text)) !== null) {
+                fencedMatch = m; // mantém o último
+            }
 
-                    // Verifica se há um Boss novo na cena
-                    if (stats.boss_visual && stats.boss_visual !== "null") {
-                        bossVisual = stats.boss_visual;
+            // Heurística: pega o ÚLTIMO objeto JSON do texto (para casos sem fence)
+            // (Tenta ser conservador para não capturar chaves do meio do texto.)
+            const tailJson = /(\{[\s\S]*\})\s*$/;
+            const tailMatch = text.match(tailJson);
+
+            let stats = null;
+            let jsonSource = null;
+
+            // Helper: tenta extrair apenas o objeto enemy_boss de um texto contendo JSON (mesmo quando o JSON completo não é parseável)
+            function extractEnemyBossObject(rawText) {
+                const idx = rawText.search(/"enemy_boss"\s*:\s*\{/i);
+                if (idx === -1) return null;
+
+                // Encontra o início do objeto (a primeira '{' após enemy_boss:)
+                const start = rawText.indexOf('{', idx);
+                if (start === -1) return null;
+
+                // Faz brace-matching simples para capturar o objeto
+                let depth = 0;
+                let inStr = false;
+                let esc = false;
+                for (let i = start; i < rawText.length; i++) {
+                    const ch = rawText[i];
+                    if (esc) { esc = false; continue; }
+                    if (ch === '\\') { esc = true; continue; }
+                    if (ch === '"') { inStr = !inStr; continue; }
+                    if (inStr) continue;
+                    if (ch === '{') depth++;
+                    if (ch === '}') {
+                        depth--;
+                        if (depth === 0) {
+                            const objText = rawText.slice(start, i + 1);
+                            try { return JSON.parse(objText); } catch (e) { return null; }
+                        }
                     }
+                }
+                return null;
+            }
 
-                    // Remove JSON do texto
-                    return { cleanText: text.replace(regex, "").trim(), bossImage: bossVisual };
-                } catch (e) { 
-                    console.error("Erro JSON", e);
-                    return { cleanText: text, bossImage: null }; 
+            if (fencedMatch && fencedMatch[1]) {
+                jsonSource = fencedMatch[0];
+                try { stats = JSON.parse(fencedMatch[1]); } catch (e) { stats = null; }
+            }
+
+            if (!stats && tailMatch && tailMatch[1]) {
+                // Só tenta parse se parecer plausível (evita capturar texto comum)
+                const candidate = tailMatch[1].trim();
+                if (candidate.startsWith('{') && candidate.endsWith('}')) {
+                    try {
+                        stats = JSON.parse(candidate);
+                        jsonSource = candidate;
+                    } catch (e) { stats = null; }
                 }
             }
-            return { cleanText: text, bossImage: null };
+
+            let bossName = null;
+            let bossObj = null;
+
+            if (stats) {
+                // Atualiza fichas se existirem
+                if (stats.p1) updateCard(1, stats.p1);
+                if (stats.p2) updateCard(2, stats.p2);
+
+                // Compatibilidade: formatos antigos e novo formato enemy_boss
+                if (stats.boss_visual && stats.boss_visual !== "null") {
+                    bossName = stats.boss_visual;
+                    // Se vier apenas o nome, cria um objeto mínimo para o cartão do chefe.
+                    bossObj = { nome: bossName };
+                }
+
+                if (stats.enemy_boss) {
+                    // Pode vir como objeto ou string
+                    if (typeof stats.enemy_boss === 'string') {
+                        bossName = stats.enemy_boss;
+                        bossObj = { nome: bossName };
+                    } else {
+                        bossObj = stats.enemy_boss;
+                    }
+                }
+
+                const cleaned = jsonSource ? text.replace(jsonSource, '').trim() : text.trim();
+                return { cleanText: cleaned, enemyBoss: bossObj };
+            }
+
+            // Fallback final: se não conseguimos parsear o JSON inteiro, tenta pelo menos extrair enemy_boss
+            const bossOnly = extractEnemyBossObject(text);
+            if (bossOnly) {
+                // Não remove nada do texto (para evitar apagar narrativa), apenas ativa o cartão.
+                return { cleanText: text.trim(), enemyBoss: bossOnly };
+            }
+
+            return { cleanText: text, enemyBoss: null };
         }
 
-        // Função para injetar imagem do Boss no chat
-        function addBossImageToChat(bossName) {
-            const div = document.createElement('div');
-            div.style.textAlign = "center";
-            
-            const img = document.createElement('img');
-            // Remove espaços e garante nome do arquivo: BOSS_Nome.png
-            const filename = `BOSS_${bossName.replace(/\s+/g, '')}.png`; 
-            
-            img.src = filename;
-            img.className = "chat-boss-img";
-            img.alt = bossName;
-            
-            // Tratamento de erro se a imagem não existir
-            img.onerror = function() { 
-                this.style.display = 'none'; 
+        // Cartão do Boss: exibe/oculta e tenta carregar a imagem do chefe.
+        function updateBossCard(enemyBoss) {
+            if (!enemyBoss) {
+                bossCard.style.display = 'none';
+                bossImg.removeAttribute('src');
+                bossImg.style.display = 'none';
+                document.getElementById('boss-name').innerText = 'Chefe';
+                document.getElementById('boss-subtitle').innerText = '...';
+                document.getElementById('boss-hp-text').innerText = 'PV: ?';
+                document.getElementById('boss-hp-bar').style.width = '0%';
+                document.getElementById('boss-desc').innerText = '';
+                return;
+            }
+
+            bossCard.style.display = 'block';
+
+            const nome = enemyBoss.nome || enemyBoss.name || 'Chefe';
+            const origem = enemyBoss.origem || enemyBoss.origin || '';
+            const nivel = enemyBoss.nivel ?? enemyBoss.level ?? '';
+            const xp = enemyBoss.xp ?? '';
+            const ataque = enemyBoss.ataque ?? enemyBoss.attack ?? '';
+            const vidaAtual = enemyBoss.vida ?? enemyBoss.life ?? 0;
+            const vidaMax = enemyBoss.vida_max ?? enemyBoss.max_life ?? vidaAtual;
+            const habilidade = enemyBoss.habilidade || enemyBoss.ability || '';
+            const descricao = enemyBoss.descricao || enemyBoss.description || '';
+
+            document.getElementById('boss-name').innerText = nome;
+            document.getElementById('boss-subtitle').innerText = `${origem}${origem && nivel !== '' ? ' • ' : ''}${nivel !== '' ? 'Nível ' + nivel : ''}${xp !== '' ? ' • XP ' + xp : ''}${ataque !== '' ? ' • ATQ ' + ataque : ''}${habilidade ? ' • ' + habilidade : ''}`.trim();
+            document.getElementById('boss-desc').innerText = descricao;
+
+            const safeMax = Math.max(1, Number(vidaMax) || 1);
+            const safeCur = Math.max(0, Number(vidaAtual) || 0);
+            document.getElementById('boss-hp-text').innerText = `PV: ${safeCur}/${safeMax}`;
+            document.getElementById('boss-hp-bar').style.width = `${Math.min(100, (safeCur / safeMax) * 100)}%`;
+
+            // Nome canônico para o arquivo da imagem (BOSS_*.png)
+            const raw = String(nome).trim();
+            const key = raw.replace(/[^a-z0-9]/gi, '').toLowerCase();
+            const canonicalMap = {
+                'hivequeen': 'HiveQueen',
+                'mightydragon': 'MightyDragon',
+                'abyssaloracle': 'AbyssalOracle',
+                'lordofdarkness': 'LordOfDarkness'
+            };
+            const canonical = canonicalMap[key] || raw.replace(/\s+/g, '');
+            const filename = `BOSS_${canonical}.png`;
+
+            bossImg.src = filename;
+            bossImg.alt = raw;
+            bossImg.style.display = 'block';
+
+            bossImg.onerror = function() {
+                // Se não existir a imagem, mantém o cartão visível (com texto), mas esconde a imagem.
+                this.removeAttribute('src');
+                this.style.display = 'none';
                 console.log(`Imagem ${filename} não encontrada.`);
             };
-
-            div.appendChild(img);
-            chatBox.appendChild(div);
         }
 
         function updateCard(id, data) {
@@ -499,6 +630,8 @@
                             addRawMessage(msg.parts[0].text, "user-msg");
                         }
                     });
+                    // Garante que o quadro não fique preso em um boss antigo após carregar
+                    updateBossCard(null);
                     inputField.disabled = false; sendBtn.disabled = false;
                 } catch (err) { alert("Erro: " + err.message); }
             };
@@ -555,10 +688,3 @@
 </body>
 
 </html>
-
-
-
-
-
-
-
