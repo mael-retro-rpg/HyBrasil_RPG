@@ -143,7 +143,7 @@ Em cada turno:
 
 ## 5) Habilidades (regras exatas)
 
-> As habilidades são sempre ativas. **Efeitos de dano/cura são aplicados após os ataques** (fase “After Attacks”), para evitar ambiguidades de alvo quando a linha de frente cai.
+> As habilidades são sempre ativas. **Os efeitos de dano (Precision/Magic), cura (Cure) ou aprimoramento (Fury) são aplicados após os ataques** (fase “After Attacks”) a partir do momento que o personagem está na segunda posição da fila, ou seja, a retaguarda, para evitar ambiguidades de alvo quando a linha de frente cai.
 
 - **Fury (Warrior):** aumenta o **Ataque** do próprio personagem em um valor igual ao **Nível**, esse bônus não é acumulativo.
 - **Precision (Hunter):** ataca da retaguarda causando dano igual ao **Nível** (após os ataques) ao inimigo na Frente (ou ao próximo da fila se a Frente cair).
