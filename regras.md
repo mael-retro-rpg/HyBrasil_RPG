@@ -323,6 +323,13 @@ Quando não estiver em combate:
 - Combate deve acontecer quando o jogador escolher uma opção arriscada **ou** após 1–3 interações de exploração.
 - O jogador deve ser avisado do combate para que haja a opção de combater ou fugir.
 
+**Exceção – Vilões Maiores**
+
+- Quando o encontro envolver um dos **Vilões Maiores**, o confronto inicia em modo narrativo.
+- O vilão tenta **persuadir, provocar ou manipular** os personagens antes da luta.
+- Esse diálogo dura **duas rodadas narrativas completas**.
+- O combate só pode ser iniciado **a partir da terceira rodada**, seja por decisão do vilão ou dos jogadores.
+
 ### 11.3 NPCs
 
 - Cada região possui ao menos 1 **Agente da Missão** (quest giver).
