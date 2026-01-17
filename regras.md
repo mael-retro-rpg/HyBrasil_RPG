@@ -304,7 +304,7 @@ O XP de cada Criatura Maior é definido como:
 A fila inimiga deve ser explicitamente definida antes do combate:
 
 - Havendo lacaios, a Frente deve ser ocupada por um lacaio.
-- Criaturas Maiores iniciam o combate na Retaguarda.
+- Criaturas Maiores iniciam o combate a partir da terceira posição.
 
 ---
 
