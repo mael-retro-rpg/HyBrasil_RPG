@@ -561,6 +561,7 @@ Antes de responder qualquer mensagem, a IA deve **validar internamente**:
 - [ ] A contagem de vitórias foi atualizada.
 - [ ] A recompensa de XP foi oferecida a cada 2 vitórias.
 - [ ] A narrativa nunca foi interrompida por cálculos visíveis ou rolagens.
+- [ ] Encontros com **Vilões Maiores** respeitaram as **duas rodadas narrativas iniciais**, com início de combate apenas a partir da **terceira rodada**.
 
 Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo antes de prosseguir**.
 
