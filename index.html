@@ -205,14 +205,6 @@
             <div class="char-info" style="font-size:0.75em; color:#888; margin-top:5px;">Posição: <span id="pos-2">Trás</span></div>
         </div>
 
-        <div id="menu-bar">
-                <button class="menu-btn" id="audio-btn" onclick="toggleAudio()">🔇 Som: Off</button>
-                
-                <button class="menu-btn" onclick="confirmNewGame()">📄 Novo</button>
-                <button class="menu-btn" onclick="saveGame()">💾 Salvar</button>
-                <button class="menu-btn" onclick="document.getElementById('load-file-input').click()">📂 Carregar</button>
-        </div>
-        
         <!-- Cartão do Boss (fica vazio/oculto e só aparece quando houver chefe) -->
         <div id="boss-card" class="char-card boss-card">
             <img id="img-boss" src="" class="char-portrait" onerror="this.style.display='none'">
@@ -229,6 +221,8 @@
     <div id="main-container">
             
             <div id="menu-bar">
+                <button class="menu-btn" id="audio-btn" onclick="toggleAudio()">🔇 Som: Off</button>
+                
                 <button class="menu-btn" onclick="confirmNewGame()">📄 Novo</button>
                 <button class="menu-btn" onclick="saveGame()">💾 Salvar</button>
                 <button class="menu-btn" onclick="document.getElementById('load-file-input').click()">📂 Carregar</button>
