@@ -205,6 +205,14 @@
             <div class="char-info" style="font-size:0.75em; color:#888; margin-top:5px;">Posição: <span id="pos-2">Trás</span></div>
         </div>
 
+        <div id="menu-bar">
+                <button class="menu-btn" id="audio-btn" onclick="toggleAudio()">🔇 Som: Off</button>
+                
+                <button class="menu-btn" onclick="confirmNewGame()">📄 Novo</button>
+                <button class="menu-btn" onclick="saveGame()">💾 Salvar</button>
+                <button class="menu-btn" onclick="document.getElementById('load-file-input').click()">📂 Carregar</button>
+        </div>
+        
         <!-- Cartão do Boss (fica vazio/oculto e só aparece quando houver chefe) -->
         <div id="boss-card" class="char-card boss-card">
             <img id="img-boss" src="" class="char-portrait" onerror="this.style.display='none'">
@@ -378,7 +386,10 @@
                 
                 // 3. Atualiza o cartão do Boss (se houver)
                 updateBossCard(processed.enemyBoss);
-
+                
+                // --- NOVO: MANDA FALAR O TEXTO ---
+                speakText(processed.cleanText);
+                
                 // 4. Efeito de digitação
                 await typeWriterEffect(processed.cleanText, "ai-msg");
 
@@ -652,6 +663,55 @@
             startNewGame();
         }
 
+        // --- SISTEMA DE ÁUDIO (TTS) ---
+        let isAudioOn = false;
+        const synth = window.speechSynthesis;
+
+        function toggleAudio() {
+            isAudioOn = !isAudioOn;
+            const btn = document.getElementById('audio-btn');
+            
+            if (isAudioOn) {
+                btn.innerText = "🔊 Som: On";
+                btn.style.borderColor = "#4caf50";
+                btn.style.color = "#4caf50";
+                // Tenta falar algo curto para "acordar" o sistema de áudio do navegador
+                speakText("Áudio ativado.");
+            } else {
+                btn.innerText = "🔇 Som: Off";
+                btn.style.borderColor = "#555";
+                btn.style.color = "#fff";
+                synth.cancel(); // Para de falar imediatamente
+            }
+        }
+
+        function speakText(text) {
+            if (!isAudioOn) return;
+
+            // 1. Para qualquer fala anterior para não encavalar
+            synth.cancel();
+
+            // 2. Limpa o texto para a narradora não ler formatação
+            // Remove **, ##, __, ``` e outros símbolos de Markdown
+            let cleanText = text.replace(/[*#_`]/g, ''); 
+            // Remove o bloco JSON se por acaso sobrar
+            cleanText = cleanText.replace(/\{[\s\S]*\}/g, '');
+
+            // 3. Configura a fala
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'pt-BR'; // Força português
+            utterance.rate = 1.0; // Velocidade (0.1 a 10)
+            utterance.pitch = 1.0; // Tom (0 a 2)
+
+            // Tenta pegar uma voz melhor se disponível (ex: Google Português)
+            const voices = synth.getVoices();
+            const ptVoice = voices.find(v => v.lang.includes('pt-BR') && v.name.includes('Google'));
+            if (ptVoice) utterance.voice = ptVoice;
+
+            // 4. Fala
+            synth.speak(utterance);
+        }
+        
         async function typeWriterEffect(text, className) {
             const div = document.createElement('div');
             div.className = className + " typing-cursor";
