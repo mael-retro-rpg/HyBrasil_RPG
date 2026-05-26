@@ -15,9 +15,10 @@
             padding: 20px; 
             line-height: 1.6; 
         }
-        h1, h2, h3 { color: #bb86fc; }
-        h1 { text-align: center; font-size: 2.2em; border-bottom: 2px solid #333; padding-bottom: 10px; }
-        h2 { margin-top: 40px; border-bottom: 1px solid #444; padding-bottom: 5px; }
+        h1, h2, h3, h4 { color: #bb86fc; }
+        h1 { text-align: center; font-size: 2.2em; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 30px;}
+        h2 { margin-top: 50px; border-bottom: 1px solid #444; padding-bottom: 5px; font-size: 1.8em; }
+        h4 { margin-bottom: 5px; color: #4caf50; }
         
         .container { 
             max-width: 1000px; 
@@ -62,6 +63,24 @@
         /* Imagens duplas para classes (M e F) */
         .class-images { display: flex; justify-content: center; gap: 10px; }
         
+        /* Box de Informação / Regras */
+        .info-box {
+            background: #1a2332;
+            border: 1px solid #273b5e;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .info-box ul {
+            margin-top: 10px;
+            padding-left: 20px;
+            color: #b0c4de;
+        }
+        .info-box li {
+            margin-bottom: 8px;
+        }
+        
         /* Limpeza de float */
         .clearfix::after { content: ""; clear: both; display: table; }
     </style>
@@ -70,11 +89,11 @@
     <div class="container clearfix">
         
         <div class="pt">
-            <h1>HyBrasil RPG - Manual de Instruções</h1>
-            <p>Bem-vindo a <strong>HyBrasil – A Ilha Paraíso</strong>, a única ilha conhecida da existência, cercada por névoas eternas. Este manual interativo contém as referências visuais e mecânicas básicas para guiar a sua jornada.</p>
+            <h1>HyBrasil RPG - Manual do Aventureiro</h1>
+            <p style="text-align: center; font-size: 1.1em; color: #aaa;">Bem-vindo a <strong>HyBrasil – A Ilha Paraíso</strong>, a única ilha conhecida da existência, cercada por névoas eternas e habitada por criaturas de imenso poder. Este manual contém o conhecimento essencial para guiar a sua jornada e dominar o Motor de Regras.</p>
             
-            <h2>As Ordens (Classes)</h2>
-            <p>Os heróis de HyBrasil pertencem a uma das cinco Ordens, cada uma com mecânicas únicas. Abaixo, as aparências padrão (Masculino e Feminino) e os seus atributos iniciais no Nível 1.</p>
+            <h2>As Ordens de HyBrasil (Classes)</h2>
+            <p>Em HyBrasil, as Ordens não são simples guildas mercenárias, mas tradições vitais para a contenção das forças naturais hostis. Os heróis pertencem a uma destas cinco frentes, cada uma com o seu papel na sociedade e no campo de batalha.</p>
             
             <div class="grid">
                 <div class="card">
@@ -83,8 +102,9 @@
                         <img src="assets/heroes/W_F.png" alt="Guerreira F" onerror="this.src='https://via.placeholder.com/80/252526/bb86fc?text=W_F'">
                     </div>
                     <h3>Ordem da Lâmina (Guerreiro)</h3>
-                    <p><strong>Ataque:</strong> 2 | <strong>Vida:</strong> 4</p>
-                    <p><strong>Habilidade (Ataque Poderoso):</strong> Quando estiver na retaguarda ou na frente, aumenta o Ataque do próprio personagem em um valor igual ao Nível. Esse bônus não é acumulativo.</p>
+                    <p style="font-style: italic; color: #888;">"Protege cidades e caravanas de ataques diretos e cercos."</p>
+                    <p><strong>Ataque Inicial:</strong> 2 | <strong>Vida Máxima:</strong> 4</p>
+                    <p><strong>Habilidade - Ataque Poderoso:</strong> Quando estiver na retaguarda ou na frente, aumenta o Ataque do próprio personagem num valor igual ao Nível. (Bônus não acumulativo).</p>
                 </div>
                 
                 <div class="card">
@@ -93,8 +113,9 @@
                         <img src="assets/heroes/H_F.png" alt="Caçadora F" onerror="this.src='https://via.placeholder.com/80/252526/bb86fc?text=H_F'">
                     </div>
                     <h3>Ordem da Flecha (Caçador)</h3>
-                    <p><strong>Ataque:</strong> 4 | <strong>Vida:</strong> 2</p>
-                    <p><strong>Habilidade (Ataque Preciso):</strong> Ataca da retaguarda. Se o inimigo possuir unidades na retaguarda, causa dano igual ao seu Ataque diretamente à retaguarda inimiga. Se restar apenas o inimigo da Frente, causa dano igual ao seu Nível a essa Frente.</p>
+                    <p style="font-style: italic; color: #888;">"Vigia fronteiras longínquas, florestas e estradas perigosas."</p>
+                    <p><strong>Ataque Inicial:</strong> 4 | <strong>Vida Máxima:</strong> 2</p>
+                    <p><strong>Habilidade - Ataque Preciso:</strong> Ataca exclusivamente da retaguarda. Causa dano direto (igual ao seu Ataque) à retaguarda inimiga, ignorando a Frente. Se restar apenas a Frente inimiga, causa dano reduzido (igual ao seu Nível).</p>
                 </div>
                 
                 <div class="card">
@@ -103,8 +124,9 @@
                         <img src="assets/heroes/M_F.png" alt="Maga F" onerror="this.src='https://via.placeholder.com/80/252526/bb86fc?text=M_F'">
                     </div>
                     <h3>Ordem do Véu (Mago)</h3>
-                    <p><strong>Ataque:</strong> 5 | <strong>Vida:</strong> 1</p>
-                    <p><strong>Habilidade (Ataque Mágico):</strong> Ataca da retaguarda causando dano igual ao Ataque ao inimigo na Frente (ou ao próximo da fila se a Frente cair).</p>
+                    <p style="font-style: italic; color: #888;">"Estuda fenômenos arcanos raros e perigos sobrenaturais."</p>
+                    <p><strong>Ataque Inicial:</strong> 5 | <strong>Vida Máxima:</strong> 1</p>
+                    <p><strong>Habilidade - Ataque Mágico:</strong> Ataca da retaguarda com poder massivo, causando o seu dano total de Ataque diretamente ao inimigo que estiver na linha de Frente.</p>
                 </div>
                 
                 <div class="card">
@@ -113,8 +135,9 @@
                         <img src="assets/heroes/C_F.png" alt="Clériga F" onerror="this.src='https://via.placeholder.com/80/252526/bb86fc?text=C_F'">
                     </div>
                     <h3>Ordem da Luz Silenciosa (Clérigo)</h3>
-                    <p><strong>Ataque:</strong> 1 | <strong>Vida:</strong> 5</p>
-                    <p><strong>Habilidade (Pulso de Cura):</strong> Recupera Vida igual ao Nível de quem estiver na Frente.</p>
+                    <p style="font-style: italic; color: #888;">"Mantém comunidades unidas, trata feridos e acalma regiões instáveis."</p>
+                    <p><strong>Ataque Inicial:</strong> 1 | <strong>Vida Máxima:</strong> 5</p>
+                    <p><strong>Habilidade - Pulso de Cura:</strong> Atua na retaguarda. Em cada turno, recupera passivamente a Vida do aliado que estiver na Frente num valor igual ao seu Nível.</p>
                 </div>
                 
                 <div class="card">
@@ -123,74 +146,108 @@
                         <img src="assets/heroes/P_F.png" alt="Paladina F" onerror="this.src='https://via.placeholder.com/80/252526/bb86fc?text=P_F'">
                     </div>
                     <h3>Ordem do Equilíbrio (Paladino)</h3>
-                    <p><strong>Ataque:</strong> 3 | <strong>Vida:</strong> 3</p>
-                    <p><strong>Habilidade (Defesa Justiceira):</strong> Quando o Paladino estiver na Frente ou na Retaguarda, ele ignora dano igual ao próprio Nível sempre que for atingido.</p>
+                    <p style="font-style: italic; color: #888;">"Mediadores inabaláveis que intervêm quando o caos ameaça dominar."</p>
+                    <p><strong>Ataque Inicial:</strong> 3 | <strong>Vida Máxima:</strong> 3</p>
+                    <p><strong>Habilidade - Defesa Justiceira:</strong> Uma defesa de ferro. Independentemente de estar na Frente ou na Retaguarda, o Paladino ignora (bloqueia) dano igual ao seu próprio Nível sempre que sofre um ataque.</p>
                 </div>
             </div>
 
+            <h2>O Sistema de Combate Automático</h2>
+            <p>Em <strong>HyBrasil RPG</strong>, as batalhas são intensas, estratégicas e <strong>resolvidas automaticamente pelo Mestre da IA (Gemini)</strong>. O seu papel como jogador é gerir os atributos, tomar decisões de exploração e, fundamentalmente, escolher a <strong>Formação (Frente ou Retaguarda)</strong> da sua dupla antes dos embates.</p>
+
+            <div class="info-box">
+                <h4><i class="fa-solid fa-swords"></i> A Arena de Batalha (HUD)</h4>
+                <p>Quando um combate é acionado, a narrativa pausa e a Arena Visual é ativada. O ecrã divide-se em duas forças:</p>
+                <ul>
+                    <li><strong>O Seu Grupo:</strong> Os seus dois heróis posicionados conforme a sua escolha. Quem estiver na Frente é o alvo principal dos golpes corpo-a-corpo inimigos. A Retaguarda é para suporte e ataques de longo alcance.</li>
+                    <li><strong>A Horda Inimiga:</strong> Uma fila dinâmica que pode conter até 6 inimigos. Lacaios de nível zero atuam como escudos na linha da frente, enquanto Criaturas Maiores preparam golpes devastadores a partir da terceira posição da fila.</li>
+                </ul>
+
+                <h4 style="margin-top: 15px;"><i class="fa-solid fa-clock-rotate-left"></i> A Ordem Exata dos Turnos</h4>
+                <p>O Mestre IA processa toda a matemática nos bastidores e gera um <strong>Pergaminho de Resolução</strong> seguindo esta ordem inquebrável em cada turno:</p>
+                <ul>
+                    <li><strong>1. Ataques Simultâneos (Frente):</strong> A Frente do jogador e a Frente inimiga colidem e causam o seu dano base de Ataque uma à outra simultaneamente.</li>
+                    <li><strong>2. Aplicação de Habilidades:</strong> Só após o choque frontal é que as habilidades táticas (como os tiros à retaguarda do Caçador, as curas do Clérigo ou os feitiços do Mago) entram em efeito para alterar o rumo do combate.</li>
+                    <li><strong>3. Quedas e Avanço de Fila:</strong> Se a Vida de uma criatura ou herói chegar a zero, eles caem. O elemento que estiver logo atrás na fila avança para assumir a Frente imediatamente.</li>
+                    <li><strong>4. Fim do Combate:</strong> O embate termina se todos os inimigos perecerem ou se ambos os heróis da dupla caírem.</li>
+                </ul>
+
+                <h4 style="margin-top: 15px;"><i class="fa-solid fa-heart-circle-check"></i> Pós-Combate, Cura e Experiência (XP)</h4>
+                <p>Se sobreviver ao confronto, a dupla tem a chance de se recompor. Ao final de cada vitória, <strong>a Vida de ambos os heróis é restaurada para a sua Vida Máxima automaticamente</strong>. Além disso, o sistema conta as suas glórias: <strong>a cada 2 vitórias exatas</strong>, o Mestre irá pausar a aventura e perguntar a qual dos dois heróis deseja atribuir +1 Ponto de Experiência (XP), o que melhorará os seus atributos ou os fará subir de nível!</p>
+            </div>
+
             <h2>Auxiliares Místicos (Companions) - Nível 2+</h2>
-            <p>Ao atingir o Nível 2 (3 de XP), o vínculo espiritual dos heróis manifesta um Auxiliar Místico. Na Frente, ele soma ataque ao herói. Na Retaguarda, ele duplica o efeito da habilidade especial do conjurador. Pode também sacrificar-se para salvar o herói de um golpe letal.</p>
+            <p>Ao atingir o Nível 2 (com 3 pontos de XP acumulados), o vínculo espiritual dos heróis manifesta um <strong>Auxiliar Místico</strong>. Eles não ocupam espaço na fila de combate, mas ligam-se à alma do herói, fornecendo benefícios distintos dependendo da posição de combate.</p>
             
+            <div class="info-box" style="border-left-color: #ff9800; background: #2c2211;">
+                <h4>As Mecânicas do Vínculo</h4>
+                <ul>
+                    <li><strong>Vanguarda (Se o herói estiver na Frente):</strong> O Auxiliar luta fisicamente, somando o seu próprio poder (+1 no Nível 2, +2 no Nível 3) ao Ataque base do herói.</li>
+                    <li><strong>Duplicação Arcana (Se o herói estiver na Retaguarda):</strong> O Auxiliar entra em sintonia mágica, projetando uma cópia exata do efeito da habilidade especial do conjurador no mesmo turno.</li>
+                    <li><strong>Sacrifício Leal:</strong> Se o herói na linha da Frente for receber um golpe letal que reduziria a sua Vida a zero, o Auxiliar intervém. O Auxiliar é sacrificado e removido do combate, anulando todo o dano daquele ataque, permitindo que o herói sobreviva com 1 Ponto de Vida.</li>
+                </ul>
+            </div>
+
             <div class="grid">
                 <div class="card companion-card">
                     <img src="assets/companions/asa-de-anis.png" alt="Asa-de-Anis" onerror="this.src='https://via.placeholder.com/90/252526/ff9800?text=Asa-de-Anis'">
                     <h3>Asa-de-Anis 🦅</h3>
                     <p><strong>Classe:</strong> Guerreiro(a)</p>
-                    <p>Um falcão heráldico feito de energia pura azul-celeste.</p>
+                    <p>Um majestoso falcão heráldico feito de energia pura e chamas azul-celestes.</p>
                 </div>
                 <div class="card companion-card">
                     <img src="assets/companions/raposa_astral.png" alt="Raposa Astral" onerror="this.src='https://via.placeholder.com/90/252526/ff9800?text=Raposa+Astral'">
                     <h3>Raposa Astral 🦊</h3>
                     <p><strong>Classe:</strong> Caçador(a)</p>
-                    <p>Uma raposa celestial flutuante de três caudas com padrões estelares.</p>
+                    <p>Uma raposa celestial flutuante de três caudas que abriga poeira estelar em seu pêlo.</p>
                 </div>
                 <div class="card companion-card">
                     <img src="assets/companions/serpente_eterea.png" alt="Serpente Etérea" onerror="this.src='https://via.placeholder.com/90/252526/ff9800?text=Serpente+Etérea'">
                     <h3>Serpente Etérea 🐍</h3>
                     <p><strong>Classe:</strong> Mago(a)</p>
-                    <p>Uma pequena serpente de chamas violetas sólidas e runas arcanas.</p>
+                    <p>Uma veloz serpente formada por chamas violetas sólidas e runas arcanas antigas.</p>
                 </div>
                 <div class="card companion-card">
                     <img src="assets/companions/silfide_da_alvorada.png" alt="Sílfide da Alvorada" onerror="this.src='https://via.placeholder.com/90/252526/ff9800?text=Sílfide'">
                     <h3>Sílfide da Alvorada 🧚</h3>
                     <p><strong>Classe:</strong> Clérigo(a)</p>
-                    <p>Uma silhueta esguia como uma fada com asas sólidas de luz dourada.</p>
+                    <p>Uma silhueta diminuta e esguia adornada com asas feitas de calor e luz dourada reconfortante.</p>
                 </div>
                 <div class="card companion-card">
                     <img src="assets/companions/egide_de_marfim.png" alt="Égide de Marfim" onerror="this.src='https://via.placeholder.com/90/252526/ff9800?text=Égide'">
                     <h3>Égide de Marfim 🐢</h3>
                     <p><strong>Classe:</strong> Paladino(a)</p>
-                    <p>Uma tartaruga terrestre com casco esculpido em cristal de marfim opaco.</p>
+                    <p>Uma tartaruga terrestre impassível, cujo casco é esculpido em pesados cristais de marfim.</p>
                 </div>
             </div>
 
-            <h2>Vilões Maiores (Bosses)</h2>
-            <p>Estas são as quatro entidades de grande influência. A presença de um vilão maior altera o ambiente, os NPCs e as hordas monstruosas que irá enfrentar.</p>
+            <h2>Vilões Maiores (Chefes de Campanha)</h2>
+            <p>Estas são as quatro forças primordiais que ameaçam desequilibrar a ilha. Encontros com estas entidades são raros, mortais e nunca acontecem sem que a ilha avise primeiro através de pesadelos e sinais.</p>
             
             <div class="grid">
                 <div class="card boss-card">
                     <img src="assets/bosses/BOSS_HiveQueen.png" alt="Rainha da Colmeia" onerror="this.src='https://via.placeholder.com/90/252526/bb86fc?text=Rainha+Colmeia'">
                     <h3>Rainha da Colmeia (Hive Queen)</h3>
-                    <p><strong>Origem:</strong> Selvagens</p>
-                    <p>Mente coletiva absoluta. Controla os enxames e abominações de carapaça.</p>
+                    <p><strong>Força Regente:</strong> Os Selvagens</p>
+                    <p>A soberana absoluta da mente coletiva. Comanda exércitos insetoides e artrópodes gigantes com um foco militar devastador, assimilando a biologia de HyBrasil.</p>
                 </div>
                 <div class="card boss-card">
                     <img src="assets/bosses/BOSS_MightyDragon.png" alt="Poderoso Dragão" onerror="this.src='https://via.placeholder.com/90/252526/bb86fc?text=Dragão'">
                     <h3>Poderoso Dragão (Mighty Dragon)</h3>
-                    <p><strong>Origem:</strong> Bestas</p>
-                    <p>Poder destrutivo ancestral e fúria primal que incendeia os continentes.</p>
+                    <p><strong>Força Regente:</strong> As Bestas</p>
+                    <p>O próprio poder destrutivo ancestral de HyBrasil encarnado em escamas colossais de fogo místico e fúria primal capaz de derreter as montanhas de Pedralta.</p>
                 </div>
                 <div class="card boss-card">
                     <img src="assets/bosses/BOSS_AbyssalOracle.png" alt="Oráculo Abissal" onerror="this.src='https://via.placeholder.com/90/252526/bb86fc?text=Oráculo'">
                     <h3>Oráculo Abissal (Abyssal Oracle)</h3>
-                    <p><strong>Origem:</strong> Monstros</p>
-                    <p>Entidade profética e distorcida que corrompe a carne e a mente.</p>
+                    <p><strong>Força Regente:</strong> Os Monstros</p>
+                    <p>Uma entidade profética e distorcida oriunda das trincheiras abissais. Os seus múltiplos olhos e tentáculos baralham a mente dos homens antes de lhes rasgar a carne.</p>
                 </div>
                 <div class="card boss-card">
                     <img src="assets/bosses/BOSS_LordOfDarkness.png" alt="Senhor das Trevas" onerror="this.src='https://via.placeholder.com/90/252526/bb86fc?text=Senhor+Trevas'">
                     <h3>Senhor das Trevas (Lord of Darkness)</h3>
-                    <p><strong>Origem:</strong> Mortos</p>
-                    <p>Senhor do tempo e da memória, aprisionando almas perdidas.</p>
+                    <p><strong>Força Regente:</strong> Os Mortos</p>
+                    <p>Senhor absoluto do tempo decaído e da memória esquecida. É capaz de reerguer e escravizar os ecos sombrios e as almas passadas dos que caíram na névoa.</p>
                 </div>
             </div>
         </div>
