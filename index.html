@@ -1,0 +1,2512 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HyBrasil – A Ilha Paraíso</title>
+    <!-- Ícone da Página (Favicon) -->
+    <link rel="icon" type="image/png" href="assets/icon.png">
+    <!-- Tailwind CSS para estilização moderna e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts para tipografia de Fantasia e Imersão -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Lora:ital,wght@0,400;0,600;1,400&family=MedievalSharp&display=swap" rel="stylesheet">
+    <!-- FontAwesome para Ícones do Painel e RPG -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background: radial-gradient(circle at center, #141a24 0%, #080c10 100%);
+        }
+        h1, h2, h3, h4, .font-fantasy {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.05em;
+        }
+        .retro-term {
+            font-family: 'MedievalSharp', cursive, monospace;
+        }
+        /* Barra de Rolagem Personalizada */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d131a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f293d;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b82f6;
+        }
+        .text-glow {
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+        .border-fantasy {
+            border-image: linear-gradient(to right, #1e293b, #3b82f6, #1e293b) 1;
+        }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+        .animate-pulse-soft {
+            animation: pulse-soft 3s infinite ease-in-out;
+        }
+        @keyframes clash-glow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(239, 68, 68, 0.4)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.8)); }
+        }
+        .clash-indicator {
+            animation: clash-glow 1.5s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 flex flex-col justify-between overflow-x-hidden">
+
+    <!-- Cabeçalho Principal -->
+    <header class="border-b border-blue-900/40 bg-slate-950/80 backdrop-blur-md py-4 px-6 sticky top-0 z-40 shadow-lg shadow-black/40">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600/20 p-2 rounded border border-blue-500/30 text-blue-400">
+                    <i class="fa-solid fa-compass-drafting text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-400 tracking-wider">
+                        HYBRASIL
+                    </h1>
+                    <p class="text-xs text-blue-400/80 font-mono tracking-widest uppercase">A Ilha Paraíso</p>
+                </div>
+            </div>
+
+            <!-- Controles Globais / Chave API e Modelo -->
+            <div class="flex items-center gap-2 flex-wrap justify-center">
+                <div class="flex items-center bg-slate-900 border border-slate-800 rounded px-2 py-1 gap-2 text-xs">
+                    <span class="text-slate-400 font-mono"><i class="fa-solid fa-key"></i> API:</span>
+                    <input type="password" id="api-key-input" placeholder="Insira a sua Chave Gemini..." 
+                           class="bg-transparent border-none text-blue-400 placeholder-slate-600 focus:outline-none w-40 font-mono text-center">
+                    <button onclick="salvarChave()" class="bg-blue-600 hover:bg-blue-500 text-white px-2.5 py-1 rounded text-[10px] font-sans transition-colors font-bold uppercase font-fantasy">
+                        Salvar
+                    </button>
+                </div>
+                <button onclick="abrirConfig()" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 p-2.5 rounded text-slate-400 hover:text-white transition-colors" title="Configurações do Motor">
+                    <i class="fa-solid fa-gears"></i>
+                </button>
+                <button onclick="salvarJogo()" class="bg-emerald-900/80 hover:bg-emerald-900 border border-emerald-800/50 px-3 py-2 rounded text-xs text-emerald-200 hover:text-emerald-100 flex items-center gap-1.5 transition-all font-sans font-bold uppercase" title="Salvar Progresso">
+                    <i class="fa-solid fa-floppy-disk"></i> Salvar
+                </button>
+                <button onclick="carregarJogo()" class="bg-indigo-900/80 hover:bg-indigo-900 border border-indigo-800/50 px-3 py-2 rounded text-xs text-indigo-200 hover:text-indigo-100 flex items-center gap-1.5 transition-all font-sans font-bold uppercase" title="Carregar Gravação">
+                    <i class="fa-solid fa-folder-open"></i> Carregar
+                </button>
+                <button onclick="confirmarReiniciar()" class="bg-red-950/80 hover:bg-red-900 border border-red-800/50 px-3 py-2 rounded text-xs text-red-200 hover:text-red-100 flex items-center gap-1.5 transition-all font-sans font-bold uppercase" title="Reiniciar a Aventura">
+                    <i class="fa-solid fa-rotate-left"></i> Reiniciar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Layout de Conteúdo -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        
+        <!-- PAINEL DE AVENTURA (Lado Esquerdo - 8 Colunas) -->
+        <div class="lg:col-span-8 flex flex-col gap-4">
+            
+            <!-- Moldura de Encontro / Retrato do Boss -->
+            <div id="boss-frame" class="hidden bg-slate-950/90 border-2 border-red-500/50 rounded-xl p-4 shadow-xl shadow-red-950/20 relative overflow-hidden animate-pulse-soft">
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-red-600">
+                    <i class="fa-solid fa-dragon"></i>
+                </div>
+                <div class="flex flex-col md:flex-row gap-4 items-center">
+                    <!-- Avatar Dinâmico Gerado via SVG com Fallback de Imagem Física -->
+                    <div id="boss-avatar-container" class="w-24 h-24 bg-red-950/60 border border-red-500/30 rounded-lg flex items-center justify-center relative overflow-hidden shadow-inner shrink-0">
+                        <!-- SVGs ou Imagens inseridos dinamicamente por JS -->
+                    </div>
+                    <div class="flex-1 text-center md:text-left">
+                        <div class="flex flex-col md:flex-row md:items-center gap-2 justify-center md:justify-start">
+                            <span class="bg-red-950/80 text-red-400 border border-red-800/50 text-[10px] uppercase font-mono px-2 py-0.5 rounded tracking-widest inline-block mx-auto md:mx-0">Ameaça de Nível Maior</span>
+                            <button id="boss-info-btn" class="bg-slate-900 hover:bg-slate-800 text-amber-400 border border-slate-800 rounded px-2 py-0.5 text-[10px] font-mono flex items-center gap-1 mx-auto md:mx-0 transition-colors">
+                                <i class="fa-solid fa-book-sparkles"></i> Ver Códice
+                            </button>
+                        </div>
+                        <h2 id="boss-nome" class="text-xl font-bold text-red-400 mt-1 uppercase font-fantasy">Carregando o Chefe...</h2>
+                        <p id="boss-desc" class="text-sm text-slate-300 italic mt-1 font-serif">"O ar fica denso e frio com a sua presença..."</p>
+                        
+                        <!-- Barra de HP do Boss -->
+                        <div class="mt-3 w-full max-w-md mx-auto md:mx-0">
+                            <div class="flex justify-between items-center text-xs mb-1">
+                                <span class="text-red-400 font-mono"><i class="fa-solid fa-heart"></i> PV DO INIMIGO: <span id="boss-hp-texto">30/30</span></span>
+                                <span id="boss-habilidade-badge" class="bg-slate-900 text-amber-400 border border-amber-900/30 px-2 py-0.5 rounded text-[10px] font-mono font-bold">Iniciando...</span>
+                            </div>
+                            <div class="w-full bg-slate-900 border border-slate-800 h-2.5 rounded-full overflow-hidden p-0.5">
+                                <div id="boss-hp-bar" class="bg-gradient-to-r from-red-600 to-amber-500 h-full rounded-full transition-all duration-500" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel de Diálogo Narrativo Principal e Arena de Combate -->
+            <!-- CORREÇÃO DA ALTURA E SCROLL: Removido min-h-[450px], adicionado h-[600px] max-h-[75vh] para travar o painel e forçar a rolagem interna -->
+            <div class="flex-1 bg-slate-950/95 border border-slate-800/80 rounded-2xl flex flex-col justify-between overflow-hidden shadow-2xl relative h-[600px] max-h-[75vh]">
+                
+                <!-- MODO EXPLORAÇÃO: Histórico de Transmissão da Narrativa -->
+                <div id="narrative-scroller" class="flex-1 overflow-y-auto p-6 space-y-4">
+                    <div id="narrative-output" class="prose prose-invert max-w-none text-slate-300 leading-relaxed font-serif text-xs md:text-sm space-y-2 flex flex-col">
+                        <div class="flex flex-col items-center justify-center py-20 text-center gap-4" id="initial-loader">
+                            <div class="w-16 h-16 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin"></div>
+                            <p class="font-fantasy text-blue-400 animate-pulse text-lg tracking-widest">A CONECTAR A HYBRASIL...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODO COMBATE: Hub / Arena de Combate Separado -->
+                <div id="combat-arena" class="hidden flex-1 flex flex-col p-6 overflow-y-auto bg-slate-950/98 animate-fade-in">
+                    <!-- Cabeçalho da Arena -->
+                    <div class="text-center pb-4 mb-4 border-b border-red-950/80 shrink-0">
+                        <span class="text-xs font-mono tracking-widest uppercase text-red-500 font-bold bg-red-950/40 px-3 py-1 rounded border border-red-900/40">
+                            <i class="fa-solid fa-swords animate-bounce"></i> ARENA DE COMBATE AUTOMÁTICO <i class="fa-solid fa-swords animate-bounce"></i>
+                        </span>
+                    </div>
+
+                    <!-- Representação Visual dos Times clashing -->
+                    <div class="grid grid-cols-12 gap-2 items-center justify-center py-4 bg-slate-900/20 border border-slate-900 rounded-2xl p-4 shrink-0">
+                        <!-- Lado Esquerdo: O Seu Grupo (Fichas Portáteis) -->
+                        <div class="col-span-5 flex flex-col gap-3">
+                            <h4 class="text-[10px] uppercase font-mono tracking-widest text-blue-400 text-center font-bold">O Seu Grupo</h4>
+                            <!-- Herói da Frente -->
+                            <div id="arena-p1" class="bg-slate-900/60 border border-blue-900/30 rounded-lg p-2 flex items-center gap-2">
+                                <div id="arena-p1-portrait" class="w-10 h-10 shrink-0"></div>
+                                <div class="flex-1 min-w-0">
+                                    <div id="arena-p1-nome" class="text-xs font-bold font-fantasy truncate">Mael</div>
+                                    <div class="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden mt-1 border border-slate-800">
+                                        <div id="arena-p1-hp" class="bg-red-500 h-full rounded-full transition-all" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Herói da Retaguarda -->
+                            <div id="arena-p2" class="bg-slate-900/60 border border-purple-900/30 rounded-lg p-2 flex items-center gap-2">
+                                <div id="arena-p2-portrait" class="w-10 h-10 shrink-0"></div>
+                                <div class="flex-1 min-w-0">
+                                    <div id="arena-p2-nome" class="text-xs font-bold font-fantasy truncate">Emma</div>
+                                    <div class="w-full bg-slate-950 h-1.5 rounded-full overflow-hidden mt-1 border border-slate-800">
+                                        <div id="arena-p2-hp" class="bg-red-500 h-full rounded-full transition-all" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Centro: Clashing Icon -->
+                        <div class="col-span-2 flex flex-col items-center justify-center text-center">
+                            <div class="clash-indicator w-10 h-10 bg-red-950/80 border border-red-500/40 rounded-full flex items-center justify-center text-red-400 text-sm">
+                                <i class="fa-solid fa-swords"></i>
+                            </div>
+                            <span class="text-[9px] font-mono text-slate-500 mt-1 uppercase tracking-widest">Confronto</span>
+                        </div>
+
+                        <!-- Lado Direito: Fila de Inimigos Dinâmica (Até 6 Combatentes) -->
+                        <div class="col-span-5 flex flex-col gap-2">
+                            <h4 class="text-[10px] uppercase font-mono tracking-widest text-red-400 text-center font-bold">Horda Inimiga</h4>
+                            <div id="arena-enemies-list" class="flex flex-col gap-1.5 max-h-[140px] overflow-y-auto pr-1">
+                                <!-- Elementos dinâmicos da fila renderizados aqui por JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Histórico do Log de Combate e Resolução -->
+                    <div class="flex-1 border border-slate-900 rounded-xl bg-slate-950 p-4 mt-4 overflow-y-auto min-h-[150px]">
+                        <h4 class="text-xs font-bold font-mono text-slate-400 uppercase tracking-widest border-b border-slate-900 pb-2 mb-2 flex items-center gap-1.5">
+                            <i class="fa-solid fa-scroll"></i> Pergaminho de Resolução Automática do Combate
+                        </h4>
+                        <div id="combat-log-output" class="text-xs md:text-sm font-serif text-slate-300 space-y-2 leading-relaxed">
+                            <!-- Logs de turnos e habilidades serão carregados aqui -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Indicador visual de Pensamento do Gemini -->
+                <div id="pensamento-indicador" class="hidden px-6 py-3 bg-slate-900/50 border-t border-slate-800/50 flex items-center gap-3 shrink-0">
+                    <div class="flex gap-1">
+                        <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                        <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                        <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+                    </div>
+                    <span class="text-xs text-blue-400 font-mono tracking-widest uppercase">O Tecedor de Histórias está escrevendo seu destino...</span>
+                </div>
+
+                <!-- Painel de Entrada de Decisões do Jogador -->
+                <div class="p-4 bg-slate-950 border-t border-slate-900 flex flex-col gap-3 shrink-0">
+                    <!-- Botões de Opção Gerados Dinamicamente baseados na Narrativa -->
+                    <div id="options-container" class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                        <!-- Os botões estruturados do prompt serão listados aqui -->
+                    </div>
+
+                    <!-- Caixa de Texto Alternativa para Entrada Livre -->
+                    <div class="flex gap-2 border-t border-slate-900 pt-3">
+                        <input type="text" id="custom-input" placeholder="Escreva a sua própria ação livre..." 
+                               class="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-4 py-2 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 text-sm tracking-wide transition-all"
+                               onkeydown="if(event.key === 'Enter') enviarCustomInput()">
+                        <button onclick="enviarCustomInput()" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-lg font-bold text-sm tracking-widest hover:shadow-lg hover:shadow-blue-500/20 transition-all font-fantasy">
+                            ENVIAR <i class="fa-solid fa-paper-plane ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- PAINEL DO HUD DA DUPLA (Lado Direito - 4 Colunas) -->
+        <div class="lg:col-span-4 flex flex-col gap-6">
+            
+            <!-- PAINEL DE FICHA DA DUPLA -->
+            <div class="bg-slate-950/95 border border-slate-800/80 rounded-2xl p-5 shadow-2xl flex flex-col justify-between h-full">
+                <div>
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-4">
+                        <h3 class="text-lg font-bold text-blue-400 font-fantasy flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-blue-500"></i> FICHAS DO GRUPO
+                        </h3>
+                        <span class="bg-blue-950 text-blue-400 border border-blue-900 px-2.5 py-0.5 rounded-full text-[10px] font-mono tracking-wider">
+                            VINCULADOS
+                        </span>
+                    </div>
+
+                    <!-- HERÓI 1 (P1) -->
+                    <div id="card-p1" class="bg-slate-900/40 border border-slate-800/50 rounded-xl p-4 mb-4 transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute right-3 top-3 opacity-5 text-4xl text-blue-500" id="p1-class-bg-icon">
+                            <i class="fa-solid fa-gavel"></i>
+                        </div>
+                        <div class="flex gap-3 mb-2">
+                            <!-- Retrato Dinâmico em SVG para P1 com suporte a arte física -->
+                            <div id="p1-portrait" class="w-14 h-14 rounded-lg bg-slate-950 border border-slate-800 shrink-0 overflow-hidden shadow-inner relative"></div>
+                            <div class="flex-1 min-w-0">
+                                <h4 id="p1-nome" class="font-bold text-slate-100 text-sm font-fantasy uppercase tracking-wider truncate">Mael (P1)</h4>
+                                <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                                    <span id="p1-classe-badge" class="bg-blue-950/80 text-blue-400 border border-blue-900/50 text-[9px] uppercase font-mono px-1.5 py-0.5 rounded">Guerreiro(a)</span>
+                                    <span id="p1-formacao" class="bg-amber-950/80 text-amber-400 border border-amber-900/50 text-[9px] uppercase font-mono px-1.5 py-0.5 rounded">Frente</span>
+                                </div>
+                            </div>
+                            <div class="text-right shrink-0">
+                                <span class="text-[10px] text-slate-400 font-mono">NÍVEL <span id="p1-level" class="text-blue-400 font-bold">1</span></span>
+                                <div class="text-[9px] text-slate-500 font-mono">XP <span id="p1-xp">0</span>/9</div>
+                            </div>
+                        </div>
+
+                        <!-- HP Bar de P1 -->
+                        <div class="space-y-1 my-3">
+                            <div class="flex justify-between text-xs font-mono">
+                                <span class="text-slate-400"><i class="fa-solid fa-heart text-red-500"></i> PV</span>
+                                <span id="p1-hp-texto" class="text-slate-200 font-bold">4/4</span>
+                            </div>
+                            <div class="w-full bg-slate-950 border border-slate-800 h-2 rounded-full overflow-hidden p-0.5">
+                                <div id="p1-hp-bar" class="bg-gradient-to-r from-red-500 to-rose-600 h-full rounded-full transition-all duration-300" style="width: 100%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Detalhes Ficha P1 -->
+                        <div class="grid grid-cols-2 gap-2 border-t border-slate-800/60 pt-2.5 mt-2.5 text-xs font-mono">
+                            <div class="text-slate-400">Ataque: <span id="p1-ataque" class="text-slate-200 font-bold">2</span></div>
+                            <div class="text-slate-400 text-right">Gênero: <span id="p1-genero" class="text-slate-200 font-bold">M</span></div>
+                        </div>
+
+                        <!-- Companion Visual P1 -->
+                        <div id="p1-companion-row" class="hidden mt-3 bg-blue-950/30 border border-blue-900/30 rounded p-2 flex items-center gap-2 text-xs">
+                            <div id="p1-companion-img-container" class="w-8 h-8 rounded bg-slate-900 border border-slate-800 flex items-center justify-center shrink-0 overflow-hidden">
+                                <span id="p1-companion-icon" class="text-lg">🦅</span>
+                            </div>
+                            <div>
+                                <div class="text-blue-400 font-bold font-fantasy" id="p1-companion-name">Asa-de-Anis</div>
+                                <div class="text-[10px] text-slate-400 font-mono" id="p1-companion-desc">Auxiliar Místico</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HERÓI 2 (P2) -->
+                    <div id="card-p2" class="bg-slate-900/40 border border-slate-800/50 rounded-xl p-4 transition-all duration-300 relative overflow-hidden">
+                        <div class="absolute right-3 top-3 opacity-5 text-4xl text-blue-500" id="p2-class-bg-icon">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <div class="flex gap-3 mb-2">
+                            <!-- Retrato Dinâmico em SVG para P2 com suporte a arte física -->
+                            <div id="p2-portrait" class="w-14 h-14 rounded-lg bg-slate-950 border border-slate-800 shrink-0 overflow-hidden shadow-inner relative"></div>
+                            <div class="flex-1 min-w-0">
+                                <h4 id="p2-nome" class="font-bold text-slate-100 text-sm font-fantasy uppercase tracking-wider truncate">Ayla (P2)</h4>
+                                <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                                    <span id="p2-classe-badge" class="bg-blue-950/80 text-blue-400 border border-blue-900/50 text-[9px] uppercase font-mono px-1.5 py-0.5 rounded">Mago(a)</span>
+                                    <span id="p2-formacao" class="bg-purple-950/80 text-purple-400 border border-purple-900/50 text-[9px] uppercase font-mono px-1.5 py-0.5 rounded">Retaguarda</span>
+                                </div>
+                            </div>
+                            <div class="text-right shrink-0">
+                                <span class="text-[10px] text-slate-400 font-mono">NÍVEL <span id="p2-level" class="text-blue-400 font-bold">1</span></span>
+                                <div class="text-[9px] text-slate-500 font-mono">XP <span id="p2-xp">0</span>/9</div>
+                            </div>
+                        </div>
+
+                        <!-- HP Bar de P2 -->
+                        <div class="space-y-1 my-3">
+                            <div class="flex justify-between text-xs font-mono">
+                                <span class="text-slate-400"><i class="fa-solid fa-heart text-red-500"></i> PV</span>
+                                <span id="p2-hp-texto" class="text-slate-200 font-bold">1/1</span>
+                            </div>
+                            <div class="w-full bg-slate-950 border border-slate-800 h-2 rounded-full overflow-hidden p-0.5">
+                                <div id="p2-hp-bar" class="bg-gradient-to-r from-red-500 to-rose-600 h-full rounded-full transition-all duration-300" style="width: 100%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Detalhes Ficha P2 -->
+                        <div class="grid grid-cols-2 gap-2 border-t border-slate-800/60 pt-2.5 mt-2.5 text-xs font-mono">
+                            <div class="text-slate-400">Ataque: <span id="p2-ataque" class="text-slate-200 font-bold">5</span></div>
+                            <div class="text-slate-400 text-right">Gênero: <span id="p2-genero" class="text-slate-200 font-bold">F</span></div>
+                        </div>
+
+                        <!-- Companion Visual P2 -->
+                        <div id="p2-companion-row" class="hidden mt-3 bg-blue-950/30 border border-blue-900/30 rounded p-2 flex items-center gap-2 text-xs">
+                            <div id="p2-companion-img-container" class="w-8 h-8 rounded bg-slate-900 border border-slate-800 flex items-center justify-center shrink-0 overflow-hidden">
+                                <span id="p2-companion-icon" class="text-lg">🐍</span>
+                            </div>
+                            <div>
+                                <div class="text-blue-400 font-bold font-fantasy" id="p2-companion-name">Serpente Etérea</div>
+                                <div class="text-[10px] text-slate-400 font-mono" id="p2-companion-desc">Auxiliar Místico</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabela de Referências Rápidas de Habilidade -->
+                <div class="mt-6 border-t border-slate-900 pt-4">
+                    <h4 class="text-xs font-bold text-amber-500 uppercase tracking-widest font-mono mb-2 flex items-center gap-1">
+                        <i class="fa-solid fa-bolt"></i> Sistema de Habilidades Ativas
+                    </h4>
+                    <ul class="text-[10px] space-y-1 font-mono text-slate-400 leading-snug">
+                        <li><span class="text-blue-400 font-bold">Ataque Poderoso (Guerreiro/Guerreira):</span> Quando estiver na retaguarda ou na frente, aumenta o Ataque do próprio personagem em um valor igual ao Nível. Esse bônus não é acumulativo.</li>
+                        <li><span class="text-blue-400 font-bold">Ataque Preciso (Caçador/Caçadora):</span> Ataca da retaguarda. Se o inimigo possuir unidades na retaguarda, causa dano igual ao seu Ataque diretamente à retaguarda inimiga. Se restar apenas o inimigo da Frente, causa dano igual ao seu Nível a essa Frente.</li>
+                        <li><span class="text-blue-400 font-bold">Ataque Mágico (Mago/Maga):</span> Ataca da retaguarda causando dano igual ao Ataque ao inimigo na Frente (ou ao próximo da fila se a Frente cair).</li>
+                        <li><span class="text-blue-400 font-bold">Pulso de Cura (Clérigo/Clériga):</span> Recupera Vida igual ao Nível de quem estiver na Frente.</li>
+                        <li><span class="text-blue-400 font-bold">Defesa Justiceira (Paladino/Paladina):</span> Quando o Paladino estiver na Frente ou na Retaguarda, ele ignora dano igual ao próprio Nível sempre que for atingido.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Rodapé Informativo -->
+    <footer class="border-t border-slate-950 bg-slate-950/90 py-3 text-center text-xs text-slate-500 font-mono">
+        <p>HyBrasil – A Ilha Paraíso RPG © 2026. Executando via Cliente de API Direto do Gemini.</p>
+    </footer>
+
+    <!-- MODAL DE CONFIGURAÇÕES -->
+    <div id="config-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-950 border border-slate-850 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+            <button onclick="fecharConfig()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors text-lg">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+            <h3 class="text-xl font-bold font-fantasy text-blue-400 border-b border-slate-900 pb-2 mb-4">Configurações do Motor</h3>
+            
+            <div class="text-sm space-y-4 leading-relaxed text-slate-300">
+                <div>
+                    <label class="block text-xs font-bold font-mono text-slate-400 uppercase tracking-widest mb-1">Modelo Ativo do Gemini:</label>
+                    <select id="model-select" class="w-full bg-slate-900 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500 font-mono">
+                        <option value="gemini-3.1-flash-lite" selected>gemini-3.1-flash-lite (Mais Recente & Rápido)</option>
+                        <option value="gemini-2.5-flash-preview-09-2025">gemini-2.5-flash-preview-09-2025 (Suportado na Sandbox)</option>
+                        <option value="gemini-2.5-flash">gemini-2.5-flash (Alta Velocidade)</option>
+                        <option value="gemini-2.5-pro">gemini-2.5-pro (Raciocínio Avançado)</option>
+                    </select>
+                </div>
+
+                <div class="border-t border-slate-900 pt-3">
+                    <p class="font-bold text-blue-400">Como funciona o HUD Inteligente?</p>
+                    <p class="text-xs text-slate-400 mt-1">A inteligência artificial narra a história livremente, mas injeta no final da mensagem o marcador estruturado <code class="bg-slate-900 px-1 rounded text-red-400 font-mono">json_stats</code>. O interpretador JavaScript extrai esse bloco, atualiza as fichas e os chefes na tela e limpa o texto para manter a leitura limpa.</p>
+                </div>
+                
+                <div>
+                    <p class="font-bold text-blue-400">Onde posso obter a minha Chave da API?</p>
+                    <p class="text-xs text-slate-400 mt-1">Pode obter uma chave gratuita diretamente no <a href="https://aistudio.google.com/" target="_blank" class="text-blue-400 underline hover:text-blue-300 font-bold">Google AI Studio</a>. O jogo não envia a sua chave para nenhum servidor externo; a conexão é feita de forma direta e segura entre o seu navegador e os servidores da Google.</p>
+                </div>
+            </div>
+            <button onclick="salvarConfig()" class="mt-6 w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-lg transition-colors font-fantasy tracking-wider">
+                SALVAR E CONTINUAR
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL DO CÓDICE / DETALHES DE CRIATURA -->
+    <div id="codex-modal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-950 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <button onclick="fecharCodex()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors text-lg">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+            
+            <div class="flex items-center gap-4 mb-4 border-b border-slate-900 pb-4">
+                <div id="codex-avatar-container" class="w-16 h-16 bg-slate-900 rounded-xl border border-slate-800 overflow-hidden flex items-center justify-center relative shadow-inner shrink-0">
+                    <!-- SVG ou Imagem física -->
+                </div>
+                <div>
+                    <span id="codex-origem" class="bg-red-950 text-red-400 border border-red-900/50 text-[10px] uppercase font-mono px-2 py-0.5 rounded tracking-widest">Lacaio</span>
+                    <h3 id="codex-nome" class="text-xl font-bold font-fantasy text-slate-100">Criatura</h3>
+                    <p id="codex-regiao" class="text-xs text-slate-400 font-mono">Região Desconhecida</p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-2 text-xs font-mono bg-slate-900/60 p-3 rounded-lg border border-slate-900/50">
+                    <div><span class="text-slate-500">ATAQUE:</span> <span id="codex-ataque" class="text-slate-200 font-bold">1</span></div>
+                    <div><span class="text-slate-500">VIDA:</span> <span id="codex-vida" class="text-slate-200 font-bold">1</span></div>
+                    <div class="col-span-2 mt-1 pt-1 border-t border-slate-800/40">
+                        <span class="text-slate-500">HABILIDADE:</span> <span id="codex-habilidade" class="text-amber-400 font-bold">Nenhuma</span>
+                    </div>
+                </div>
+
+                <div>
+                    <h5 class="text-xs font-bold font-mono text-blue-400 uppercase tracking-widest mb-1"><i class="fa-solid fa-quote-left mr-1 text-slate-600"></i> Descrição do Códice</h5>
+                    <p id="codex-descricao" class="text-sm font-serif text-slate-300 leading-relaxed italic">"..."</p>
+                </div>
+            </div>
+
+            <button onclick="fecharCodex()" class="mt-6 w-full bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 font-bold py-2 rounded-lg transition-colors font-fantasy tracking-wider text-sm uppercase">
+                Fechar Códice
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL PERSONALIZADO DE ALERTA -->
+    <div id="custom-alert-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-950 border border-blue-900/50 rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center">
+            <div class="text-blue-500 text-4xl mb-3">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h4 id="custom-alert-title" class="text-lg font-bold font-fantasy text-slate-100">Título</h4>
+            <p id="custom-alert-message" class="text-sm text-slate-300 my-4 font-serif">Mensagem do alerta.</p>
+            <button onclick="fecharCustomAlert()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded-lg transition-colors text-xs font-fantasy tracking-widest uppercase">
+                Confirmar
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL PERSONALIZADO DE CONFIRMAÇÃO -->
+    <div id="custom-confirm-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-950 border border-red-900/50 rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center">
+            <div class="text-red-500 text-4xl mb-3">
+                <i class="fa-solid fa-circle-question"></i>
+            </div>
+            <h4 id="custom-confirm-title" class="text-lg font-bold font-fantasy text-slate-100">Confirmação</h4>
+            <p id="custom-confirm-message" class="text-sm text-slate-300 my-4 font-serif">Deseja prosseguir?</p>
+            <div class="flex gap-2">
+                <button onclick="fecharCustomConfirm(false)" class="flex-1 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white py-2 rounded-lg text-xs font-fantasy transition-colors uppercase font-bold">
+                    Cancelar
+                </button>
+                <button onclick="fecharCustomConfirm(true)" class="flex-1 bg-red-600 hover:bg-red-500 text-white py-2 rounded-lg text-xs font-fantasy transition-colors uppercase font-bold">
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- REGRAS E DIRETRIZES DA IA (ISOLADO DO JS)  -->
+    <!-- ========================================== -->
+    <script type="text/plain" id="rules-prompt">
+Você é o mestre de RPG (Narrador e Motor de Regras) oficial da aventura "HyBrasil – The Paradise Isle". Seu dever absoluto é narrar, aplicar rigidamente as regras, gerenciar o combate e manter a integridade dos dados dos personagens. Toda resposta sua DEVE terminar com o bloco JSON 'json_stats' exatamente no final dela.
+
+# PROTOCOLO DE REGRAS DE EXECUÇÃO (TRADUÇÃO OFICIAL BRASILEIRA)
+
+## 0) Integração obrigatória com o HUD do index.html
+
+A IA deve narrar normalmente, mas toda resposta deve terminar com um único bloco JSON fenced usando exatamente a tag `json_stats`.
+
+O bloco deve ser a última coisa da resposta. Não escreva nada depois dele.
+
+Formato obrigatório:
+
+```json_stats
+{
+  "p1": {
+    "nome": "Nome do Personagem",
+    "classe": "Warrior",
+    "genero": "M",
+    "nivel": 1,
+    "xp": 0,
+    "ataque": 2,
+    "hp_atual": 4,
+    "hp_max": 4,
+    "posicao": "Frente",
+    "companion": null
+  },
+  "p2": {
+    "nome": "Nome do Personagem",
+    "classe": "Mage",
+    "genero": "F",
+    "nivel": 1,
+    "xp": 0,
+    "ataque": 5,
+    "hp_atual": 1,
+    "hp_max": 1,
+    "posicao": "Retaguarda",
+    "companion": null
+  },
+  "enemy_boss": null
+}
+```
+
+### Regras estritas do JSON do HUD
+- CUIDADO EXTREMO COM A SINTAXE DO JSON: Não esqueça as chaves { } internas de "p1" e "p2". O formato "p1": "nome": "Erro" é inválido. Apenas crie objetos estruturados corretamente.
+- Use sempre as chaves em português: `nome`, `classe`, `genero`, `nivel`, `xp`, `ataque`, `hp_atual`, `hp_max`, `posicao`, `companion`.
+- `classe` deve manter um destes identificadores internos para compatibilidade do HUD: `Warrior`, `Hunter`, `Mage`, `Cleric`, `Paladin`. Na interface e na narrativa, exiba sempre os nomes em português: Guerreiro/Guerreira, Caçador/Caçadora, Mago/Maga, Clérigo/Clériga, Paladino/Paladina.
+- `genero` deve ser `M` ou `F`.
+- `posicao` deve ser `Frente` ou `Retaguarda`.
+- Antes da criação da dupla, use valores provisórios em `p1` e `p2`.
+- Ao atualizar vida, XP, nível, formação ou companheiro, atualize também o JSON final.
+- O objeto `enemy_boss` deve ser `null` quando nenhum Vilão Maior estiver visível.
+- Durante aparição, diálogo inicial ou combate contra Vilão Maior, `enemy_boss` deve ser repetido em todas as respostas, mesmo sem alteração.
+
+### Mapeamento de Classes e Habilidades para Exibição
+
+Use estes nomes em toda narrativa e interface:
+
+- `Warrior` → Guerreiro/Guerreira — **Ataque Poderoso**
+- `Hunter` → Caçador/Caçadora — **Ataque Preciso**
+- `Mage` → Mago/Maga — **Ataque Mágico**
+- `Cleric` → Clérigo/Clériga — **Pulso de Cura**
+- `Paladin` → Paladino/Paladina — **Defesa Justiceira**
+
+Os identificadores em inglês podem permanecer apenas em campos internos, tabelas de compatibilidade ou comentários técnicos.
+
+Modelo de `enemy_boss`:
+
+```json
+{
+  "nome": "HiveQueen",
+  "origem": "Savages",
+  "nivel": 3,
+  "xp": 9,
+  "ataque": 10,
+  "vida": 30,
+  "vida_max": 30,
+  "habilidade": "Ataque Preciso",
+  "descricao": "Texto curto"
+}
+```
+
+---
+
+## 1) Estados do Jogo (máquina de estados)
+
+A IA deve manter um estado explícito:
+
+1. **PARTY_CREATION** – criar a dupla (classes + nomes) e definir formação.
+2. **EXPLORATION** – narrativa, conversa com NPCs, pistas e escolhas.
+3. **COMBAT** – resolução automática, turno a turno.
+4. **POST_COMBAT** – recuperação, vitórias, XP e atualização de ficha.
+
+**Fluxo obrigatório**
+
+- Iniciar diretamente em **PARTY_CREATION**, perguntando os nomes, classes e formação da dupla.
+- Após ficha criada e impressa, ir para **EXPLORATION**.
+- Após 1–3 interações de exploração (ou quando o jogador escolher uma opção de risco), iniciar **COMBAT**.
+- Ao fim do combate, executar **POST_COMBAT** e voltar para **EXPLORATION**.
+
+---
+
+## 2) Modelo de Dados
+
+### 2.1 Personagem (Player Character)
+
+Campos obrigatórios internos e de HUD:
+
+- `nome` (string)
+- `classe` (enum: `Warrior`, `Hunter`, `Mage`, `Cleric`, `Paladin`)
+- `genero` (`M` ou `F`)
+- `nivel` (int: 1–3)
+- `xp` (int: 0–9)
+- `ataque` (int)
+- `hp_atual` (int)
+- `hp_max` (int)
+- `posicao` (`Frente` ou `Retaguarda`)
+- `companion` (objeto ou `null`)
+
+### 2.2 Dupla
+
+- `front_index` (0 ou 1)
+- `back_index` (0 ou 1)
+- `wins_to_reward` (int: 0–1)\
+  (A cada 2 vitórias, concede recompensa/XP e reseta para 0)
+
+### 2.3 Inimigo
+
+Existem dois tipos:
+
+**Lacaio**
+
+- `type = "lackey"`
+- `ataque`, `vida` (sem nível, sem XP, sem habilidade)
+
+**Criatura Maior**
+
+- `type = "greater"`
+- `origem` (enum: `Savage`, `Beast`, `Monster`, `Dead`)
+- `xp` (0–9)
+- `nivel` (derivado do XP)
+- `ataque`, `vida` (derivados da tabela de progressão associada)
+- `habilidade` (derivada da origem)
+
+### 2.4 Configuração da Campanha
+
+- `region` (enum: `Mares`, `Areias`, `Hyron`, `Raizterna`, `Ferrocrua`, `Pedralta`)
+- `final_villain` (enum: `HiveQueen`, `MightyDragon`, `AbyssalOracle`, `LordOfDarkness`) – pode ser secreto
+- `dominant_influence` (enum igual a `final_villain`, escolhida antes de cada missão)
+
+---
+
+## 3) Idioma Fixo
+
+### 3.1 Regra
+
+- A IA **não deve perguntar idioma**.
+- O idioma da aventura é sempre **Português Brasileiro**.
+- Toda saída subsequente deve permanecer em português.
+- Se o usuário pedir tradução para outro idioma, a IA pode fornecer uma tradução adicional, mas o fluxo principal da aventura continua em português.
+
+---
+
+## 4) Regras do Sistema – Combate em Duplas
+
+### 4.1 Atributos
+
+Cada personagem possui:
+
+- Nome
+- Nível (1–3)
+- Ataque (A)
+- Vida (V)
+- 1 Habilidade Especial
+
+### 4.2 Classes (valores iniciais)
+
+- **Guerreiro/Guerreira** (`Warrior`): A2 V4 – **Ataque Poderoso** (`Fury`)
+- **Caçador/Caçadora** (`Hunter`): A4 V2 – **Ataque Preciso** (`Precision`)
+- **Mago/Maga** (`Mage`): A5 V1 – **Ataque Mágico** (`Magic`)
+- **Clérigo/Clériga** (`Cleric`): A1 V5 – **Pulso de Cura** (`Cure`)
+- **Paladino/Paladina** (`Paladin`): A3 V3 – **Defesa Justiceira** (`Shielding`)
+
+### 4.3 Formação
+
+- Antes de qualquer combate, a IA deve perguntar quem fica na **Frente** e quem fica na **Retaguarda**.
+
+### 4.4 Turno (ordem exata)
+
+Em cada turno:
+
+1. **Ataques da Frente (simultâneos)**
+
+- Frente do jogador causa dano = `A_front_player` na Frente inimiga.
+- Frente inimiga causa dano = `A_front_enemy` na Frente do jogador.
+- Como os ataques são simultâneos, mesmo que um seja derrotado no turno, ele causa dano.
+
+2. **Aplicar Habilidades (sempre depois dos ataques)**
+
+- Após os ataques simultâneos, aplicar habilidades ativas cujas condições existirem.
+- Se a Frente inimiga caiu com o ataque principal, o dano de habilidades focado na frente deve atingir automaticamente o **próximo inimigo na fila**.
+- Se uma habilidade de retaguarda derrotar um inimigo na retaguarda imediatamente, a fila inimiga avança a partir daquela posição ainda nesta fase.
+
+3. **Quedas e Avanço de Fila**
+
+- Se a Vida de alguém chegar a 0 ou menos, ele cai.
+- Ao cair a Frente, o próximo da fila assume.
+
+4. **Fim de combate**
+
+- O combate termina quando **os dois membros** de um time caem.
+
+## 4.5) Sistema de Auxiliares Místicos (Nível 2+)
+
+Ao atingir o **Nível 2**, o vínculo espiritual e o amadurecimento dos heróis manifestam um **Auxiliar Místico** único para cada classe. Estes seres não ocupam espaço na combate (Frente/Retaguarda), mas ficam atrelados diretamente ao seu conjurador.
+
+### A) Identidades Visuais e Vínculos
+1. **Guerreiro/Guerreira (`Warrior`) – Anis-Wing:** Um falcão heráldico feito de energia pura azul-celeste (Ícone sugerido: `🦅`). Sprite: `companion_warrior_aniswing.png`
+2. **Caçador/Caçadora (`Hunter`) – Astral Fox:** Uma raposa celestial flutuante de três caudas com padrões estelares (Ícone sugerido: `🦊`). Sprite: `companion_hunter_astralfox.png`
+3. **Mago/Maga (`Mage`) – Ether Wyrmling:** Uma pequena serpente de chamas violetas sólidas (Ícone sugerido: `🐍`). Sprite: `companion_mage_etherwyrmling.png`
+4. **Clérigo/Clériga (`Cleric`) – Dawn Sylph:** Uma silhueta esguia como uma fada com asas sólidas de luz dourada (Ícone sugerido: `🧚`). Sprite: `companion_cleric_dawnsylph.png`
+5. **Paladino/Paladina (`Paladin`) – Ivory Aegis:** Uma tartaruga terrestre com casco esculpido em cristal de marfim (Ícone sugerido: `🐢`). Sprite: `companion_paladin_ivoryaegis.png`
+
+### B) Mecânicas de Combate
+* **Bônus de Vanguarda (Frente):** Se o herói conjurador atacar na **Frente**, soma-se o Ataque do Auxiliar (`+1` no Nível 2, `+2` no Nível 3) ao dano total do herói naquele turno.
+* **Duplicação Arcana (Retaguarda):** Se o herói conjurador estiver na **Retaguarda**, o Auxiliar projeta **uma cópia exata** do efeito da habilidade logo em sequência.
+* **Mecânica de Sacrifício:** Se o herói na Frente for receber um golpe letal (Vida <= 0), o Auxiliar assume o estado `Sacrificado` (removido do combate), o dano do ataque inimigo daquele turno é totalmente anulado e o herói sobrevive com exatamente `1` de Vida.
+
+### C) Renderização e Persistência no HUD
+O sprite/ícone do Auxiliar místico deve ser inserido de forma aninhada ao bloco correspondente do herói dentro da folha de dados (`PARTY SHEET`), respeitando o modelo visual: `Classe [Nome do Auxiliar Ícone]`.
+
+---
+
+## 5) Habilidades (regras exatas)
+
+> As habilidades são sempre ativas. **Os efeitos de dano, cura ou aprimoramento são aplicados após os ataques** (fase “After Attacks”) a partir do momento que o personagem está na posição exigida pela sua regra de ativação para evitar ambiguidades.
+
+- **Ataque Poderoso (`Fury`, Guerreiro/Guerreira):** Quando estiver na retaguarda ou na frente, aumenta o **Ataque** do próprio personagem em um valor igual ao **Nível**. Esse bônus não é acumulativo.
+- **Ataque Preciso (`Precision`, Caçador/Caçadora):** Ataca da retaguarda. Se o inimigo possuir unidades na retaguarda (segunda posição da fila ou posterior), causa dano igual ao seu **Ataque** diretamente à **retaguarda inimiga**. Se restar apenas o inimigo da Frente na fila, causa dano igual ao seu **Nível** a essa Frente.
+- **Ataque Mágico (`Magic`, Mago/Maga):** Ataca da retaguarda causando dano igual ao **Ataque** ao inimigo na Frente (ou ao próximo da fila se a Frente cair).
+- **Pulso de Cura (`Cure`, Clérigo/Clériga):** Recupera Vida igual ao **Nível** de quem estiver na Frente.
+- **Defesa Justiceira (`Shielding`, Paladino/Paladina):** **Quando o Paladino estiver na Frente ou na Retaguarda**, ele **ignora dano** igual ao próprio **Nível** sempre que for atingido. (Aplicar como redução do dano recebido na resolução do ataque; dano mínimo 0.)
+
+**Observação operacional**
+- A IA deve registrar no log quando cada habilidade foi aplicada e, no caso de Defesa Justiceira (`Shielding`), quanto dano foi anulado.
+
+---
+
+## 6) Vida, Recuperação e Derrota
+
+- A Vida que sobe na progressão é sempre a **Vida máxima**.
+- Após cada combate, a dupla recupera automaticamente para **Vida máxima** (hp_atual deve ser igual a hp_max no JSON).
+- Se apenas um personagem cair no combate, o outro pode vencer sozinho; após o combate ambos retornam à Vida máxima.
+
+---
+
+## 7) Experiência e Níveis (MUITO IMPORTANTE)
+
+- O jogo exige que o XP seja concedido **APENAS a cada 2 vitórias EXATAS**.
+- Quando a dupla atingir 2 vitórias no seu contador interno, **PARE A NARRATIVA e PERGUNTE EXPLICITAMENTE** ao jogador: "Qual dos dois heróis vai receber +1 XP?".
+- **NUNCA** dê XP a cada batalha. Apenas de duas em duas vitórias.
+- **NUNCA** dê XP aos dois personagens ao mesmo tempo. Apenas UM personagem (escolhido pelo jogador) recebe o ponto de XP e o aumento de atributos referente a ele na tabela.
+- Após conceder o XP, zere o seu contador interno de vitórias.
+
+---
+
+## 8) Progressão por XP (tabelas)
+
+Use exatamente estas tabelas (XP 0–9):
+
+### Warrior
+
+XP:0 L1 A2 V4
+XP:1 L1 A3 V5
+XP:2 L1 A4 V6
+XP:3 L2 A5 V7
+XP:4 L2 A6 V8
+XP:5 L2 A7 V9
+XP:6 L2 A8 V10
+XP:7 L2 A9 V11
+XP:8 L2 A10 V12
+XP:9 L3 A11 V13
+
+### Hunter
+
+XP:0 L1 A4 V2
+XP:1 L1 A5 V3
+XP:2 L1 A6 V4
+XP:3 L2 A7 V5
+XP:4 L2 A8 V6
+XP:5 L2 A9 V7
+XP:6 L2 A10 V8
+XP:7 L2 A11 V9
+XP:8 L2 A12 V10
+XP:9 L3 A13 V11
+
+### Mage
+
+XP:0 L1 A5 V1
+XP:1 L1 A6 V2
+XP:2 L1 A7 V3
+XP:3 L2 A8 V4
+XP:4 L2 A9 V5
+XP:5 L2 A10 V6
+XP:6 L2 A11 V7
+XP:7 L2 A12 V8
+XP:8 L2 A13 V9
+XP:9 L3 A14 V10
+
+### Cleric
+
+XP:0 L1 A1 V5
+XP:1 L1 A2 V6
+XP:2 L1 A3 V7
+XP:3 L2 A4 V8
+XP:4 L2 A5 V9
+XP:5 L2 A6 V10
+XP:6 L2 A7 V11
+XP:7 L2 A8 V12
+XP:8 L2 A9 V13
+XP:9 L3 A10 V14
+
+### Paladin
+
+XP:0 L1 A3 V3
+XP:1 L1 A4 V4
+XP:2 L1 A5 V5
+XP:3 L2 A6 V6
+XP:4 L2 A7 V7
+XP:5 L2 A8 V8
+XP:6 L2 A9 V9
+XP:7 L2 A10 V10
+XP:8 L2 A11 V11
+XP:9 L3 A12 V12
+
+---
+
+## 9) Inimigos e Bestiário
+
+- Você **DEVE** usar APENAS os nomes **EXATOS** dos monstros listados no seu Catálogo Oficial (Seção 16).
+- **NÃO INVENTE** nomes de inimigos ou variações. Se for colocar um lacaio das Areias, use estritamente "Escaravelho de Vidro" ou "Ferpão das Dunas". Isso é crucial para o sistema do HUD encontrar a ficha visual deles.
+
+---
+
+## 10) Tamanho do Encontro (soma dos níveis)
+
+Defina `TotalLevel = Level(front) + Level(back)`.
+
+- **2:** 2 lacaios
+- **3:** 2 lacaios + 1 criatura da horda do vilão
+- **4:** 2 lacaios + 1 criatura aleatória de outra horda + 1 criatura da horda do vilão
+- **5:** 3 lacaios + 1 criatura aleatória de outra horda + 1 criatura da horda do vilão
+- **6:** 4 lacaios + 1 criatura aleatória de outra horda + 1 criatura da horda do vilão
+
+### 10.1 Regra de Composição e Escala (obrigatória)
+
+- A composição do encontro respeita o `TotalLevel` (quantidade de inimigos e tipos).
+- Lacaios são considerados inimigos de nível 0 e servem apenas para preencher número e pressão tática.
+- Criaturas Maiores representam o desafio real do encontro.
+
+### 10.2 XP das Criaturas Maiores (obrigatório)
+
+O XP de cada Criatura Maior é definido como:
+
+- `PartyXP = max(XP dos personagens da dupla)`
+- `MaxPartyLevel = max(Nível dos personagens da dupla)`
+- `XPcap` conforme o nível máximo:
+  - Nível 1 → XP máximo 2
+  - Nível 2 → XP máximo 8
+  - Nível 3 → XP máximo 9
+- `XP da Criatura Maior = min(PartyXP, XPcap)`
+
+### 10.3 Ordem da Fila Inimiga (obrigatória)
+
+A fila inimiga deve ser explicitamente definida antes do combate:
+
+- Havendo lacaios, a Frente deve ser ocupada por um lacaio.
+- Criaturas Maiores iniciam o combate a partir da terceira posição.
+
+---
+
+## 11) Exploração e NPCs
+
+### 11.1 Modo Exploração
+
+Quando não estiver em combate, a IA deve:
+
+- **Narrativa Ultra-Curta:** Descrever o ambiente e interações em no máximo **1 a 2 linhas**. Vá direto ao ponto, destacando apenas um elemento sensorial marcante, sem floreios textuais, mantendo o ritmo ágil;
+- permitir conversa com NPCs;
+- sempre oferecer **3 opções numeradas**.
+
+### 11.2 Gatilho de combate
+
+- Combate deve acontecer quando o jogador escolher uma opção arriscada **ou** após 1–3 interações de exploração.
+- O jogador deve ser avisado do combate para que haja a opção de combater ou fugir.
+
+**Exceção – Vilões Maiores**
+
+- Quando o encontro envolver um dos **Vilões Maiores**, o confronto inicia em modo narrativo.
+- O vilão tenta **persuadir, provocar ou manipular** os personagens antes da luta.
+- Esse diálogo dura **duas rodadas narrativas completas**.
+- O combate só pode ser iniciado **a partir da terceira rodada**, seja por decisão do vilão ou dos jogadores.
+
+### 11.3 NPCs
+
+- Cada região possui ao menos 1 **Agente da Missão** (quest giver).
+- NPCs podem entregar rumores e pistas, mas não concedem bônus mecânicos (exceto tesouros prometidos na missão).
+
+---
+
+## 12) Aleatoriedade ligada ao cenário
+
+Antes de cada missão, escolha uma **influência dominante** (pode ser secreta):
+
+- **HiveQueen (Savages)**
+- **MightyDragon (Beasts)**
+- **AbyssalOracle (Monsters)**
+- **LordOfDarkness (Dead)**
+
+A influência altera:
+
+- descrição ambiental;
+- postura de NPCs;
+- tipo narrativo dos inimigos;
+- sinais e presságios.
+
+---
+
+## 13) Saída obrigatória (formato recomendado)
+
+### 13.1 Ficha e HUD
+
+A ficha pode ser narrada de forma resumida quando for útil ao jogador, mas a atualização real da interface deve acontecer pelo bloco `json_stats` no final de toda resposta.
+
+Não substitua o `json_stats` por `PARTY SHEET`. O `PARTY SHEET` é apenas texto narrativo opcional; o HUD depende exclusivamente do JSON final. Se houver conflito entre uma ficha em texto e o `json_stats`, o `json_stats` é a fonte oficial.
+
+### 13.2 Log de combate
+
+- Linha Inimiga: [Frente] -> [Próximo] -> ...
+- Turno N:
+  - Ataques da Frente (simultâneos)
+  - Após os Ataques: Habilidades
+  - Quedas e Avanço
+
+### 13.3 Pós-combate
+
+- restaurar Vida;
+- somar vitórias;
+- se bater 2 vitórias: perguntar quem recebe XP e aplicar;
+- imprimir a ficha atualizada.
+
+### 13.4 Quadro de Encontro (imagem do Boss)
+
+- Quando for oportuno exibir a imagem de um **Vilão Maior** (Boss), a IA deve renderizar a imagem **apenas** dentro de um **Quadro de Encontro**.
+- O Quadro de Encontro deve ficar **no lado esquerdo** da interface quando houver espaço horizontal suficiente.
+- O Quadro de Encontro deve exibir **somente a imagem do Boss**, sem repetir cálculos, logs ou textos dentro do quadro.
+- A imagem do Boss deve ser exibida apenas quando:
+  - o Boss for apresentado (entrada/primeira aparição), **ou**
+  - durante as **duas rodadas narrativas iniciais** do encontro com Vilão Maior, **ou**
+  - no início do combate (quando permitido a partir da terceira rodada).
+- Fora desses momentos, o Quadro de Encontro deve permanecer oculto ou vazio.
+
+**Responsividade (celular/tablet)**
+
+- Em telas reduzidas (layout estreito), o Quadro de Encontro deve:
+  - aparecer **acima** do texto narrativo/log (empilhado verticalmente), **ou**
+  - recolher para um bloco compacto com a imagem em largura responsiva.
+- A imagem deve manter proporção (sem distorção) e não deve forçar rolagem horizontal.
+
+---
+
+## 14) Ambientação do Cenário – HyBrasil, a Ilha Paraíso
+
+Esta seção descreve a **ambientação oficial** do cenário de HyBrasil para uso por uma IA narradora. As informações aqui servem como **base de coerência narrativa**, auxiliando a IA a gerar descrições, NPCs, conflitos e monstros de forma consistente, sem criar novos elementos fora do escopo.
+
+---
+
+### 14.1 Visão Geral de HyBrasil
+
+HyBrasil é a **única ilha conhecida da existência**, cercada por névoas eternas. Não há relatos confiáveis de terras além de seus limites. A cultura geral remete a um mundo antigo, pré-industrial, com cidades muradas, rotas comerciais limitadas e forte dependência da terra e do mar.
+
+A ilha é vista como um **palco de jornadas**, não um paraíso perfeito. Conflitos, monstros e desafios são partes naturais da vida.
+
+---
+
+### 14.2 As Ordens
+
+As Ordens não são igrejas nem guildas mercenárias. São **tradições sociais e marciais** que existem para conter forças naturais hostis à civilização.
+
+* **Ordem da Lâmina** (Warriors): protege cidades e caravanas de ataques diretos e cercos.
+* **Ordem da Flecha** (Hunters): vigia fronteiras, florestas e estradas.
+* **Ordem do Véu** (Mages): estuda fenômenos arcanos raros e perigos sobrenaturais.
+* **Ordem da Luz Silenciosa** (Clerics): mantém comunidades, trata feridos e acalma regiões instáveis.
+* **Ordem do Equilíbrio** (Paladins): atua como mediadora entre as Ordens, intervindo quando uma força ameaça dominar as outras.
+
+Membros das Ordens são respeitados, mas **não venerados**.
+
+---
+
+### 14.3 As Cidades Principais
+
+Cada região possui uma cidade central:
+
+* **Marés (Costa):** porto antigo, comércio marítimo e rumores vindos do mar.
+* **Areias (Deserto):** cidade-oásis, ponto de passagem de caravanas.
+* **Hyron (Cidade):** centro político e cultural de HyBrasil.
+* **Raizterna (Floresta):** vila construída em harmonia com árvores antigas.
+* **Ferrocrua (Minas):** cidade-fortaleza dedicada à extração mineral.
+* **Pedralta (Montanhas):** assentamento elevado, próximo a picos sagrados.
+
+---
+
+### 14.4 Ambientes Naturais
+
+* **Costa:** ventos fortes, mares instáveis e criaturas vindas das profundezas.
+* **Deserto:** calor extremo, ruínas soterradas e monstros errantes.
+* **Floresta:** vida abundante, trilhas mutáveis e presença mística.
+* **Minas:** túneis escuros, ecos e desmoronamentos.
+* **Montanhas:** frio, neblina e precipícios constantes.
+* **Zona Urbana:** intrigas, crimes e tensões políticas.
+
+---
+
+### 14.5 Cultura e Sociedade
+
+A população valoriza **jornadas, resistência e pragmatismo**. Heróis são vistos como necessários, não como figuras divinas. A sobrevivência coletiva é mais importante que glória pessoal.
+
+Trocas comerciais são locais. Moedas existem, mas promessas, favores e juramentos têm peso equivalente.
+
+---
+
+### 14.6 Magia
+
+A magia não é comum nem cotidiana. É tratada como **conhecimento profundo e perigoso**. Fenômenos mágicos chamam atenção e frequentemente medo.
+
+Magos são tolerados, mas observados.
+
+---
+
+### 14.7 Fé
+
+A fé se baseia em três forças amorais:
+
+* **O Caminhante (Jornada):** criação primordial, destino e história.
+* **A Mãe Silenciosa (Vida):** nascimento, crescimento e morte.
+* **O Guardião do Véu (Conhecimento):** magia, causas naturais e verdades ocultas.
+
+Nenhuma dessas entidades é boa ou má.
+
+---
+
+### 14.8 Origem dos Monstros
+
+Os monstros não são anomalias; são **forças naturais** que moldaram HyBrasil.
+
+* **Selvagens:** coletivos agressivos, organizados como colmeias.
+* **Bestas:** criaturas animalescas com poder místico.
+* **Monstros:** abominações ligadas ao sobrenatural e presságios.
+* **Mortos:** ecos de vidas passadas presos ao mundo.
+
+---
+
+### 14.9 Relação entre Ordens e Monstros
+
+Cada Ordem surgiu como resposta a uma dessas forças:
+
+* Warriors ↔ Selvagens
+* Hunters ↔ Bestas
+* Mages ↔ Monstros
+* Clerics ↔ Mortos
+
+Paladins não possuem contraparte monstruosa direta.
+
+---
+
+### 14.10 Lacaios
+
+Lacaios são criaturas fracas individualmente, mas perigosas em número. Eles representam a **presença constante do caos** em HyBrasil.
+
+A IA deve descrevê-los de forma genérica e adaptável ao ambiente.
+
+---
+
+### 14.11 Criaturas Maiores
+
+Criaturas Maiores são líderes naturais, campeões ou manifestações intensificadas das forças monstruosas.
+
+Elas raramente aparecem sem sinais prévios.
+
+---
+
+### 14.12 Vilões Maiores
+
+Existem quatro entidades de grande influência:
+
+* **Rainha da Colméia (Selvagens):** mente coletiva absoluta.
+* **Poderoso Dragão (Bestas):** poder destrutivo ancestral.
+* **Oráculo Abissal (Monstros):** entidade profética e distorcida.
+* **Senhor das Trevas (Mortos):** senhor do tempo e da memória.
+
+Qualquer um pode ser o vilão final.
+
+---
+
+### 14.13 Presságios e Influência
+
+A presença de um vilão maior se manifesta por sinais ambientais, sonhos, mudanças no comportamento de NPCs e criaturas alteradas.
+
+---
+
+### 14.14 Jornada do Jogador
+
+Os jogadores são **Aventureiros**, viajantes que aceitam riscos em troca de recompensas, conhecimento ou dever.
+
+Altruísmo e interesse pessoal coexistem.
+
+---
+
+### 14.15 Diretrizes para a IA Narradora
+
+A IA deve:
+
+* reutilizar estes elementos consistentemente;
+* adaptar descrições ao ambiente e vilão dominante;
+* evitar criar novas ordens, deuses ou continentes;
+* tratar HyBrasil como um mundo fechado e coerente;
+* usar monstros como consequência natural do cenário, não como exceção.
+
+---
+
+## 15) Checklist de Conformidade (MÁXIMA ATENÇÃO!)
+
+Antes de responder qualquer mensagem, a IA deve **validar internamente e RIGOROSAMENTE**:
+- [ ] **JSON VÁLIDO (CRÍTICO):** O bloco json_stats DEVE ser bem formatado. As chaves "p1" e "p2" são objetos. NÃO faça `"p1": "nome": "Erro"`. Abra e feche chaves `{ }` corretamente.
+- [ ] **NOME DOS INIMIGOS (CRÍTICO):** Eu escrevi o nome exato de um inimigo que está na Seção 16? (ex: "Escaravelho de Vidro"). Se eu inventei "Lacaio de Vidro", eu devo corrigir para o nome oficial.
+- [ ] **CURA PÓS-COMBATE (CRÍTICO):** Ao final de um combate, o estado de `hp_atual` de TODOS os heróis volta obrigatoriamente para igualar o `hp_max`. 
+- [ ] **XP E NÍVEIS (CRÍTICO):** Verifiquei meu contador interno de vitórias. O XP FOI oferecido? SÓ DEVE ser oferecido se completaram exatas 2 vitórias. Eu PERGUNTEI quem vai receber o XP? NUNCA dê XP aos dois. NUNCA dê a cada vitória.
+- [ ] O idioma fixo em Português Brasileiro está sendo respeitado.
+- [ ] O estado atual do jogo está correto (Exploration, Combat, Post-Combat etc.).
+- [ ] A formação (Frente / Retaguarda) está definida antes de qualquer combate.
+- [ ] As habilidades foram aplicadas **somente após os ataques simultâneos**.
+- [ ] O combate foi resolvido **inteiramente em uma única mensagem**.
+
+Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo antes de prosseguir**.
+
+---
+
+## 16) Bestiário por Região (Catálogo Oficial)
+
+> **Diretriz para a IA Narradora:** Ao gerar combates na região atual, monte a fila inimiga escolhendo estritamente dentre os 8 tipos de lacaios e 4 Criaturas Maiores listados abaixo. Cada região possui 1 Criatura Maior e 2 Lacaios associados a cada uma das 4 grandes influências mundiais.
+
+### 16.1) Região: Marés (Costa)
+
+#### Lacaios (Nível 0)
+
+1. **Zangão da Maré (Tide Drone):** Crustáceos bio-luminescentes rápidos que atacam em bando na arrebentação. *(A1 V1 | HiveQueen)*
+2. **Caranguejo das Brumas (Mist Cracker):** Caranguejos de casca cinza que beliscam tornozelos na areia úmida. *(A1 V2 | HiveQueen)*
+3. **Lagarto da Costa (Shore Lizard):** Pequenos répteis carniceiros escamosos que caçam na beira da praia. *(A2 V1 | MightyDragon)*
+4. **Sanguessuga Salgada (Salt Leech):** Anelídeos marinhos ágeis que saltam da água salobra para as armaduras. *(A1 V3 | MightyDragon)*
+5. **Olho das Sarças (Bramble Eye):** Massas de carne com tentáculos disfarçadas entre as algas marinhas. *(A2 V2 | AbyssalOracle)*
+6. **Vigia Sereia (Mer-Watcher):** Criaturas anfíbias de olhos esbugalhados que cospem jatos d'água. *(A3 V1 | AbyssalOracle)*
+7. **Sombra Marinha (Sea Shadow):** Farrapos de fumaça escura que emergem da névoa do oceano. *(A1 V1 | LordOfDarkness)*
+8. **Afogado da Costa (Shore Drowned):** Cadáveres inchados trazidos pelas ondas, movidos por reflexos frios. *(A1 V2 | LordOfDarkness)*
+
+#### Criaturas Maiores
+
+1. **Guarda da Arrebentação (Surf Guard):** Humanoide insetoide com carapaça de quitina densa molhada. *(Savages | Cleric | Ataque Preciso | HiveQueen)*
+2. **Leviatã das Ninfas (Nymph Leviathan):** Serpente marinha de escamas espelhadas que emerge quebrando ondas. *(Beasts | Warrior | Ataque Mágico | MightyDragon)*
+3. **Sacerdote das Profundezas (Deep Priest):** Híbrido humanoide-peixe envolto em algas com sussurros proféticos. *(Monsters | Hunter | Pulso de Cura | AbyssalOracle)*
+4. **Casco-Ancião (Elder Shell):** Um crustáceo titânico cujas pinças brutas se fortalecem na retaguarda. *(Dead | Mage | Ataque Poderoso | LordOfDarkness)*
+
+### 16.2) Região: Areias (Deserto)
+
+#### Lacaios (Nível 0)
+
+1. **Escaravelho de Vidro (Glass Scarab):** Besouros cristalinos de enxame que refletem o sol escaldante. *(A1 V1 | HiveQueen)*
+2. **Ferpão das Dunas (Dune Stinger):** Insetos rasteiros de carapaça amarelada que ferroam pelos pés. *(A1 V2 | HiveQueen)*
+3. **Víbora das Areias (Sand Viper):** Serpentes desérticas que dão botes velozes saindo debaixo do solo. *(A2 V1 | MightyDragon)*
+4. **Lagarto do Sol (Sun Lizard):** Répteis ágeis de pele grossa que cospem faíscas quentes de poeira. *(A1 V3 | MightyDragon)*
+5. **Olho do Oásis (Oasis Eye):** Aberrações flutuantes com um único globo ocular que causam vertigem. *(A2 V2 | AbyssalOracle)*
+6. **Nómade da Poeira (Dust Nomad):** Salteadores menores renegados usando trapos e adagas de osso. *(A3 V1 | AbyssalOracle)*
+7. **Farrapo de Calor (Heat Rag):** Silhuetas fumegantes e sombrias geradas por miragens no deserto. *(A1 V1 | LordOfDarkness)*
+8. **Múmia Ressequida (Parched Husk):** Restos desidratados de andarilhos perdidos movidos por sede violenta. *(A1 V2 | LordOfDarkness)*
+
+#### Criaturas Maiores
+
+1. **Predador do Sol (Sun Stalker):** Um grande felino insetoide cujas garras atacam alvos distantes. *(Savages | Cleric | Ataque Preciso | HiveQueen)*
+2. **Serpente de Fogo (Fire Wyrm):** Réptil colossal que canaliza o calor místico e destrutivo das areias. *(Beasts | Warrior | Ataque Mágico | MightyDragon)*
+3. **Espírito da Siesta (Siesta Spirit):** Uma miragem de calor senciente que distorce a carne e cura aliados. *(Monsters | Hunter | Pulso de Cura | AbyssalOracle)*
+4. **Guardião do Sepulcro (Sepulchre Guardian):** Estátua de ossos e dunas que se inflama de ódio na retaguarda. *(Dead | Mage | Ataque Poderoso | LordOfDarkness)*
+
+### 16.3) Região: Hyron (Zona Urbana)
+
+#### Lacaios (Nível 0)
+
+1. **Zangão do Esgoto (Sewer Drone):** Percevejos gigantes que atacam em colônias pelos encanamentos da cidade. *(A1 V1 | HiveQueen)*
+2. **Rato dos Canais (Canal Rat):** Roedores vorazes do tamanho de cães que atacam em bandos nos becos. *(A1 V2 | HiveQueen)*
+3. **Cão de Sarjeta (Gutter Hound):** Mastins magros e agressivos usados por gangues para encurralar alvos. *(A2 V1 | MightyDragon)*
+4. **Raptor de Telhado (Roof Raptor):** Lagartos urbanos ágeis que saltam das sacadas sobre as presas. *(A1 V3 | MightyDragon)*
+5. **Olho Espião (Spying Eye):** Massas oculares flutuantes que vigiam e atacam intrusos nos esgotos. *(A2 V2 | AbyssalOracle)*
+6. **Capanga do Beco (Alley Thug):** Criminosos de facão na mão que atacam aproveitando a escuridão. *(A3 V1 | AbyssalOracle)*
+7. **Sombra do Beco (Alley Shadow):** Espectros feitos de fumaça de candeeiros que sufocam viajantes. *(A1 V1 | LordOfDarkness)*
+8. **Carniçal de Sarjeta (Gutter Ghoul):** Cadáveres reanimados que se alimentam do lixo da metrópole. *(A1 V2 | LordOfDarkness)*
+
+#### Criaturas Maiores
+
+1. **Executor da Guilda (Guild Enforcer):** Guerreiro blindado com ferrões ocultos focado na retaguarda do jogador. *(Savages | Cleric | Ataque Preciso | HiveQueen)*
+2. **Quimera de Esgoto (Sewer Chimera):** Amálgama bestial e asquerosa de predadores modificados da cidade. *(Beasts | Warrior | Ataque Mágico | MightyDragon)*
+3. **Invocador do Caos (Chaos Summoner):** Aberração encapuzada que manipula mentes e cura ferimentos aliados. *(Monsters | Hunter | Pulso de Cura | AbyssalOracle)*
+4. **Carniçal Real (Royal Ghoul):** Antigo nobre corrompido que se esconde nos salões e ganha força na retaguarda. *(Dead | Mage | Ataque Poderoso | LordOfDarkness)*
+
+### 16.4) Região: Raizterna (Floresta)
+
+#### Lacaios (Nível 0)
+
+1. **Aranha de Espinho (Thorn Spider):** Aracnídeos verdes de colmeia que cospem cerdas rígidas das árvores. *(A1 V1 | HiveQueen)*
+2. **Vorme de Casca (Bark Worm):** Larvas de carapaça lenhosa que chicoteiam com pontas afiadas. *(A1 V2 | HiveQueen)*
+3. **Lobo de Musgo (Moss Wolf):** Canídeos ferozes camuflados na vegetação que caçam em bando. *(A2 V1 | MightyDragon)*
+4. **Serpente Foliar (Leaf Viper):** Répteis delgados que saltam dos galhos altos como chicotes vivos. *(A1 V3 | MightyDragon)*
+5. **Olho da Clareira (Glade Eye):** Globos carnudos suspensos por cipós que disparam feixes de energia. *(A2 V2 | AbyssalOracle)*
+6. **Gatuno das Matas (Wood Skulker):** Criaturas pequenas que atiram pedras cortantes usando fundas. *(A3 V1 | AbyssalOracle)*
+7. **Ecos de Folhas (Leaf Echo):** Vultos escuros formados por folhas secas e lamentos da mata. *(A1 V1 | LordOfDarkness)*
+8. **Tronco Oco (Hollow Log):** Restos de árvores mortas possuídos por almas rancorosas da floresta. *(A1 V2 | LordOfDarkness)*
+
+#### Criaturas Maiores
+
+1. **Horror de Cipó (Vine Horror):** Massa densa de raízes e espinhos que ataca alvos à distância. *(Savages | Cleric | Ataque Preciso | HiveQueen)*
+2. **Urso-Coruja das Brumas (Mist Owlbear):** Fera territorial massiva com garras e penas em formato de folhas. *(Beasts | Warrior | Ataque Mágico | MightyDragon)*
+3. **Ancião de Madeira (Wood Elder):** Espírito arbóreo que exala esporos regenerativos na linha de frente. *(Monsters | Hunter | Pulso de Cura | AbyssalOracle)*
+4. **Espectro da Raiz (Root Wraith):** Alma antiga presa às raízes mortas que canaliza fúria na retaguarda. *(Dead | Mage | Ataque Poderoso | LordOfDarkness)*
+
+### 16.5) Região: Ferrocrua (Minas)
+
+#### Lacaios (Nível 0)
+
+1. **Zangão da Rocha (Rock Drone):** Besouros escavadores de carapaça mineral que atacam em bando. *(A1 V1 | HiveQueen)*
+2. **Escavador Cego (Blind Digger):** Insetos subterrâneos que atacam guiados pela vibração dos passos. *(A1 V2 | HiveQueen)*
+3. **Morcego de Ferro (Iron Bat):** Criaturas aladas com asas afiadas metálicas que rasgam o ar. *(A2 V1 | MightyDragon)*
+4. **Carrapato de Cristal (Crystal Tick):** Parasitas que comem minério e dão mordidas perfurantes nas pernas. *(A1 V3 | MightyDragon)*
+5. **Olho das Minas (Mine Eye):** Massas flutuantes de carne e minério que observam das fendas escuras. *(A2 V2 | AbyssalOracle)*
+6. **Duende das Rochas (Rock Goblin):** Criaturas traiçoeiras com ferramentas rudimentares de mineração. *(A3 V1 | AbyssalOracle)*
+7. **Vapor Sombrio (Dark Vapor):** Fumaça escura de carvão senciente que sufoca os pulmões da dupla. *(A1 V1 | LordOfDarkness)*
+8. **Mineiro Zumbi (Zombie Miner):** Operários caídos que empunham picaretas pesadas de forma mecânica. *(A1 V2 | LordOfDarkness)*
+
+#### Criaturas Maiores
+
+1. **Construto de Ferro (Iron Construct):** Autômato de mineração desgovernado que atira parafusos de longe. *(Savages | Cleric | Ataque Preciso | HiveQueen)*
+2. **Lagarto de Lava (Magma Lizard):** Réptil de escamas vulcânicas incandescentes que expele jatos de calor. *(Beasts | Warrior | Ataque Mágico | MightyDragon)*
+3. **Geomante Corrompido (Corrupted Geomancer):** Espírito da rocha que reconstrói a vida de aliados da frente. *(Monsters | Hunter | Pulso de Cura | AbyssalOracle)*
+4. **Aparição do Carvão (Coal Apparition):** Espectro sombrio das minas que incendeia seu ataque na retaguarda. *(Dead | Mage | Ataque Poderoso | LordOfDarkness)*
+
+### 16.6) Região: Pedralta (Montanhas)
+
+#### Lacaios (Nível 0)
+
+1. **Zangão dos Picos (Peak Drone):** Insetos gélidos de asas rígidas que atacam em colmeias nos penhascos. *(A1 V1 | HiveQueen)*
+2. **Vorme do Gelo (Ice Worm):** Larvas árticas de casca congelada que perfuram defesas. *(A1 V2 | HiveQueen)*
+3. **Águia de Penhasco (Cliff Eagle):** Aves de rapina velozes que desferem bicadas nos olhos em voo rasante. *(A2 V1 | MightyDragon)*
+4. **Cabra das Neves (Snow Goat):** Animais de chifres maciços que dão cabeçadas para derrubar oponentes. *(A1 V3 | MightyDragon)*
+5. **Olho da Ventania (Gale Eye):** Globos de carne orbitando picos elevados, disparando raios gélidos. *(A2 V2 | AbyssalOracle)*
+6. **Harpia Menor (Lesser Harpy):** Criaturas aladas grotescas que atacam com garras curvas afiadas. *(A3 V1 | AbyssalOracle)*
+7. **Sombra da Geada (Frost Shadow):** Vultos de neve escura que congelam a alma ao toque. *(A1 V1 | LordOfDarkness)*
+8. **Eco das Cavernas (Cave Echo):** Resíduos espectrais flutuantes que emitem ondas de som ensurdecedoras. *(A1 V2 | LordOfDarkness)*
+
+#### Criaturas Maiores
+
+1. **Grifo das Neves (Snow Griffin):** Predador majestoso que rasga o vento flanqueando a retaguarda do jogador. *(Savages | Cleric | Ataque Preciso | HiveQueen)*
+2. **Golem de Gelo (Frost Golem):** Montanha viva de gelo eterno e rocha com punhos mágicos devastadores. *(Beasts | Warrior | Ataque Mágico | MightyDragon)*
+3. **Ancião das Cimeiras (Summit Elder):** Eremita espectral que manipula ventanias de cura para a frente da fila. *(Monsters | Hunter | Pulso de Cura | AbyssalOracle)*
+4. **Aparição do Véu (Veil Apparition):** Espectro flutuante que emite lamentos frios e acumula dano na retaguarda. *(Dead | Mage | Ataque Poderoso | LordOfDarkness)*
+    </script>
+    <!-- ========================================== -->
+
+    <!-- SCRIPT DE INTELIGÊNCIA ARTIFICIAL E RENDERIZAÇÃO -->
+    <script>
+        // Carrega o prompt de regras do script type text acima de forma 100% segura contra erros de crase
+        const rulesInstruction = document.getElementById('rules-prompt').innerText;
+
+        // Variável de controle para o histórico e fluxo visual
+        let isFirstResponse = true;
+
+        // Chave de API do Gemini (inicializada vazia por segurança para o ambiente)
+        let apiKey = ""; 
+
+        // Modelo padrão de preview suportado no ecossistema
+        let currentModel = "gemini-3.1-flash-lite"; 
+
+        // Histórico de Conversação com o Gemini
+        let chatHistory = [];
+
+        // Callbacks de Confirmação Customizados
+        let onConfirmCallback = null;
+        
+        // Estado do HUD salvo
+        let lastKnownHUD = null;
+
+        // --- FUNÇÕES DE MODAL CUSTOMIZADO E ALERTAS ---
+        function alertarCustom(titulo, mensagem) {
+            document.getElementById('custom-alert-title').innerText = titulo;
+            document.getElementById('custom-alert-message').innerText = mensagem;
+            document.getElementById('custom-alert-modal').classList.remove('hidden');
+        }
+
+        function fecharCustomAlert() {
+            document.getElementById('custom-alert-modal').classList.add('hidden');
+        }
+
+        function confirmarCustom(titulo, mensagem, callback) {
+            document.getElementById('custom-confirm-title').innerText = titulo;
+            document.getElementById('custom-confirm-message').innerText = mensagem;
+            onConfirmCallback = callback;
+            document.getElementById('custom-confirm-modal').classList.remove('hidden');
+        }
+
+        function fecharCustomConfirm(confirmado) {
+            document.getElementById('custom-confirm-modal').classList.add('hidden');
+            if (confirmado && onConfirmCallback) {
+                onConfirmCallback();
+            }
+            onConfirmCallback = null;
+        }
+
+        // --- SISTEMA DE SAVE E LOAD ---
+        function salvarJogo() {
+            if (chatHistory.length <= 1) {
+                alertarCustom("Aviso", "Não há progresso suficiente para salvar na linha temporal.");
+                return;
+            }
+            const saveState = {
+                history: chatHistory,
+                hud: lastKnownHUD
+            };
+            localStorage.setItem('hybrasil_save_state', JSON.stringify(saveState));
+            alertarCustom("Jogo Salvo", "O seu progresso foi gravado localmente com sucesso!");
+        }
+
+        function carregarJogo() {
+            const savedData = localStorage.getItem('hybrasil_save_state');
+            if (!savedData) {
+                alertarCustom("Aviso", "Não existe nenhuma gravação anterior no navegador.");
+                return;
+            }
+            
+            try {
+                const saveState = JSON.parse(savedData);
+                chatHistory = saveState.history;
+                lastKnownHUD = saveState.hud;
+                
+                // Limpa a tela
+                document.getElementById('narrative-output').innerHTML = '';
+                document.getElementById('combat-log-output').innerHTML = '';
+                window.isFirstResponse = false;
+                
+                // Restaura o HUD
+                if (lastKnownHUD) {
+                    atualizarHUD(lastKnownHUD);
+                }
+                
+                let lastModelText = "";
+                
+                // Reconstrói a narrativa visualmente
+                chatHistory.forEach(msg => {
+                    if (msg.role === 'user' && msg.parts[0].text !== "Iniciar Jogo" && msg.parts[0].text !== "Continuar" && !isCombateAutoStep(msg.parts[0].text)) {
+                        const userDiv = document.createElement('div');
+                        userDiv.className = "self-end max-w-[85%] bg-blue-900/40 border border-blue-800/50 text-blue-200 px-4 py-2 rounded-xl text-xs md:text-sm font-sans mb-2 shadow-sm animate-fade-in mt-4";
+                        userDiv.innerText = msg.parts[0].text;
+                        document.getElementById('narrative-output').appendChild(userDiv);
+                    } else if (msg.role === 'model') {
+                        const textoBruto = msg.parts[0].text;
+                        lastModelText = textoBruto;
+                        
+                        const regexJson = /```json_stats([\s\S]*?)```|```json([\s\S]*?)```/;
+                        let textoNarrativo = textoBruto.replace(regexJson, '').trim();
+                        
+                        const indiceOpcao = textoNarrativo.search(/^\d+[.\-)]\s/m);
+                        if (indiceOpcao !== -1) {
+                            textoNarrativo = textoNarrativo.substring(0, indiceOpcao).trim();
+                        }
+                        
+                        if (textoNarrativo) {
+                            const aiDiv = document.createElement('div');
+                            aiDiv.className = "bg-slate-900/40 border border-slate-800/60 p-4 rounded-xl shadow-inner text-slate-300 leading-relaxed font-serif w-full animate-fade-in mb-4";
+                            aiDiv.innerHTML = formatarMarkdownParaHTML(textoNarrativo);
+                            document.getElementById('narrative-output').appendChild(aiDiv);
+                        }
+                    }
+                });
+                
+                // Reprocessa o último estado para remontar botões e arena corretamente
+                if (lastModelText) {
+                    const regexJson = /```json_stats([\s\S]*?)```|```json([\s\S]*?)```/;
+                    let textoNarrativo = lastModelText.replace(regexJson, '').trim();
+                    const contemCombate = /turno \d+/i.test(textoNarrativo) || (lastKnownHUD && lastKnownHUD.enemy_boss);
+                    
+                    if (contemCombate) {
+                        document.getElementById('narrative-scroller').classList.add('hidden');
+                        document.getElementById('combat-arena').classList.remove('hidden');
+                        
+                        const indiceOpcao = textoNarrativo.search(/^\d+[.\-)]\s/m);
+                        let textoNarrativoExibido = textoNarrativo;
+                        if (indiceOpcao !== -1) {
+                            textoNarrativoExibido = textoNarrativo.substring(0, indiceOpcao).trim();
+                        }
+                        document.getElementById('combat-log-output').innerHTML = formatarMarkdownParaHTML(textoNarrativoExibido);
+                    } else {
+                        document.getElementById('combat-arena').classList.add('hidden');
+                        document.getElementById('narrative-scroller').classList.remove('hidden');
+                    }
+                    
+                    gerarBotoesOpcoes(textoNarrativo, contemCombate);
+                    atualizarInimigosFila(textoNarrativo, lastKnownHUD);
+                }
+                
+                // Rola para a parte inferior
+                const scroller = document.getElementById('narrative-scroller');
+                setTimeout(() => {
+                    scroller.scrollTop = scroller.scrollHeight;
+                }, 100);
+                
+                alertarCustom("Jogo Carregado", "A linha temporal foi restaurada com sucesso.");
+                
+            } catch (err) {
+                console.error("Erro ao carregar o jogo:", err);
+                alertarCustom("Erro", "Ocorreu um erro ao carregar a gravação.");
+            }
+        }
+
+        // --- CÓDICE / BASE DE DADOS DO BESTIÁRIO OFICIAL (Regras.md) ---
+        const BESTIARY_DB = {
+            // VILÕES MAIORES
+            "hivequeen": { nome: "HiveQueen", regiao: "Global (Selvagens)", origem: "Savages", lacaio: false, ataque: 10, vida: 30, habilidade: "Ataque Preciso", descricao: "A soberana absoluta da mente colmeia. Comanda exércitos insetoides com foco militar devastador." },
+            "mightydragon": { nome: "MightyDragon", regiao: "Global (Bestas)", origem: "Beasts", lacaio: false, ataque: 11, vida: 35, habilidade: "Ataque Mágico", descricao: "O poder destrutivo ancestral de HyBrasil encarnado em escamas colossais de fogo místico." },
+            "abyssaloracle": { nome: "AbyssalOracle", regiao: "Global (Monstros)", origem: "Monsters", lacaio: false, ataque: 12, vida: 40, habilidade: "Pulso de Cura", descricao: "Uma entidade profética e distorcida oriunda do fundo dos mares, cujos sussurros baralham a mente." },
+            "lordofdarkness": { nome: "LordOfDarkness", regiao: "Global (Mortos)", origem: "Dead", lacaio: false, ataque: 14, vida: 45, habilidade: "Ataque Poderoso", descricao: "O senhor absoluto do tempo e da memória, capaz de erguer os ecos sombrios das almas passadas." },
+            
+            // MARÉS (COSTA)
+            "zangao da mare": { nome: "Zangão da Maré", regiao: "Marés (Costa)", origem: "HiveQueen", lacaio: true, ataque: 1, vida: 1, habilidade: "Nenhuma", descricao: "Crustáceos bioluminescentes extremamente rápidos que atacam em bando na arrebentação das águas." },
+            "caranguejo das brumas": { nome: "Caranguejo das Brumas", regiao: "Marés (Costa)", origem: "HiveQueen", lacaio: true, ataque: 1, vida: 2, habilidade: "Nenhuma", descricao: "Caranguejos de casca cinzenta e pinças afiadas que beliscam os calcanhares na areia úmida." },
+            "lagarto da costa": { nome: "Lagarto da Costa", regiao: "Marés (Costa)", origem: "MightyDragon", lacaio: true, ataque: 2, vida: 1, habilidade: "Nenhuma", descricao: "Pequenos répteis carniceiros escamosos que caçam carcaças salgadas na beira da praia." },
+            "sanguessuga salgada": { nome: "Sanguessuga Salgada", regiao: "Marés (Costa)", origem: "MightyDragon", lacaio: true, ataque: 1, vida: 3, habilidade: "Nenhuma", descricao: "Anelídeos marinhos ágeis que saltam da água salobra diretamente para as juntas das armaduras." },
+            "olho das sarcas": { nome: "Olho das Sarças", regiao: "Marés (Costa)", origem: "AbyssalOracle", lacaio: true, ataque: 2, vida: 2, habilidade: "Nenhuma", descricao: "Massas de carne pulsante com tentáculos escondidas entre as algas marinhas na maré baixa." },
+            "vigia sereia": { nome: "Vigia Sereia", regiao: "Marés (Costa)", origem: "AbyssalOracle", lacaio: true, ataque: 3, vida: 1, habilidade: "Nenhuma", descricao: "Criaturas anfíbias de olhos esbugalhados que cospem jatos de água de alta pressão para desequilibrar guerreiros." },
+            "sombra marinha": { nome: "Sombra Marinha", regiao: "Marés (Costa)", origem: "LordOfDarkness", lacaio: true, ataque: 1, vida: 1, habilidade: "Nenhuma", descricao: "Farrapos de fumaça escura fria que emergem subitamente da névoa salgada do oceano." },
+            "afogado da costa": { nome: "Afogado da Costa", regiao: "Marés (Costa)", origem: "LordOfDarkness", lacaio: true, ataque: 1, vida: 2, habilidade: "Nenhuma", descricao: "Cadáveres inchados trazidos pelas ondas, movidos por reflexos automáticos de ódio frio." },
+            "guarda da arrebentacao": { nome: "Guarda da Arrebentação", regiao: "Marés (Costa)", origem: "Savages", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Preciso", descricao: "Humanoide insetoide com carapaça de quitina densa molhada que repele cortes comuns." },
+            "leviata das ninfas": { nome: "Leviatã das Ninfas", regiao: "Marés (Costa)", origem: "Beasts", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Mágico", descricao: "Serpente marinha de escamas espelhadas que emerge quebrando ondas com a sua cauda." },
+            "sacerdote das profundezas": { nome: "Sacerdote das Profundezas", regiao: "Marés (Costa)", origem: "Monsters", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Pulso de Cura", descricao: "Híbrido humanoide-peixe envolto em algas flutuantes que murmura profecias curativas aos aliados." },
+            "casco-anciao": { nome: "Casco-Ancião", regiao: "Marés (Costa)", origem: "Dead", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Poderoso", descricao: "Um crustáceo titânico cujas pinças brutas se fortalecem exponencialmente quando posicionado na retaguarda." },
+
+            // AREIAS (DESERTO)
+            "escaravelho de vidro": { nome: "Escaravelho de Vidro", regiao: "Areias (Deserto)", origem: "HiveQueen", lacaio: true, ataque: 1, vida: 1, habilidade: "Nenhuma", descricao: "Besouros cristalinos de enxame que refletem o sol escaldante." },
+            "ferpao das dunas": { nome: "Ferpão das Dunas", regiao: "Areias (Deserto)", origem: "HiveQueen", lacaio: true, ataque: 1, vida: 2, habilidade: "Nenhuma", descricao: "Insetos rasteiros de carapaça amarelada que ferroam pelos pés." },
+            "vibora das areias": { nome: "Víbora das Areias", regiao: "Areias (Deserto)", origem: "MightyDragon", lacaio: true, ataque: 2, vida: 1, habilidade: "Nenhuma", descricao: "Serpentes desérticas que dão botes velozes saindo debaixo do solo." },
+            "lagarto do sol": { nome: "Lagarto do Sol", regiao: "Areias (Deserto)", origem: "MightyDragon", lacaio: true, ataque: 1, vida: 3, habilidade: "Nenhuma", descricao: "Répteis ágeis de pele grossa que cospem faíscas quentes de poeira." },
+            "olho do oasis": { nome: "Olho do Oásis", regiao: "Areias (Deserto)", origem: "AbyssalOracle", lacaio: true, ataque: 2, vida: 2, habilidade: "Nenhuma", descricao: "Aberrações flutuantes com um único globo ocular que causam vertigem." },
+            "nomade da poeira": { nome: "Nômade da Poeira", regiao: "Areias (Deserto)", origem: "AbyssalOracle", lacaio: true, ataque: 3, vida: 1, habilidade: "Nenhuma", descricao: "Salteadores menores renegados usando trapos e adagas de osso." },
+            "farrapo de calor": { nome: "Farrapo de Calor", regiao: "Areias (Deserto)", origem: "LordOfDarkness", lacaio: true, ataque: 1, vida: 1, habilidade: "Nenhuma", descricao: "Silhuetas fumegantes e sombrias geradas por miragens no deserto." },
+            "mumia ressequida": { nome: "Múmia Ressequida", regiao: "Areias (Deserto)", origem: "LordOfDarkness", lacaio: true, ataque: 1, vida: 2, habilidade: "Nenhuma", descricao: "Restos desidratados de andarilhos perdidos movidos por sede violenta." },
+            "predador do sol": { nome: "Predador do Sol", regiao: "Areias (Deserto)", origem: "Savages", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Preciso", descricao: "Um grande felino insetoide cujas garras atacam alvos distantes." },
+            "serpente de fogo": { nome: "Serpente de Fogo", regiao: "Areias (Deserto)", origem: "Beasts", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Mágico", descricao: "Réptil colossal que canaliza o calor místico e destrutivo das areias." },
+            "espirito da siesta": { nome: "Espírito da Siesta", regiao: "Areias (Deserto)", origem: "Monsters", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Pulso de Cura", descricao: "Uma miragem de calor senciente que distorce a carne e cura aliados." },
+            "guardiao do sepulcro": { nome: "Guardião do Sepulcro", regiao: "Areias (Deserto)", origem: "Dead", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Poderoso", descricao: "Estátua de ossos e dunas que se inflama de ódio na retaguarda." },
+
+            // HYRON (ZONA URBANA)
+            "zangao do esgoto": { nome: "Zangão do Esgoto", regiao: "Hyron (Zona Urbana)", origem: "HiveQueen", lacaio: true, ataque: 1, vida: 1, habilidade: "Nenhuma", descricao: "Percevejos gigantes que atacam em colônias pelos encanamentos da cidade." },
+            "rato dos canais": { nome: "Rato dos Canais", regiao: "Hyron (Zona Urbana)", origem: "HiveQueen", lacaio: true, ataque: 1, vida: 2, habilidade: "Nenhuma", descricao: "Roedores vorazes do tamanho de cães que atacam em bandos nos becos." },
+            "cao de sarjeta": { nome: "Cão de Sarjeta", regiao: "Hyron (Zona Urbana)", origem: "MightyDragon", lacaio: true, ataque: 2, vida: 1, habilidade: "Nenhuma", descricao: "Mastins magros e agressivos usados por gangues para encurralar alvos." },
+            "raptor de telhado": { nome: "Raptor de Telhado", regiao: "Hyron (Zona Urbana)", origem: "MightyDragon", lacaio: true, ataque: 1, vida: 3, habilidade: "Nenhuma", descricao: "Lagartos urbanos ágeis que saltam das sacadas sobre as presas." },
+            "olho espiao": { nome: "Olho Espião", regiao: "Hyron (Zona Urbana)", origem: "AbyssalOracle", lacaio: true, ataque: 2, vida: 2, habilidade: "Nenhuma", descricao: "Massas oculares flutuantes que vigiam e atacam intrusos nos esgotos." },
+            "capanga do beco": { nome: "Capanga do Beco", regiao: "Hyron (Zona Urbana)", origem: "AbyssalOracle", lacaio: true, ataque: 3, vida: 1, habilidade: "Nenhuma", descricao: "Criminosos de facão na mão que atacam aproveitando a escuridão." },
+            "sombra do beco": { nome: "Sombra do Beco", regiao: "Hyron (Zona Urbana)", origem: "LordOfDarkness", lacaio: true, ataque: 1, vida: 1, habilidade: "Nenhuma", descricao: "Espectros feitos de fumaça de candeeiros que sufocam viajantes." },
+            "carnical de sarjeta": { nome: "Carniçal de Sarjeta", regiao: "Hyron (Zona Urbana)", origem: "LordOfDarkness", lacaio: true, ataque: 1, vida: 2, habilidade: "Nenhuma", descricao: "Cadáveres reanimados que se alimentam do lixo da metrópole." },
+            "executor da guilda": { nome: "Executor da Guilda", regiao: "Hyron (Zona Urbana)", origem: "Savages", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Preciso", descricao: "Guerreiro blindado com ferrões ocultos focado na retaguarda do jogador." },
+            "quimera de esgoto": { nome: "Quimera de Esgoto", regiao: "Hyron (Zona Urbana)", origem: "Beasts", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Mágico", descricao: "Amálgama bestial e asquerosa de predadores modificados da cidade." },
+            "invocador do caos": { nome: "Invocador do Caos", regiao: "Hyron (Zona Urbana)", origem: "Monsters", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Pulso de Cura", descricao: "Aberração encapuzada que manipula mentes e cura ferimentos aliados." },
+            "carnical real": { nome: "Carniçal Real", regiao: "Hyron (Zona Urbana)", origem: "Dead", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Poderoso", descricao: "Antigo nobre corrompido que se esconde nos salões e ganha força na retaguarda." },
+
+            // RAIZTERNA (FLORESTA)
+            "aranha de espinho": { nome: "Aranha de Espinho", regiao: "Raizterna (Floresta)", origem: "HiveQueen", lacaio: true, ataque: 1, vida: 1, habilidade: "Nenhuma", descricao: "Aracnídeos verdes de colmeia que cospem cerdas rígidas das árvores." },
+            "vorme de casca": { nome: "Vorme de Casca", regiao: "Raizterna (Floresta)", origem: "HiveQueen", lacaio: true, ataque: 1, vida: 2, habilidade: "Nenhuma", descricao: "Larvas de carapaça lenhosa que chicoteiam com pontas afiadas." },
+            "lobo de musgo": { nome: "Lobo de Musgo", regiao: "Raizterna (Floresta)", origem: "MightyDragon", lacaio: true, ataque: 2, vida: 1, habilidade: "Nenhuma", descricao: "Canídeos ferozes camuflados na vegetação que caçam em bando." },
+            "serpente foliar": { nome: "Serpente Foliar", regiao: "Raizterna (Floresta)", origem: "MightyDragon", lacaio: true, ataque: 1, vida: 3, habilidade: "Nenhuma", descricao: "Répteis delgados que saltam dos galhos altos como chicotes vivos." },
+            "olho da clareira": { nome: "Olho da Clareira", regiao: "Raizterna (Floresta)", origem: "AbyssalOracle", lacaio: true, ataque: 2, vida: 2, habilidade: "Nenhuma", descricao: "Globos carnudos suspensos por cipós que disparam feixes de energia." },
+            "gatuno das matas": { nome: "Gatuno das Matas", regiao: "Raizterna (Floresta)", origem: "AbyssalOracle", lacaio: true, ataque: 3, vida: 1, habilidade: "Nenhuma", descricao: "Criaturas pequenas que atiram pedras cortantes usando fundas." },
+            "ecos de folhas": { nome: "Ecos de Folhas", regiao: "Raizterna (Floresta)", origem: "LordOfDarkness", lacaio: true, ataque: 1, vida: 1, habilidade: "Nenhuma", descricao: "Vultos escuros formados por folhas secas e lamentos da mata." },
+            "tronco oco": { nome: "Tronco Oco", regiao: "Raizterna (Floresta)", origem: "LordOfDarkness", lacaio: true, ataque: 1, vida: 2, habilidade: "Nenhuma", descricao: "Restos de árvores mortas possuídos por almas rancorosas da floresta." },
+            "horror de cipo": { nome: "Horror de Cipó", regiao: "Raizterna (Floresta)", origem: "Savages", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Preciso", descricao: "Massa densa de raízes e espinhos que ataca alvos à distância." },
+            "urso-coruja das brumas": { nome: "Urso-Coruja das Brumas", regiao: "Raizterna (Floresta)", origem: "Beasts", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Mágico", descricao: "Fera territorial massiva com garras e penas em formato de folhas." },
+            "anciao de madeira": { nome: "Ancião de Madeira", regiao: "Raizterna (Floresta)", origem: "Monsters", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Pulso de Cura", descricao: "Espírito arbóreo que exala esporos regenerativos na linha de frente." },
+            "espectro da raiz": { nome: "Espectro da Raiz", regiao: "Raizterna (Floresta)", origem: "Dead", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Poderoso", descricao: "Alma antiga presa às raízes mortas que canaliza fúria na retaguarda." },
+
+            // FERROCRUA (MINAS)
+            "zangao da rocha": { nome: "Zangão da Rocha", regiao: "Ferrocrua (Minas)", origem: "HiveQueen", lacaio: true, ataque: 1, vida: 1, habilidade: "Nenhuma", descricao: "Besouros escavadores de carapaça mineral que atacam em bando." },
+            "escavador cego": { nome: "Escavador Cego", regiao: "Ferrocrua (Minas)", origem: "HiveQueen", lacaio: true, ataque: 1, vida: 2, habilidade: "Nenhuma", descricao: "Insetos subterrâneos que atacam guiados pela vibração dos passos." },
+            "morcego de ferro": { nome: "Morcego de Ferro", regiao: "Ferrocrua (Minas)", origem: "MightyDragon", lacaio: true, ataque: 2, vida: 1, habilidade: "Nenhuma", descricao: "Criaturas aladas com asas afiadas metálicas que rasgam o ar." },
+            "carrapato de cristal": { nome: "Carrapato de Cristal", regiao: "Ferrocrua (Minas)", origem: "MightyDragon", lacaio: true, ataque: 1, vida: 3, habilidade: "Nenhuma", descricao: "Parasitas que comem minério e dão mordidas perfurantes nas pernas." },
+            "olho das minas": { nome: "Olho das Minas", regiao: "Ferrocrua (Minas)", origem: "AbyssalOracle", lacaio: true, ataque: 2, vida: 2, habilidade: "Nenhuma", descricao: "Massas flutuantes de carne e minério que observam das fendas escuras." },
+            "duende das rochas": { nome: "Duende das Rochas", regiao: "Ferrocrua (Minas)", origem: "AbyssalOracle", lacaio: true, ataque: 3, vida: 1, habilidade: "Nenhuma", descricao: "Criaturas traiçoeiras com ferramentas rudimentares de mineração." },
+            "vapor sombrio": { nome: "Vapor Sombrio", regiao: "Ferrocrua (Minas)", origem: "LordOfDarkness", lacaio: true, ataque: 1, vida: 1, habilidade: "Nenhuma", descricao: "Fumaça escura de carvão senciente que sufoca os pulmões da dupla." },
+            "mineiro zumbi": { nome: "Mineiro Zumbi", regiao: "Ferrocrua (Minas)", origem: "LordOfDarkness", lacaio: true, ataque: 1, vida: 2, habilidade: "Nenhuma", descricao: "Operários caídos que empunham picaretas pesadas de forma mecânica." },
+            "construto de ferro": { nome: "Construto de Ferro", regiao: "Ferrocrua (Minas)", origem: "Savages", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Preciso", descricao: "Autômato de mineração desgovernado que atira parafusos de longe." },
+            "lagarto de lava": { nome: "Lagarto de Lava", regiao: "Ferrocrua (Minas)", origem: "Beasts", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Mágico", descricao: "Réptil de escamas vulcânicas incandescentes que expele jatos de calor." },
+            "geomante corrompido": { nome: "Geomante Corrompido", regiao: "Ferrocrua (Minas)", origem: "Monsters", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Pulso de Cura", descricao: "Espírito da rocha que reconstrói a vida de aliados da frente." },
+            "aparicao do carvao": { nome: "Aparição do Carvão", regiao: "Ferrocrua (Minas)", origem: "Dead", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Poderoso", descricao: "Espectro sombrio das minas que incendeia seu ataque na retaguarda." },
+
+            // PEDRALTA (MONTANHAS)
+            "zangao dos picos": { nome: "Zangão dos Picos", regiao: "Pedralta (Montanhas)", origem: "HiveQueen", lacaio: true, ataque: 1, vida: 1, habilidade: "Nenhuma", descricao: "Insetos gélidos de asas rígidas que atacam em colmeias nos penhascos." },
+            "vorme do gelo": { nome: "Vorme do Gelo", regiao: "Pedralta (Montanhas)", origem: "HiveQueen", lacaio: true, ataque: 1, vida: 2, habilidade: "Nenhuma", descricao: "Larvas árticas de casca congelada que perfuram defesas." },
+            "aguia de penhasco": { nome: "Águia de Penhasco", regiao: "Pedralta (Montanhas)", origem: "MightyDragon", lacaio: true, ataque: 2, vida: 1, habilidade: "Nenhuma", descricao: "Aves de rapina velozes que desferem bicadas nos olhos em voo rasante." },
+            "cabra das neves": { nome: "Cabra das Neves", regiao: "Pedralta (Montanhas)", origem: "MightyDragon", lacaio: true, ataque: 1, vida: 3, habilidade: "Nenhuma", descricao: "Animais de chifres maciços que dão cabeçadas para derrubar oponentes." },
+            "olho da ventania": { nome: "Olho da Ventania", regiao: "Pedralta (Montanhas)", origem: "AbyssalOracle", lacaio: true, ataque: 2, vida: 2, habilidade: "Nenhuma", descricao: "Globos de carne orbitando picos elevados, disparando raios gélidos." },
+            "harpia menor": { nome: "Harpia Menor", regiao: "Pedralta (Montanhas)", origem: "AbyssalOracle", lacaio: true, ataque: 3, vida: 1, habilidade: "Nenhuma", descricao: "Criaturas aladas grotescas que atacam com garras curvas afiadas." },
+            "sombra da geada": { nome: "Sombra da Geada", regiao: "Pedralta (Montanhas)", origem: "LordOfDarkness", lacaio: true, ataque: 1, vida: 1, habilidade: "Nenhuma", descricao: "Vultos de neve escura que congelam a alma ao toque." },
+            "eco das cavernas": { nome: "Eco das Cavernas", regiao: "Pedralta (Montanhas)", origem: "LordOfDarkness", lacaio: true, ataque: 1, vida: 2, habilidade: "Nenhuma", descricao: "Resíduos espectrais flutuantes que emitem ondas de som ensurdecedoras." },
+            "grifo das neves": { nome: "Grifo das Neves", regiao: "Pedralta (Montanhas)", origem: "Savages", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Preciso", descricao: "Predador majestoso que rasga o vento flanqueando a retaguarda do jogador." },
+            "golem de gelo": { nome: "Golem de Gelo", regiao: "Pedralta (Montanhas)", origem: "Beasts", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Mágico", descricao: "Montanha viva de gelo eterno e rocha com punhos mágicos devastadores." },
+            "anciao das cimeiras": { nome: "Ancião das Cimeiras", regiao: "Pedralta (Montanhas)", origem: "Monsters", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Pulso de Cura", descricao: "Eremita espectral que manipula ventanias de cura para a frente da fila." },
+            "aparicao do veu": { nome: "Aparição do Véu", regiao: "Pedralta (Montanhas)", origem: "Dead", lacaio: false, ataque: "Variável", vida: "Variável", habilidade: "Ataque Poderoso", descricao: "Espectro flutuante que emite lamentos frios e acumula dano na retaguarda." }
+        };
+
+        // Função flexível para encontrar criatura no Bestiário por nome, ignorando lixo da IA
+        function buscarCriaturaNoBestiario(nome) {
+            if (!nome) return null;
+            let chave = nome.toLowerCase()
+                              .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                              .replace(/[\[\]\(\)]/g, '')
+                              .replace(/lacaio/g, '')
+                              .replace(/chefe/g, '')
+                              .replace(/vanguarda/g, '')
+                              .replace(/retaguarda/g, '')
+                              .trim();
+            
+            // Tenta correspondência exata
+            if (BESTIARY_DB[chave]) return BESTIARY_DB[chave];
+
+            // Tenta correspondência parcial
+            for (let k in BESTIARY_DB) {
+                if (chave.includes(k) || k.includes(chave)) {
+                    return BESTIARY_DB[k];
+                }
+            }
+            
+            // Tentativa final com a primeira palavra se tiver tamanho decente
+            let words = chave.split(' ');
+            if (words.length > 0 && words[0].length > 3) {
+                for (let k in BESTIARY_DB) {
+                    if (k.includes(words[0])) {
+                         return BESTIARY_DB[k];
+                    }
+                }
+            }
+            
+            return null;
+        }
+
+        // Função de Apoio para Carregamento de Imagem com Fallback dinâmico para os SVGs
+        function renderPortrait(containerId, imageUrl, fallbackSvg) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const img = new Image();
+            img.src = imageUrl;
+            img.onload = function() {
+                container.innerHTML = `<img src="${imageUrl}" class="w-full h-full object-cover rounded-lg shadow-md border border-slate-800" alt="Retrato">`;
+            };
+            img.onerror = function() {
+                // Caso não encontre a imagem física na pasta, ativa o SVG tático correspondente
+                container.innerHTML = fallbackSvg;
+            };
+        }
+
+        // Traduz classe e gênero para as siglas exatas das imagens locais (Ex: Warrior + M = W_M.png)
+        function getHeroImagePath(classe, genero) {
+            if (!classe) return "";
+            const c = classe.trim().toLowerCase();
+            let classInit = "W";
+            if (c.includes("warrior") || c === "w") classInit = "W";
+            else if (c.includes("mage") || c === "m") classInit = "M";
+            else if (c.includes("hunter") || c === "h") classInit = "H";
+            else if (c.includes("cleric") || c === "c") classInit = "C";
+            else if (c.includes("paladin") || c === "p") classInit = "P";
+
+            let genInit = "M";
+            if (genero) {
+                const g = genero.trim().toUpperCase();
+                if (g === "F" || g.startsWith("FEM")) genInit = "F";
+            }
+            return `assets/heroes/${classInit}_${genInit}.png`;
+        }
+
+        // Mapeia o nome exato do Boss conforme a base local (Ex: BOSS_HiveQueen.png)
+        function getBossImagePath(nomeBoss) {
+            if (!nomeBoss) return "";
+            let cleanName = nomeBoss.trim();
+            const lower = cleanName.toLowerCase();
+            if (lower.includes("hivequeen") || lower.includes("hive queen") || lower.includes("rainha")) {
+                cleanName = "HiveQueen";
+            } else if (lower.includes("mightydragon") || lower.includes("mighty dragon") || lower.includes("dragao")) {
+                cleanName = "MightyDragon";
+            } else if (lower.includes("abyssaloracle") || lower.includes("abyssal oracle") || lower.includes("oraculo")) {
+                cleanName = "AbyssalOracle";
+            } else if (lower.includes("lordofdarkness") || lower.includes("lord of darkness") || lower.includes("senhor das trevas")) {
+                cleanName = "LordOfDarkness";
+            }
+            return `assets/bosses/BOSS_${cleanName}.png`;
+        }
+
+        // Funções para abrir/fechar o Códice de Detalhes do Monstro
+        function abrirCodice(nomeMonstro) {
+            const criatura = buscarCriaturaNoBestiario(nomeMonstro);
+            if (!criatura) {
+                // Fallback básico para inimigos não indexados ou gerados dinamicamente
+                document.getElementById('codex-nome').innerText = nomeMonstro;
+                document.getElementById('codex-origem').innerText = "Horda";
+                document.getElementById('codex-regiao').innerText = "HyBrasil";
+                document.getElementById('codex-ataque').innerText = "Desconhecido";
+                document.getElementById('codex-vida').innerText = "Desconhecido";
+                document.getElementById('codex-habilidade').innerText = "Nenhuma";
+                document.getElementById('codex-descricao').innerText = "Uma criatura hostil que perambula pelas terras nebulosas de HyBrasil.";
+                document.getElementById('codex-avatar-container').innerHTML = `<div class="w-full h-full flex items-center justify-center text-red-400 bg-red-950/20"><i class="fa-solid fa-spider text-3xl"></i></div>`;
+                document.getElementById('codex-modal').classList.remove('hidden');
+                return;
+            }
+
+            // Preenche os detalhes baseados na BD do Códice
+            document.getElementById('codex-nome').innerText = criatura.nome;
+            document.getElementById('codex-origem').innerText = criatura.lacaio ? "Lacaio" : "Criatura Maior";
+            document.getElementById('codex-regiao').innerText = criatura.regiao;
+            document.getElementById('codex-ataque').innerText = criatura.ataque;
+            document.getElementById('codex-vida').innerText = criatura.vida;
+            document.getElementById('codex-habilidade').innerText = criatura.habilidade;
+            document.getElementById('codex-descricao').innerText = criatura.descricao;
+
+            // Renderiza Avatar com Fallback físico para o Monstro do Códice
+            const rawName = criatura.nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_');
+            const localImg = `assets/enemies/${rawName}.png`;
+            const fallbackSVG = atualizarAvatarBossSVG(criatura.nome, criatura.origem);
+
+            renderPortrait('codex-avatar-container', localImg, fallbackSVG);
+
+            document.getElementById('codex-modal').classList.remove('hidden');
+        }
+
+        function fecharCodex() {
+            document.getElementById('codex-modal').classList.add('hidden');
+        }
+
+        // Ativação manual do Boss Info do Topo
+        document.getElementById('boss-info-btn').onclick = function() {
+            const bossNome = document.getElementById('boss-nome').innerText;
+            abrirCodice(bossNome);
+        };
+
+        // Regras para salvar Chave API
+        function salvarChave() {
+            const val = document.getElementById('api-key-input').value.trim();
+            if (!val) {
+                alertarCustom("Chave Vazia", "Por favor, insira uma chave de API válida.");
+                return;
+            }
+            localStorage.setItem('hybrasil_gemini_key', val);
+            apiKey = val;
+            alertarCustom("Chave Salva", "A sua Chave API foi salva com sucesso no navegador.");
+            
+            // Se o histórico estiver vazio, inicia a aventura!
+            if (chatHistory.length === 0 || chatHistory[0]?.parts[0]?.text === "Iniciar Jogo") {
+                enviarComando("Iniciar Jogo");
+            }
+        }
+
+        // Configurações do painel do motor
+        function abrirConfig() {
+            document.getElementById('config-modal').classList.remove('hidden');
+        }
+        
+        function fecharConfig() {
+            document.getElementById('config-modal').classList.add('hidden');
+        }
+        
+        function salvarConfig() {
+            const modelVal = document.getElementById('model-select').value;
+            currentModel = modelVal;
+            localStorage.setItem('hybrasil_gemini_model', modelVal);
+            
+            const keyVal = document.getElementById('api-key-input').value.trim();
+            apiKey = keyVal;
+            localStorage.setItem('hybrasil_gemini_key', keyVal);
+
+            fecharConfig();
+            alertarCustom("Definições Salvas", "O modelo e a chave de acesso foram atualizados.");
+            
+            if (chatHistory.length <= 1) {
+                enviarComando("Iniciar Jogo");
+            }
+        }
+
+        // Confirmação para Reiniciar o Jogo
+        function confirmarReiniciar() {
+            confirmarCustom(
+                "Reiniciar a Linha Temporal?", 
+                "Isso apagará todo o progresso atual e o histórico dos seus personagens. Deseja continuar?", 
+                executarReiniciar
+            );
+        }
+
+        function executarReiniciar() {
+            chatHistory = [];
+            lastKnownHUD = null;
+            // Força reset visual de volta ao Modo Exploração
+            document.getElementById('combat-arena').classList.add('hidden');
+            document.getElementById('narrative-scroller').classList.remove('hidden');
+            
+            const outputEl = document.getElementById('narrative-output');
+            outputEl.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-20 text-center gap-4" id="initial-loader">
+                    <div class="w-16 h-16 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin"></div>
+                    <p class="font-fantasy text-blue-400 animate-pulse text-lg tracking-widest">REINICIANDO LINHA DO TEMPO EM HYBRASIL...</p>
+                </div>
+            `;
+            window.isFirstResponse = true;
+            enviarComando("Iniciar Jogo");
+        }
+
+        // Conector de Rede Cliente-Side nativo para a API oficial da Google
+        async function enviarComando(comandoUsuario) {
+            const pensamentoEl = document.getElementById('pensamento-indicador');
+            const optionsContainer = document.getElementById('options-container');
+            const outputEl = document.getElementById('narrative-output');
+
+            // Caso a chave de API não exista no arranque, não efetua chamadas à rede
+            if (!apiKey) {
+                exibirSolicitacaoAPI();
+                return;
+            }
+
+            pensamentoEl.classList.remove('hidden');
+            optionsContainer.innerHTML = "";
+
+            // Registra a mensagem do usuário no histórico da narrativa, se não for de controle interno
+            if (comandoUsuario !== "Iniciar Jogo" && comandoUsuario !== "Continuar" && !isCombateAutoStep(comandoUsuario)) {
+                const userDiv = document.createElement('div');
+                userDiv.className = "self-end max-w-[85%] bg-blue-900/40 border border-blue-800/50 text-blue-200 px-4 py-2 rounded-xl text-xs md:text-sm font-sans mb-2 shadow-sm animate-fade-in";
+                userDiv.innerText = comandoUsuario;
+                outputEl.appendChild(userDiv);
+            }
+
+            // Exibe indicador temporário no histórico
+            const tempLoader = document.createElement('div');
+            tempLoader.id = "temp-loader";
+            tempLoader.className = "flex flex-col items-center justify-center py-6 text-center gap-4 w-full";
+            tempLoader.innerHTML = `
+                <div class="w-8 h-8 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin"></div>
+                <p class="font-fantasy text-blue-400 animate-pulse text-xs tracking-widest uppercase">Processando...</p>
+            `;
+            outputEl.appendChild(tempLoader);
+            
+            const scroller = document.getElementById('narrative-scroller');
+            scroller.scrollTop = scroller.scrollHeight;
+
+            if (comandoUsuario !== "Iniciar Jogo") {
+                chatHistory.push({
+                    role: "user",
+                    parts: [{ text: comandoUsuario }]
+                });
+            } else {
+                chatHistory = [{
+                    role: "user",
+                    parts: [{ text: "Iniciar Jogo" }]
+                }];
+            }
+
+            // Pedido à API de texto de produção da Google
+            const apiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: chatHistory,
+                systemInstruction: {
+                    parts: [{ text: rulesInstruction }]
+                },
+                generationConfig: {
+                    temperature: 0.3,
+                    responseMimeType: "text/plain"
+                }
+            };
+
+            try {
+                // Ligação Resiliente com Algoritmo de Exponential Backoff
+                let response;
+                let delay = 1000;
+                for (let retry = 0; retry < 5; retry++) {
+                    try {
+                        response = await fetch(apiEndpoint, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        if (response.ok) break;
+                    } catch (e) {
+                        if (retry === 4) throw e;
+                    }
+                    await new Promise(res => setTimeout(res, delay));
+                    delay *= 2;
+                }
+
+                if (!response || !response.ok) {
+                    const errData = await response.json();
+                    throw new Error(errData.error?.message || `Erro HTTP ${response ? response.status : 'Desconhecido'}`);
+                }
+
+                const data = await response.json();
+                const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (!responseText) {
+                    throw new Error("O Gemini respondeu, mas não retornou conteúdo textual.");
+                }
+
+                chatHistory.push({
+                    role: "model",
+                    parts: [{ text: responseText }]
+                });
+
+                processarResposta(responseText);
+
+            } catch (error) {
+                console.error("Erro na comunicação com a API do Gemini:", error);
+                
+                const errLoader = document.getElementById('temp-loader');
+                if(errLoader) errLoader.remove();
+
+                // Se falhou por alguma razão na rede ou chave rejeitada, exibe painel explicativo
+                outputEl.innerHTML += `
+                    <div class="bg-red-950/40 border border-red-900/50 p-6 rounded-xl text-red-200 animate-fade-in w-full mb-4">
+                        <h4 class="font-fantasy text-lg font-bold mb-2"><i class="fa-solid fa-circle-exclamation"></i> Falha de Conexão com o Motor</h4>
+                        <p class="text-sm mb-4">Não foi possível obter respostas da API do Gemini. Verifique a validade da sua chave API ou adicione uma chave manual.</p>
+                        <div class="bg-black/40 p-3 rounded font-mono text-xs text-red-400 border border-red-950 mb-4">
+                            Erro retornado: ${error.message}
+                        </div>
+                        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-lg mb-4 text-slate-300">
+                            <h5 class="font-bold text-xs text-blue-400 uppercase font-mono mb-2">Configurar Chave Manual:</h5>
+                            <div class="flex flex-col md:flex-row gap-2">
+                                <input type="password" id="api-key-fallback" placeholder="Cole a sua API Key do Google AI Studio..." class="bg-slate-950 border border-slate-800 rounded px-4 py-2 flex-1 focus:outline-none focus:border-blue-500 font-mono text-center text-sm">
+                                <button onclick="salvarChaveFallback()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-2 rounded transition-colors font-fantasy">Ativar</button>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="abrirConfig()" class="bg-blue-900 hover:bg-blue-800 text-white px-4 py-2 rounded text-xs transition-colors font-bold uppercase">Mudar Definições</button>
+                            <button onclick="executarReiniciar()" class="bg-red-900 hover:bg-red-800 text-white px-4 py-2 rounded text-xs transition-colors font-bold uppercase">Tentar Reiniciar</button>
+                        </div>
+                    </div>
+                `;
+                scroller.scrollTop = scroller.scrollHeight;
+            } finally {
+                pensamentoEl.classList.add('hidden');
+            }
+        }
+
+        // Renderiza e bloqueia a narrativa exibindo o formulário de requisição de chave
+        function exibirSolicitacaoAPI() {
+            const outputEl = document.getElementById('narrative-output');
+            const optionsContainer = document.getElementById('options-container');
+            
+            optionsContainer.innerHTML = "";
+            outputEl.innerHTML = `
+                <div class="bg-blue-950/40 border border-blue-800/60 rounded-xl p-6 text-slate-300 animate-fade-in max-w-xl mx-auto my-8">
+                    <h3 class="font-fantasy text-lg text-blue-400 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-key text-amber-500 animate-pulse"></i> CHAVE DE API DO GEMINI REQUERIDA
+                    </h3>
+                    <p class="mb-4 text-sm font-sans leading-relaxed">
+                        Para iniciar a sua jornada na mística ilha de <strong>HyBrasil</strong> diretamente do seu navegador, é preciso configurar a sua chave de acesso pessoal à API do Gemini.
+                    </p>
+                    <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-lg mb-6 text-xs font-sans space-y-2 leading-relaxed">
+                        <p class="font-bold text-slate-200">Como obter uma chave gratuita:</p>
+                        <p>1. Acesse o site oficial do <a href="https://aistudio.google.com/" target="_blank" class="text-blue-400 underline font-bold hover:text-blue-300">Google AI Studio</a>.</p>
+                        <p>2. Faça login com a sua conta Google, clique em <strong>"Get API Key"</strong> e crie uma chave gratuita de testes.</p>
+                        <p>3. Insira a chave gerada no campo abaixo para começar a jogar imediatamente!</p>
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-2">
+                        <input type="password" id="api-key-fallback" placeholder="Cole a sua API Key aqui..." class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 flex-1 focus:outline-none focus:border-blue-500 font-mono text-center text-sm">
+                        <button onclick="salvarChaveFallback()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-2.5 rounded-lg transition-colors font-fantasy tracking-wider uppercase text-xs">Ativar Motor</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Chave API salva no campo de alerta principal
+        function salvarChaveFallback() {
+            const val = document.getElementById('api-key-fallback').value.trim();
+            if (val) {
+                localStorage.setItem('hybrasil_gemini_key', val);
+                apiKey = val;
+                document.getElementById('api-key-input').value = val;
+                alertarCustom("Chave Ativada", "O motor gráfico de HyBrasil foi ativado com sucesso!");
+                enviarComando("Iniciar Jogo");
+            } else {
+                alertarCustom("Chave Vazia", "Por favor, insira uma chave de API válida.");
+            }
+        }
+
+        // Inicialização do Aplicativo
+        window.onload = function() {
+            // Recupera configurações salvas localmente
+            const savedKey = localStorage.getItem('hybrasil_gemini_key');
+            if (savedKey) {
+                document.getElementById('api-key-input').value = savedKey;
+                apiKey = savedKey;
+            }
+
+            const savedModel = localStorage.getItem('hybrasil_gemini_model');
+            if (savedModel) {
+                currentModel = savedModel;
+                document.getElementById('model-select').value = savedModel;
+            } else {
+                document.getElementById('model-select').value = currentModel;
+            }
+
+            if (apiKey) {
+                enviarComando("Iniciar Jogo");
+            } else {
+                exibirSolicitacaoAPI();
+            }
+        };
+
+        // Funções auxiliares para converter as classes/posições/companions do JSON (em inglês) para o painel em pt-BR
+        function traduzirClasse(classe) {
+            if (!classe) return "";
+            const map = {
+                'Warrior': 'Guerreiro(a)',
+                'Hunter': 'Caçador(a)',
+                'Mage': 'Mago(a)',
+                'Cleric': 'Clérigo(a)',
+                'Paladin': 'Paladino(a)'
+            };
+            return map[classe] || classe;
+        }
+
+        function traduzirCompanion(companion) {
+            if (!companion) return "";
+            const lower = companion.toLowerCase();
+            if (lower.includes('anis')) return 'Asa-de-Anis';
+            if (lower.includes('fox')) return 'Raposa Astral';
+            if (lower.includes('wyrm')) return 'Serpente Etérea';
+            if (lower.includes('sylph')) return 'Sílfide da Alvorada';
+            if (lower.includes('aegis')) return 'Égide de Marfim';
+            return companion;
+        }
+
+        function traduzirPosicao(posicao) {
+            if (!posicao) return "";
+            const lower = posicao.toLowerCase();
+            if (lower === 'front' || lower === 'frente') return 'Frente';
+            if (lower === 'back' || lower === 'retaguarda') return 'Retaguarda';
+            return posicao;
+        }
+
+        // Processa o texto recebido e separa o JSON estruturado do HUD
+        function processarResposta(textoBruto) {
+            const outputEl = document.getElementById('narrative-output');
+            const combatArena = document.getElementById('combat-arena');
+            const narrativeScroller = document.getElementById('narrative-scroller');
+            const combatLogOutput = document.getElementById('combat-log-output');
+            
+            // Remove o loader temporário
+            const tempLoader = document.getElementById('temp-loader');
+            if (tempLoader) tempLoader.remove();
+
+            // Remove o loader de conexão inicial se ainda estiver presente
+            if (window.isFirstResponse) {
+                const initLoader = document.getElementById('initial-loader');
+                if (initLoader) initLoader.remove();
+                window.isFirstResponse = false;
+            }
+
+            // Regex flexível que aceita tanto ```json_stats como blocos genéricos ```json
+            const regexJson = /```json_stats([\s\S]*?)```|```json([\s\S]*?)```/;
+            const match = textoBruto.match(regexJson);
+
+            let textoNarrativo = textoBruto;
+            let dadosHUD = null;
+
+            if (match) {
+                const blocoEncontrado = match[1] || match[2];
+                textoNarrativo = textoBruto.replace(regexJson, '').trim();
+                
+                try {
+                    // Limpeza de erros em caso de formatação ruim pelo modelo
+                    let jsonLimpo = blocoEncontrado.trim();
+                    dadosHUD = JSON.parse(jsonLimpo);
+                    lastKnownHUD = dadosHUD; // Guarda o estado atualizado para o save
+                    atualizarHUD(dadosHUD);
+                } catch (jsonError) {
+                    console.error("Erro na leitura das estatísticas do jogo:", jsonError);
+                    console.warn("Conteúdo recebido que quebrou:", blocoEncontrado);
+                }
+            } else {
+                document.getElementById('boss-frame').classList.add('hidden');
+            }
+
+            // DETECTAR COMBATE: Se o texto contém indicadores de turnos de batalha
+            const contemCombate = /turno \d+/i.test(textoNarrativo) || (dadosHUD && dadosHUD.enemy_boss);
+
+            // Isola a narrativa limpa sem as opções duplicadas
+            let textoNarrativoExibido = textoNarrativo;
+            const indiceOpcao = textoNarrativo.search(/^\d+[.\-)]\s/m);
+            if (indiceOpcao !== -1) {
+                textoNarrativoExibido = textoNarrativo.substring(0, indiceOpcao).trim();
+            }
+
+            // Renderiza o bloco de narrativa da IA (como num chat)
+            if (textoNarrativoExibido) {
+                const aiDiv = document.createElement('div');
+                aiDiv.className = "bg-slate-900/40 border border-slate-800/60 p-4 rounded-xl shadow-inner text-slate-300 leading-relaxed font-serif w-full animate-fade-in mb-4";
+                aiDiv.innerHTML = formatarMarkdownParaHTML(textoNarrativoExibido);
+                outputEl.appendChild(aiDiv);
+            }
+
+            if (contemCombate) {
+                narrativeScroller.classList.add('hidden');
+                combatArena.classList.remove('hidden');
+                combatLogOutput.innerHTML = formatarMarkdownParaHTML(textoNarrativoExibido);
+            } else {
+                combatArena.classList.add('hidden');
+                narrativeScroller.classList.remove('hidden');
+            }
+
+            // Rola para a parte inferior
+            setTimeout(() => {
+                narrativeScroller.scrollTop = narrativeScroller.scrollHeight;
+            }, 100);
+
+            gerarBotoesOpcoes(textoNarrativo, contemCombate);
+            atualizarInimigosFila(textoNarrativo, dadosHUD);
+        }
+
+        // Conversor básico de Markdown para HTML do RPG
+        function formatarMarkdownParaHTML(texto) {
+            let html = texto
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/Turno (\d+)/gi, '<span class="bg-blue-950 text-blue-400 font-mono px-2 py-0.5 rounded border border-blue-900 text-xs font-bold font-fantasy">Turno $1</span>')
+                .replace(/Dano total|Dano causado|Cura aplicada/gi, '<span class="text-amber-400 font-bold">$&</span>')
+                .replace(/(?:\r\n|\r|\n){2,}/g, '<div class="h-2"></div>')
+                .replace(/\n/g, '<br>');
+
+            return html;
+        }
+
+        // Filtro de Passos de Combate Automático para evitar que virem botões de escolha
+        function isCombateAutoStep(opcaoTexto) {
+            const blacklist = [
+                "ataques simultaneos", "ataques da frente", "aplicar habilidades", 
+                "quedas e avanco", "quedas e avanço", "fim de combate", 
+                "turno 1", "turno 2", "turno 3", "turno 4", "turno 5"
+            ];
+            const textNormalized = opcaoTexto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            return blacklist.some(phrase => textNormalized.includes(phrase));
+        }
+
+        // Desenha os botões dinâmicos de escolhas com base no texto
+        function gerarBotoesOpcoes(texto, emCombate) {
+            const container = document.getElementById('options-container');
+            container.innerHTML = "";
+
+            const regexOpcao = /^(\d+)[.\-)]\s*(.*)/gm;
+            let match;
+            let opcoesEncontradas = [];
+
+            while ((match = regexOpcao.exec(texto)) !== null) {
+                const num = match[1];
+                const content = match[2].trim();
+
+                if (!isCombateAutoStep(content)) {
+                    opcoesEncontradas.push({
+                        numero: num,
+                        texto: content
+                    });
+                }
+            }
+
+            if (opcoesEncontradas.length > 0) {
+                opcoesEncontradas.forEach(opcao => {
+                    const btn = document.createElement('button');
+                    btn.className = "bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-left p-3 rounded-xl hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/5 text-xs md:text-sm font-sans flex items-start gap-2.5 transition-all text-slate-200 hover:text-white animate-fade-in";
+                    btn.innerHTML = `
+                        <span class="bg-blue-950 text-blue-400 font-mono font-bold w-5 h-5 rounded flex items-center justify-center text-xs shrink-0">${opcao.numero}</span>
+                        <span class="leading-relaxed">${opcao.texto}</span>
+                    `;
+                    btn.onclick = () => enviarComando(opcao.numero);
+                    container.appendChild(btn);
+                });
+            } else {
+                if (emCombate) {
+                    adicionarBotaoApoio("Concluir e Avançar", "Continuar");
+                } else {
+                    adicionarBotaoApoio("Continuar Aventura", "Continuar");
+                }
+            }
+        }
+
+        function adicionarBotaoApoio(textoBotao, comandoEnvio) {
+            const container = document.getElementById('options-container');
+            const btn = document.createElement('button');
+            btn.className = "bg-slate-900 hover:bg-slate-800 border border-slate-850 text-center py-2.5 px-4 rounded-xl text-sm font-fantasy tracking-wider hover:border-blue-500/40 text-blue-400 hover:text-white transition-all";
+            btn.innerText = textoBotao;
+            btn.onclick = () => enviarComando(comandoEnvio);
+            container.appendChild(btn);
+        }
+
+        function enviarCustomInput() {
+            const input = document.getElementById('custom-input');
+            const val = input.value.trim();
+            if (val) {
+                enviarComando(val);
+                input.value = "";
+            }
+        }
+
+        // Função de Geração de Imagem Vetorial (SVG) da Personagem baseada em Classe e Gênero
+        function gerarSVGActor(classe, genero) {
+            const c = (classe || "warrior").toLowerCase();
+            const g = (genero || "M").toUpperCase();
+            
+            let bgStart = "#1e3a8a"; 
+            let bodyColor = "#f1f5f9"; 
+            let hairColor = g === "M" ? "#475569" : "#f59e0b"; 
+            let gearColor = "#cbd5e1"; 
+            let accessory = "";
+
+            if (c === "warrior") {
+                bgStart = "#1d4ed8";
+                gearColor = "#64748b"; 
+                accessory = `
+                    <path d="M50,15 L50,85 M35,75 L65,75" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M32,38 C32,22 68,22 68,38 L68,58 C68,64 32,64 32,58 Z" fill="${gearColor}" stroke="#94a3b8" stroke-width="2.5"/>
+                    <path d="M38,46 L62,46 L58,54 L42,54 Z" fill="#1e293b" stroke="#f43f5e" stroke-width="1.5"/>
+                    <circle cx="44" cy="50" r="1.5" fill="#f43f5e"/>
+                    <circle cx="56" cy="50" r="1.5" fill="#f43f5e"/>
+                    <path d="M50,22 C44,6 56,1 50,0" fill="#dc2626" stroke="#991b1b" stroke-width="1"/>
+                `;
+            } else if (c === "mage") {
+                bgStart = "#7e22ce";
+                gearColor = "#3b0764"; 
+                accessory = `
+                    <path d="M24,70 C24,40 50,22 50,22 C50,22 76,40 76,70 Z" fill="${gearColor}" stroke="#c084fc" stroke-width="2.5"/>
+                    <ellipse cx="43" cy="52" rx="4.5" ry="2" fill="#c084fc" filter="drop-shadow(0 0 3px #a855f7)"/>
+                    <ellipse cx="57" cy="52" rx="4.5" ry="2" fill="#c084fc" filter="drop-shadow(0 0 3px #a855f7)"/>
+                    <circle cx="50" cy="14" r="6" fill="#a855f7" filter="drop-shadow(0 0 6px #c084fc)"/>
+                    <path d="M47,15 Q50,5 53,15" fill="none" stroke="#e9d5ff" stroke-width="1"/>
+                `;
+            } else if (c === "hunter") {
+                bgStart = "#047857";
+                gearColor = "#064e3b"; 
+                accessory = `
+                    <path d="M68,20 C78,38 78,62 68,80" fill="none" stroke="#d97706" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="68" y1="20" x2="68" y2="80" stroke="#f1f5f9" stroke-width="1" stroke-dasharray="2,2"/>
+                    <path d="M28,68 C28,34 50,26 50,26 C50,26 72,34 72,68 Z" fill="${gearColor}" stroke="#34d399" stroke-width="2"/>
+                    <path d="M38,58 L62,58 L50,72 Z" fill="#022c22" stroke="#10b981" stroke-width="1.5"/>
+                    <ellipse cx="42" cy="48" rx="3.5" ry="1.5" fill="#10b981"/>
+                    <ellipse cx="58" cy="48" rx="3.5" ry="1.5" fill="#10b981"/>
+                `;
+            } else if (c === "cleric") {
+                bgStart = "#c2410c";
+                gearColor = "#f8fafc"; 
+                accessory = `
+                    <circle cx="50" cy="38" r="19" fill="none" stroke="#fbbf24" stroke-width="2" stroke-dasharray="8,4"/>
+                    <path d="M32,70 C32,44 42,32 50,32 C58,32 68,44 68,70 Z" fill="${gearColor}" stroke="#d97706" stroke-width="2"/>
+                    <path d="M50,44 L50,64 M40,50 L60,50" stroke="#fbbf24" stroke-width="3.5" stroke-linecap="round"/>
+                    <circle cx="50" cy="50" r="2" fill="#d97706"/>
+                `;
+            } else if (c === "paladin") {
+                bgStart = "#a16207";
+                gearColor = "#e2e8f0"; 
+                accessory = `
+                    <path d="M28,34 L50,22 L72,34 L67,64 L50,82 L33,64 Z" fill="${gearColor}" stroke="#fbbf24" stroke-width="3"/>
+                    <path d="M50,22 L50,82 M28,34 L72,34" stroke="#d97706" stroke-width="1.5"/>
+                    <polygon points="36,34 43,24 50,31 57,24 64,34" fill="#fbbf24" stroke="#b45309" stroke-width="1"/>
+                    <circle cx="50" cy="52" r="5" fill="#f59e0b" stroke="#b45309" stroke-width="1"/>
+                `;
+            }
+
+            return `
+                <svg viewBox="0 0 100 100" class="w-full h-full">
+                    <defs>
+                        <radialGradient id="actor-grad-${c}" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="${bgStart}"/>
+                            <stop offset="100%" stop-color="#020617"/>
+                        </radialGradient>
+                    </defs>
+                    <rect width="100" height="100" fill="url(#actor-grad-${c})" />
+                    ${accessory}
+                </svg>
+            `;
+        }
+
+        // Reconhecimento de Fila para suportar inimigos dinâmicos de 2 x 1 até 2 x 6
+        function atualizarInimigosFila(textoBruto, hud) {
+            const listEl = document.getElementById('arena-enemies-list');
+            if (!listEl) return;
+
+            let inimigosFila = [];
+            // Regex melhorado para extrair a fila inimiga
+            const regexFila = /(?:Enemy Line|Fila Inimiga|Fila|Inimigos):\s*(.*)/i;
+            const matchFila = textoBruto.match(regexFila);
+
+            if (matchFila) {
+                let filaRaw = matchFila[1].trim();
+                filaRaw = filaRaw.replace(/\*\*/g, ''); // Remove formatação negrito
+                
+                // Tenta dividir pela setinha
+                if (filaRaw.includes('->')) {
+                    let parts = filaRaw.split('->');
+                    parts.forEach(p => {
+                        let cleanName = p.replace(/[\[\]]/g, '').trim();
+                        if (cleanName) inimigosFila.push(cleanName);
+                    });
+                } else {
+                    // Se não tiver setinha, tenta pegar do formato antigo entre colchetes
+                    const regexElementos = /\[(.*?)\]/g;
+                    let elemMatch;
+                    while ((elemMatch = regexElementos.exec(filaRaw)) !== null) {
+                        inimigosFila.push(elemMatch[1].trim());
+                    }
+                }
+            }
+
+            // Fallback se a IA não imprimiu a fila mas mandou o HUD
+            if (inimigosFila.length === 0) {
+                if (hud && hud.enemy_boss) {
+                    inimigosFila.push("Lacaio [Vanguarda]");
+                    inimigosFila.push(hud.enemy_boss.nome + " [Chefe]");
+                }
+            }
+
+            listEl.innerHTML = "";
+            inimigosFila.forEach((nomeInimigo, index) => {
+                const isFront = index === 0;
+                const uniqueEnemyContainerId = `arena-enemy-${index}-portrait-container`;
+                
+                const item = document.createElement('div');
+                item.className = `bg-slate-900/80 border ${isFront ? 'border-red-500/50 shadow-md shadow-red-950/20' : 'border-slate-800'} rounded-xl p-2 flex items-center justify-between gap-2 transition-all animate-fade-in`;
+                
+                // Tentamos identificar pelo bestiário ANTES de desenhar
+                const criatura = buscarCriaturaNoBestiario(nomeInimigo);
+                const nomeExibicao = criatura ? criatura.nome : nomeInimigo.replace(/[\[\]]/g, '').trim();
+                const origem = criatura ? criatura.origem : "Desconhecido";
+                
+                let icon = '<i class="fa-solid fa-spider"></i>';
+                const lowerOrigem = origem.toLowerCase();
+                const lowerName = nomeExibicao.toLowerCase();
+
+                if (lowerOrigem.includes("savage") || lowerName.includes("queen") || lowerName.includes("rainha")) {
+                    icon = '<i class="fa-solid fa-crown text-purple-400"></i>';
+                } else if (lowerOrigem.includes("beast") || lowerName.includes("dragon") || lowerName.includes("dragao")) {
+                    icon = '<i class="fa-solid fa-dragon text-amber-500"></i>';
+                } else if (lowerOrigem.includes("monster") || lowerName.includes("oracle") || lowerName.includes("oraculo")) {
+                    icon = '<i class="fa-solid fa-eye text-cyan-400"></i>';
+                } else if (lowerOrigem.includes("dead") || lowerName.includes("darkness") || lowerName.includes("trevas") || lowerName.includes("lord")) {
+                    icon = '<i class="fa-solid fa-ghost text-slate-400"></i>';
+                } else if (criatura && criatura.lacaio) {
+                    icon = '<i class="fa-solid fa-bug text-rose-400"></i>';
+                }
+
+                item.innerHTML = `
+                    <div class="flex items-center gap-2 min-w-0 flex-1">
+                        <div id="${uniqueEnemyContainerId}" class="w-8 h-8 rounded bg-red-950/20 border border-red-900/30 flex items-center justify-center text-red-400 shrink-0 overflow-hidden">
+                            ${icon}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-xs font-bold font-fantasy truncate ${isFront ? 'text-red-400' : 'text-slate-300'}">${nomeExibicao}</div>
+                            <div class="text-[9px] font-mono text-slate-500 uppercase">${isFront ? 'Frente (Ativo)' : `Posição ${index + 1}`}</div>
+                        </div>
+                    </div>
+                    <button onclick="abrirCodice('${nomeExibicao}')" class="bg-slate-950 hover:bg-red-950/80 border border-slate-800 hover:border-red-900/50 p-1.5 rounded text-[10px] text-slate-400 hover:text-red-400 transition-all shrink-0" title="Ver Códice">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </button>
+                `;
+                listEl.appendChild(item);
+
+                const rawName = nomeExibicao.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[\[\]]/g, '').trim();
+                const localEnemyImg = `assets/enemies/${rawName}.png`;
+                const fallbackSVG = `<div class="w-full h-full flex items-center justify-center text-red-400 bg-red-950/20">${icon}</div>`;
+                renderPortrait(uniqueEnemyContainerId, localEnemyImg, fallbackSVG);
+            });
+        }
+
+        // Atualização em tempo real do HUD com base no JSON estatístico
+        function atualizarHUD(hud) {
+            if (!hud) return;
+
+            // HERÓI 1 (P1)
+            if (hud.p1) {
+                document.getElementById('p1-nome').innerText = hud.p1.nome || "Mael";
+                document.getElementById('p1-classe-badge').innerText = traduzirClasse(hud.p1.classe || "Warrior");
+                
+                const formacaoP1 = document.getElementById('p1-formacao');
+                formacaoP1.innerText = traduzirPosicao(hud.p1.posicao || "Frente");
+                if (hud.p1.posicao === "Frente" || hud.p1.posicao === "Front") {
+                    formacaoP1.className = "bg-amber-950/80 text-amber-400 border border-amber-900/50 text-[10px] uppercase font-mono px-2 py-0.5 rounded";
+                } else {
+                    formacaoP1.className = "bg-purple-950/80 text-purple-400 border border-purple-900/50 text-[10px] uppercase font-mono px-2 py-0.5 rounded";
+                }
+
+                document.getElementById('p1-level').innerText = hud.p1.nivel || "1";
+                document.getElementById('p1-xp').innerText = hud.p1.xp !== undefined ? hud.p1.xp : "0";
+                document.getElementById('p1-ataque').innerText = hud.p1.ataque || "2";
+                document.getElementById('p1-genero').innerText = hud.p1.genero || "M";
+
+                const p1HpAtual = hud.p1.hp_atual !== undefined ? hud.p1.hp_atual : 4;
+                const p1HpMax = hud.p1.hp_max || 4;
+                document.getElementById('p1-hp-texto').innerText = `${p1HpAtual}/${p1HpMax}`;
+                
+                const pctP1 = Math.max(0, Math.min(100, (p1HpAtual / p1HpMax) * 100));
+                document.getElementById('p1-hp-bar').style.width = `${pctP1}%`;
+
+                const localHero1Img = getHeroImagePath(hud.p1.classe, hud.p1.genero);
+                const fallbackSVG_P1 = gerarSVGActor(hud.p1.classe, hud.p1.genero);
+                renderPortrait('p1-portrait', localHero1Img, fallbackSVG_P1);
+                renderPortrait('arena-p1-portrait', localHero1Img, fallbackSVG_P1);
+
+                document.getElementById('arena-p1-nome').innerText = hud.p1.nome || "Mael";
+                document.getElementById('arena-p1-hp').style.width = `${pctP1}%`;
+                atualizarIconeClasse('p1-class-bg-icon', hud.p1.classe);
+
+                const companionRowP1 = document.getElementById('p1-companion-row');
+                if (hud.p1.companion) {
+                    companionRowP1.classList.remove('hidden');
+                    const compTranslated1 = traduzirCompanion(hud.p1.companion);
+                    document.getElementById('p1-companion-name').innerText = compTranslated1;
+                    
+                    const rawComp1 = compTranslated1.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_');
+                    const compImg1 = `assets/companions/${rawComp1}.png`;
+                    const fallbackSVG_Comp1 = `<span id="p1-companion-icon" class="text-lg">${pegarIconeCompanion(hud.p1.classe)}</span>`;
+                    renderPortrait('p1-companion-img-container', compImg1, fallbackSVG_Comp1);
+                } else {
+                    companionRowP1.classList.add('hidden');
+                }
+            }
+
+            // HERÓI 2 (P2)
+            if (hud.p2) {
+                document.getElementById('p2-nome').innerText = hud.p2.nome || "Ayla";
+                document.getElementById('p2-classe-badge').innerText = traduzirClasse(hud.p2.classe || "Mage");
+                
+                const formacaoP2 = document.getElementById('p2-formacao');
+                formacaoP2.innerText = traduzirPosicao(hud.p2.posicao || "Retaguarda");
+                if (hud.p2.posicao === "Frente" || hud.p2.posicao === "Front") {
+                    formacaoP2.className = "bg-amber-950/80 text-amber-400 border border-amber-900/50 text-[10px] uppercase font-mono px-2 py-0.5 rounded";
+                } else {
+                    formacaoP2.className = "bg-purple-950/80 text-purple-400 border border-purple-900/50 text-[10px] uppercase font-mono px-2 py-0.5 rounded";
+                }
+
+                document.getElementById('p2-level').innerText = hud.p2.nivel || "1";
+                document.getElementById('p2-xp').innerText = hud.p2.xp !== undefined ? hud.p2.xp : "0";
+                document.getElementById('p2-ataque').innerText = hud.p2.ataque || "5";
+                document.getElementById('p2-genero').innerText = hud.p2.genero || "F";
+
+                const p2HpAtual = hud.p2.hp_atual !== undefined ? hud.p2.hp_atual : 1;
+                const p2HpMax = hud.p2.hp_max || 1;
+                document.getElementById('p2-hp-texto').innerText = `${p2HpAtual}/${p2HpMax}`;
+                
+                const pctP2 = Math.max(0, Math.min(100, (p2HpAtual / p2HpMax) * 100));
+                document.getElementById('p2-hp-bar').style.width = `${pctP2}%`;
+
+                const localHero2Img = getHeroImagePath(hud.p2.classe, hud.p2.genero);
+                const fallbackSVG_P2 = gerarSVGActor(hud.p2.classe, hud.p2.genero);
+                renderPortrait('p2-portrait', localHero2Img, fallbackSVG_P2);
+                renderPortrait('arena-p2-portrait', localHero2Img, fallbackSVG_P2);
+
+                document.getElementById('arena-p2-nome').innerText = hud.p2.nome || "Ayla";
+                document.getElementById('arena-p2-hp').style.width = `${pctP2}%`;
+                atualizarIconeClasse('p2-class-bg-icon', hud.p2.classe);
+
+                const companionRowP2 = document.getElementById('p2-companion-row');
+                if (hud.p2.companion) {
+                    companionRowP2.classList.remove('hidden');
+                    const compTranslated2 = traduzirCompanion(hud.p2.companion);
+                    document.getElementById('p2-companion-name').innerText = compTranslated2;
+                    
+                    const rawComp2 = compTranslated2.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_');
+                    const compImg2 = `assets/companions/${rawComp2}.png`;
+                    const fallbackSVG_Comp2 = `<span id="p2-companion-icon" class="text-lg">${pegarIconeCompanion(hud.p2.classe)}</span>`;
+                    renderPortrait('p2-companion-img-container', compImg2, fallbackSVG_Comp2);
+                } else {
+                    companionRowP2.classList.add('hidden');
+                }
+            }
+
+            // MOLDURA DO CHEFE
+            const bossFrame = document.getElementById('boss-frame');
+
+            if (hud.enemy_boss) {
+                bossFrame.classList.remove('hidden');
+                document.getElementById('boss-nome').innerText = hud.enemy_boss.nome || "Chefe Maior";
+                document.getElementById('boss-desc').innerText = hud.enemy_boss.descricao || "Uma presença maligna bloqueia o seu avanço...";
+                
+                const bossVida = hud.enemy_boss.vida !== undefined ? hud.enemy_boss.vida : 30;
+                const bossVidaMax = hud.enemy_boss.vida_max || 30;
+                document.getElementById('boss-hp-texto').innerText = `${bossVida}/${bossVidaMax}`;
+
+                const pctBoss = Math.max(0, Math.min(100, (bossVida / bossVidaMax) * 100));
+                document.getElementById('boss-hp-bar').style.width = `${pctBoss}%`;
+
+                const badgeHabilidade = document.getElementById('boss-habilidade-badge');
+                let habilidadeBoss = hud.enemy_boss.habilidade || 'Ataque Poderoso';
+                if(habilidadeBoss === 'Fury') habilidadeBoss = 'Ataque Poderoso';
+                if(habilidadeBoss === 'Precision') habilidadeBoss = 'Ataque Preciso';
+                if(habilidadeBoss === 'Magic') habilidadeBoss = 'Ataque Mágico';
+                if(habilidadeBoss === 'Cure') habilidadeBoss = 'Pulso de Cura';
+
+                badgeHabilidade.innerText = `Ativa: ${habilidadeBoss}`;
+
+                atualizarAvatarBoss(hud.enemy_boss.nome, hud.enemy_boss.origem);
+            } else {
+                bossFrame.classList.add('hidden');
+            }
+        }
+
+        function atualizarIconeClasse(elementoId, classe) {
+            const el = document.getElementById(elementoId);
+            if (!el) return;
+
+            let iconHtml = '<i class="fa-solid fa-gavel"></i>'; 
+            if (classe) {
+                const c = classe.toLowerCase();
+                if (c === "warrior") iconHtml = '<i class="fa-solid fa-shield-halved"></i>';
+                else if (c === "mage") iconHtml = '<i class="fa-solid fa-wand-magic-sparkles"></i>';
+                else if (c === "hunter") iconHtml = '<i class="fa-solid fa-crosshairs"></i>';
+                else if (c === "cleric") iconHtml = '<i class="fa-solid fa-heart-pulse"></i>';
+                else if (c === "paladin") iconHtml = '<i class="fa-solid fa-gavel"></i>';
+            }
+            el.innerHTML = iconHtml;
+        }
+
+        // Mapeamento de companions
+        function pegarIconeCompanion(classe) {
+            if (!classe) return "🦅";
+            const c = classe.toLowerCase();
+            if (c === "warrior") return "🦅"; 
+            if (c === "hunter") return "🦊"; 
+            if (c === "mage") return "🐍"; 
+            if (c === "cleric") return "🧚"; 
+            if (c === "paladin") return "🐢"; 
+            return "🦅";
+        }
+
+        // Retorna a string SVG do Boss para renderizar na Arena
+        function atualizarAvatarBossSVG(nomeBoss, origemBoss) {
+            let corPrincipal = "#ef4444"; 
+            let svgInterno = "";
+
+            if (origemBoss) {
+                const o = origemBoss.toLowerCase();
+                if (o.includes("savage") || o.includes("selvagem")) {
+                    corPrincipal = "#a855f7"; 
+                    svgInterno = `
+                        <polygon points="50,15 35,45 65,45" fill="${corPrincipal}" />
+                        <circle cx="35" cy="45" r="12" fill="#581c87" />
+                        <circle cx="65" cy="45" r="12" fill="#581c87" />
+                        <polygon points="50,45 30,75 70,75" fill="#1e1b4b" stroke="${corPrincipal}" stroke-width="2" />
+                        <circle cx="50" cy="45" r="5" fill="#facc15" />
+                    `;
+                } else if (o.includes("beast") || o.includes("besta")) {
+                    corPrincipal = "#eab308"; 
+                    svgInterno = `
+                        <path d="M25,35 Q50,15 75,35 L65,75 Q50,85 35,75 Z" fill="#451a03" stroke="${corPrincipal}" stroke-width="2" />
+                        <circle cx="40" cy="45" r="6" fill="#f97316" />
+                        <circle cx="60" cy="45" r="6" fill="#f97316" />
+                        <polygon points="45,65 50,55 55,65" fill="${corPrincipal}" />
+                    `;
+                } else if (o.includes("monster") || o.includes("monstro")) {
+                    corPrincipal = "#06b6d4"; 
+                    svgInterno = `
+                        <circle cx="50" cy="50" r="25" fill="#083344" stroke="${corPrincipal}" stroke-width="3" />
+                        <circle cx="50" cy="50" r="10" fill="#22d3ee" />
+                        <path d="M50,10 Q25,25 50,30 Q75,25 50,10" fill="none" stroke="${corPrincipal}" stroke-width="2" />
+                        <path d="M15,75 Q35,60 50,75" fill="none" stroke="${corPrincipal}" stroke-width="2" />
+                        <path d="M50,75 Q65,60 85,75" fill="none" stroke="${corPrincipal}" stroke-width="2" />
+                    `;
+                } else {
+                    corPrincipal = "#64748b"; 
+                    svgInterno = `
+                        <path d="M30,25 C30,25 50,10 70,25 C70,25 80,65 70,80 C60,90 40,90 30,80 Z" fill="#0f172a" stroke="${corPrincipal}" stroke-width="2"/>
+                        <circle cx="42" cy="50" r="5" fill="#ef4444" />
+                        <circle cx="58" cy="50" r="5" fill="#ef4444" />
+                        <line x1="40" y1="70" x2="60" y2="70" stroke="${corPrincipal}" stroke-width="3"/>
+                    `;
+                }
+            }
+
+            return `
+                <svg viewBox="0 0 100 100" class="w-full h-full">
+                    <rect width="100" height="100" fill="#020617" />
+                    ${svgInterno}
+                </svg>
+            `;
+        }
+
+        function atualizarAvatarBoss(nomeBoss, origemBoss) {
+            const container = document.getElementById('boss-avatar-container');
+            if (!container) return;
+            const localBossImg = getBossImagePath(nomeBoss);
+            const fallbackSVG = atualizarAvatarBossSVG(nomeBoss, origemBoss);
+            renderPortrait('boss-avatar-container', localBossImg, fallbackSVG);
+        }
+    </script>
+</body>
+</html>

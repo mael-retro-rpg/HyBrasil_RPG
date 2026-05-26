@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HyBrasil RPG - Manual</title>
+    <link rel="icon" href="assets/icon.png" type="image/png">
+    <style>
+        /* --- ESTILOS PRINCIPAIS --- */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #121212; 
+            color: #e0e0e0; 
+            margin: 0; 
+            padding: 20px; 
+            line-height: 1.6; 
+        }
+        h1, h2, h3 { color: #bb86fc; }
+        h1 { text-align: center; font-size: 2.2em; border-bottom: 2px solid #333; padding-bottom: 10px; }
+        h2 { margin-top: 40px; border-bottom: 1px solid #444; padding-bottom: 5px; }
+        
+        .container { 
+            max-width: 1000px; 
+            margin: auto; 
+            background: #1e1e1e; 
+            padding: 40px; 
+            border-radius: 12px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.8); 
+        }
+        
+        /* --- GRIDS E CARTÕES --- */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 20px; 
+            margin-top: 20px; 
+        }
+        .card { 
+            background: #252526; 
+            border: 1px solid #444; 
+            border-left: 4px solid #4caf50; 
+            padding: 20px; 
+            border-radius: 8px; 
+            text-align: center; 
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card img { 
+            max-width: 90px; 
+            height: auto; 
+            filter: drop-shadow(0px 3px 5px rgba(236, 64, 122, 0.6)); 
+            margin: 0 5px 15px 5px; 
+            object-fit: contain;
+        }
+        .card h3 { margin: 0 0 10px 0; font-size: 1.2em; color: #fff; }
+        .card p { font-size: 0.9em; color: #ccc; margin: 5px 0; }
+        
+        /* Cores de Borda por Tipo */
+        .boss-card { border-left-color: #bb86fc; }
+        .companion-card { border-left-color: #ff9800; }
+        
+        /* Imagens duplas para classes (M e F) */
+        .class-images { display: flex; justify-content: center; gap: 10px; }
+        
+        /* Limpeza de float */
+        .clearfix::after { content: ""; clear: both; display: table; }
+    </style>
+</head>
+<body>
+    <div class="container clearfix">
+        
+        <div class="pt">
+            <h1>HyBrasil RPG - Manual de Instruções</h1>
+            <p>Bem-vindo a <strong>HyBrasil – A Ilha Paraíso</strong>, a única ilha conhecida da existência, cercada por névoas eternas. Este manual interativo contém as referências visuais e mecânicas básicas para guiar a sua jornada.</p>
+            
+            <h2>As Ordens (Classes)</h2>
+            <p>Os heróis de HyBrasil pertencem a uma das cinco Ordens, cada uma com mecânicas únicas. Abaixo, as aparências padrão (Masculino e Feminino) e os seus atributos iniciais no Nível 1.</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <div class="class-images">
+                        <img src="assets/heroes/W_M.png" alt="Guerreiro M" onerror="this.src='https://via.placeholder.com/80/252526/bb86fc?text=W_M'">
+                        <img src="assets/heroes/W_F.png" alt="Guerreira F" onerror="this.src='https://via.placeholder.com/80/252526/bb86fc?text=W_F'">
+                    </div>
+                    <h3>Ordem da Lâmina (Guerreiro)</h3>
+                    <p><strong>Ataque:</strong> 2 | <strong>Vida:</strong> 4</p>
+                    <p><strong>Habilidade (Ataque Poderoso):</strong> Quando estiver na retaguarda, aumenta o próprio Ataque num valor igual ao Nível (não acumulativo).</p>
+                </div>
+                
+                <div class="card">
+                    <div class="class-images">
+                        <img src="assets/heroes/H_M.png" alt="Caçador M" onerror="this.src='https://via.placeholder.com/80/252526/bb86fc?text=H_M'">
+                        <img src="assets/heroes/H_F.png" alt="Caçadora F" onerror="this.src='https://via.placeholder.com/80/252526/bb86fc?text=H_F'">
+                    </div>
+                    <h3>Ordem da Flecha (Caçador)</h3>
+                    <p><strong>Ataque:</strong> 4 | <strong>Vida:</strong> 2</p>
+                    <p><strong>Habilidade (Ataque Preciso):</strong> Ataca da retaguarda. Causa dano igual ao seu Ataque diretamente à retaguarda inimiga (ou igual ao Nível se restar apenas a Frente).</p>
+                </div>
+                
+                <div class="card">
+                    <div class="class-images">
+                        <img src="assets/heroes/M_M.png" alt="Mago M" onerror="this.src='https://via.placeholder.com/80/252526/bb86fc?text=M_M'">
+                        <img src="assets/heroes/M_F.png" alt="Maga F" onerror="this.src='https://via.placeholder.com/80/252526/bb86fc?text=M_F'">
+                    </div>
+                    <h3>Ordem do Véu (Mago)</h3>
+                    <p><strong>Ataque:</strong> 5 | <strong>Vida:</strong> 1</p>
+                    <p><strong>Habilidade (Ataque Mágico):</strong> Ataca da retaguarda causando dano igual ao Ataque ao inimigo na Frente.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="class-images">
+                        <img src="assets/heroes/C_M.png" alt="Clérigo M" onerror="this.src='https://via.placeholder.com/80/252526/bb86fc?text=C_M'">
+                        <img src="assets/heroes/C_F.png" alt="Clériga F" onerror="this.src='https://via.placeholder.com/80/252526/bb86fc?text=C_F'">
+                    </div>
+                    <h3>Ordem da Luz Silenciosa (Clérigo)</h3>
+                    <p><strong>Ataque:</strong> 1 | <strong>Vida:</strong> 5</p>
+                    <p><strong>Habilidade (Pulso de Cura):</strong> Recupera Vida igual ao Nível de quem estiver na Frente.</p>
+                </div>
+                
+                <div class="card">
+                    <div class="class-images">
+                        <img src="assets/heroes/P_M.png" alt="Paladino M" onerror="this.src='https://via.placeholder.com/80/252526/bb86fc?text=P_M'">
+                        <img src="assets/heroes/P_F.png" alt="Paladina F" onerror="this.src='https://via.placeholder.com/80/252526/bb86fc?text=P_F'">
+                    </div>
+                    <h3>Ordem do Equilíbrio (Paladino)</h3>
+                    <p><strong>Ataque:</strong> 3 | <strong>Vida:</strong> 3</p>
+                    <p><strong>Habilidade (Defesa Justiceira):</strong> Quando estiver na Frente, ignora dano igual ao próprio Nível sempre que for atingido.</p>
+                </div>
+            </div>
+
+            <h2>Auxiliares Místicos (Companions) - Nível 2+</h2>
+            <p>Ao atingir o Nível 2 (3 de XP), o vínculo espiritual dos heróis manifesta um Auxiliar Místico. Na Frente, ele soma ataque ao herói. Na Retaguarda, ele duplica o efeito da habilidade especial do conjurador. Pode também sacrificar-se para salvar o herói de um golpe letal.</p>
+            
+            <div class="grid">
+                <div class="card companion-card">
+                    <img src="assets/companions/asa-de-anis.png" alt="Asa-de-Anis" onerror="this.src='https://via.placeholder.com/90/252526/ff9800?text=Asa-de-Anis'">
+                    <h3>Asa-de-Anis 🦅</h3>
+                    <p><strong>Classe:</strong> Guerreiro(a)</p>
+                    <p>Um falcão heráldico feito de energia pura azul-celeste.</p>
+                </div>
+                <div class="card companion-card">
+                    <img src="assets/companions/raposa_astral.png" alt="Raposa Astral" onerror="this.src='https://via.placeholder.com/90/252526/ff9800?text=Raposa+Astral'">
+                    <h3>Raposa Astral 🦊</h3>
+                    <p><strong>Classe:</strong> Caçador(a)</p>
+                    <p>Uma raposa celestial flutuante de três caudas com padrões estelares.</p>
+                </div>
+                <div class="card companion-card">
+                    <img src="assets/companions/serpente_eterea.png" alt="Serpente Etérea" onerror="this.src='https://via.placeholder.com/90/252526/ff9800?text=Serpente+Etérea'">
+                    <h3>Serpente Etérea 🐍</h3>
+                    <p><strong>Classe:</strong> Mago(a)</p>
+                    <p>Uma pequena serpente de chamas violetas sólidas e runas arcanas.</p>
+                </div>
+                <div class="card companion-card">
+                    <img src="assets/companions/silfide_da_alvorada.png" alt="Sílfide da Alvorada" onerror="this.src='https://via.placeholder.com/90/252526/ff9800?text=Sílfide'">
+                    <h3>Sílfide da Alvorada 🧚</h3>
+                    <p><strong>Classe:</strong> Clérigo(a)</p>
+                    <p>Uma silhueta esguia como uma fada com asas sólidas de luz dourada.</p>
+                </div>
+                <div class="card companion-card">
+                    <img src="assets/companions/egide_de_marfim.png" alt="Égide de Marfim" onerror="this.src='https://via.placeholder.com/90/252526/ff9800?text=Égide'">
+                    <h3>Égide de Marfim 🐢</h3>
+                    <p><strong>Classe:</strong> Paladino(a)</p>
+                    <p>Uma tartaruga terrestre com casco esculpido em cristal de marfim opaco.</p>
+                </div>
+            </div>
+
+            <h2>Vilões Maiores (Bosses)</h2>
+            <p>Estas são as quatro entidades de grande influência. A presença de um vilão maior altera o ambiente, os NPCs e as hordas monstruosas que irá enfrentar.</p>
+            
+            <div class="grid">
+                <div class="card boss-card">
+                    <img src="assets/bosses/BOSS_HiveQueen.png" alt="Rainha da Colmeia" onerror="this.src='https://via.placeholder.com/90/252526/bb86fc?text=Rainha+Colmeia'">
+                    <h3>Rainha da Colmeia (Hive Queen)</h3>
+                    <p><strong>Origem:</strong> Selvagens</p>
+                    <p>Mente coletiva absoluta. Controla os enxames e abominações de carapaça.</p>
+                </div>
+                <div class="card boss-card">
+                    <img src="assets/bosses/BOSS_MightyDragon.png" alt="Poderoso Dragão" onerror="this.src='https://via.placeholder.com/90/252526/bb86fc?text=Dragão'">
+                    <h3>Poderoso Dragão (Mighty Dragon)</h3>
+                    <p><strong>Origem:</strong> Bestas</p>
+                    <p>Poder destrutivo ancestral e fúria primal que incendeia os continentes.</p>
+                </div>
+                <div class="card boss-card">
+                    <img src="assets/bosses/BOSS_AbyssalOracle.png" alt="Oráculo Abissal" onerror="this.src='https://via.placeholder.com/90/252526/bb86fc?text=Oráculo'">
+                    <h3>Oráculo Abissal (Abyssal Oracle)</h3>
+                    <p><strong>Origem:</strong> Monstros</p>
+                    <p>Entidade profética e distorcida que corrompe a carne e a mente.</p>
+                </div>
+                <div class="card boss-card">
+                    <img src="assets/bosses/BOSS_LordOfDarkness.png" alt="Senhor das Trevas" onerror="this.src='https://via.placeholder.com/90/252526/bb86fc?text=Senhor+Trevas'">
+                    <h3>Senhor das Trevas (Lord of Darkness)</h3>
+                    <p><strong>Origem:</strong> Mortos</p>
+                    <p>Senhor do tempo e da memória, aprisionando almas perdidas.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
