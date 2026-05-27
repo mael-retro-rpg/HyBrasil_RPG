@@ -557,6 +557,7 @@ Formato obrigatório:
 - Ao atualizar vida, XP, nível, formação ou companheiro, atualize também o JSON final.
 - O objeto `enemy_boss` deve ser `null` quando nenhum Vilão Maior estiver visível.
 - Durante aparição, diálogo inicial ou combate contra Vilão Maior, `enemy_boss` deve ser repetido em todas as respostas, mesmo sem alteração.
+- "horda": Deve ser um array de strings contendo os nomes exatos dos inimigos ativos na fila de combate (ex: ["Zumbi Menor", "Warg Maior"]). Se não houver combate no momento, deixe como um array vazio [].
 
 ### Mapeamento de Classes e Habilidades para Exibição
 
@@ -639,7 +640,7 @@ Existem dois tipos:
 - `type = "lackey"`
 - `ataque`, `vida` (sem nível, sem XP, sem habilidade)
 
-**Criatura da Horda**
+**Criatura Maior**
 
 - `type = "greater"`
 - `origem` (enum: `Savage`, `Beast`, `Monster`, `Dead`)
@@ -2347,38 +2348,40 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
             `;
         }
 
-        // Reconhecimento de Fila para suportar inimigos dinâmicos de 2 x 1 até 2 x 6
+        // Reconhecimento de Fila 100% blindado lendo direto do JSON
         function atualizarInimigosFila(textoBruto, hud) {
             const listEl = document.getElementById('arena-enemies-list');
             if (!listEl) return;
 
             let inimigosFila = [];
-            // Regex melhorado para extrair a fila inimiga
-            const regexFila = /(?:Enemy Line|Fila Inimiga|Fila|Inimigos):\s*(.*)/i;
-            const matchFila = textoBruto.match(regexFila);
+            
+            // 1. LER DO JSON: Busca a lista exata gerada pela IA
+            if (hud && hud.horda && Array.isArray(hud.horda) && hud.horda.length > 0) {
+                inimigosFila = hud.horda;
+            } else {
+                // 2. FALLBACK (Segurança): Se o JSON falhar, procura no texto (agora aceita "Linha Inimiga")
+                const regexFila = /(?:Enemy Line|Fila Inimiga|Fila|Inimigos|Linha Inimiga):\s*(.*)/i;
+                const matchFila = textoBruto.match(regexFila);
 
-            if (matchFila) {
-                let filaRaw = matchFila[1].trim();
-                filaRaw = filaRaw.replace(/\*\*/g, ''); // Remove formatação negrito
-                
-                // Tenta dividir pela setinha
-                if (filaRaw.includes('->')) {
-                    let parts = filaRaw.split('->');
-                    parts.forEach(p => {
-                        let cleanName = p.replace(/[\[\]]/g, '').trim();
-                        if (cleanName) inimigosFila.push(cleanName);
-                    });
-                } else {
-                    // Se não tiver setinha, tenta pegar do formato antigo entre colchetes
-                    const regexElementos = /\[(.*?)\]/g;
-                    let elemMatch;
-                    while ((elemMatch = regexElementos.exec(filaRaw)) !== null) {
-                        inimigosFila.push(elemMatch[1].trim());
+                if (matchFila) {
+                    let filaRaw = matchFila[1].trim().replace(/\*\*/g, ''); 
+                    if (filaRaw.includes('->')) {
+                        let parts = filaRaw.split('->');
+                        parts.forEach(p => {
+                            let cleanName = p.replace(/[\[\]]/g, '').trim();
+                            if (cleanName) inimigosFila.push(cleanName);
+                        });
+                    } else {
+                        const regexElementos = /\[(.*?)\]/g;
+                        let elemMatch;
+                        while ((elemMatch = regexElementos.exec(filaRaw)) !== null) {
+                            inimigosFila.push(elemMatch[1].trim());
+                        }
                     }
                 }
             }
 
-            // Fallback se a IA não imprimiu a fila mas mandou o HUD
+            // 3. Fallback do Boss se a fila estiver vazia e tiver um Vilão Maior ativo
             if (inimigosFila.length === 0) {
                 if (hud && hud.enemy_boss) {
                     inimigosFila.push("Lacaio [Vanguarda]");
@@ -2394,7 +2397,7 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
                 const item = document.createElement('div');
                 item.className = `bg-slate-900/80 border ${isFront ? 'border-red-500/50 shadow-md shadow-red-950/20' : 'border-slate-800'} rounded-xl p-2 flex items-center justify-between gap-2 transition-all animate-fade-in`;
                 
-                // Tentamos identificar pelo bestiário ANTES de desenhar
+                // Busca a criatura no Bestiário Oficial
                 const criatura = buscarCriaturaNoBestiario(nomeInimigo);
                 const nomeExibicao = criatura ? criatura.nome : nomeInimigo.replace(/[\[\]]/g, '').trim();
                 const origem = criatura ? criatura.origem : "Desconhecido";
@@ -2431,10 +2434,16 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
                 `;
                 listEl.appendChild(item);
 
-                const rawName = nomeExibicao.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[\[\]]/g, '').trim();
-                const localEnemyImg = `assets/enemies/${criatura.imagem}`;
-                const fallbackSVG = `<div class="w-full h-full flex items-center justify-center text-red-400 bg-red-950/20">${icon}</div>`;
-                renderPortrait(uniqueEnemyContainerId, localEnemyImg, fallbackSVG);
+                // Carrega a imagem do Banco ou tenta o fallback padrão
+                let fallbackSVG = `<div class="w-full h-full flex items-center justify-center text-red-400 bg-red-950/20">${icon}</div>`;
+                if (criatura && criatura.imagem) {
+                    const localEnemyImg = `assets/enemies/${criatura.imagem}`;
+                    renderPortrait(uniqueEnemyContainerId, localEnemyImg, fallbackSVG);
+                } else {
+                    const rawName = nomeExibicao.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[\[\]]/g, '').trim();
+                    const localEnemyImg = `assets/enemies/${rawName}.png`;
+                    renderPortrait(uniqueEnemyContainerId, localEnemyImg, fallbackSVG);
+                }
             });
         }
 
