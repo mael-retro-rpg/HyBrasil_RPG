@@ -1786,7 +1786,7 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
 
             // Renderiza Avatar com Fallback físico para o Monstro do Códice
             const rawName = criatura.nome.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_');
-            const localImg = `assets/enemies/${rawName}.png`;
+            const localImg = `assets/enemies/${criatura.imagem}`;
             const fallbackSVG = atualizarAvatarBossSVG(criatura.nome, criatura.origem);
 
             renderPortrait('codex-avatar-container', localImg, fallbackSVG);
@@ -2429,7 +2429,7 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
                 listEl.appendChild(item);
 
                 const rawName = nomeExibicao.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '_').replace(/[\[\]]/g, '').trim();
-                const localEnemyImg = `assets/enemies/${rawName}.png`;
+                const localEnemyImg = `assets/enemies/${criatura.imagem}`;
                 const fallbackSVG = `<div class="w-full h-full flex items-center justify-center text-red-400 bg-red-950/20">${icon}</div>`;
                 renderPortrait(uniqueEnemyContainerId, localEnemyImg, fallbackSVG);
             });
