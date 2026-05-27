@@ -891,7 +891,7 @@ A fila inimiga deve ser explicitamente definida antes do combate:
 
 Quando não estiver em combate, a IA deve:
 
-- **Narrativa Ultra-Curta:** Descrever o ambiente e interações em no máximo **1 a 2 linhas**. Vá direto ao ponto, destacando apenas um elemento sensorial marcante, sem floreios textuais, mantendo o ritmo ágil;
+- **Narrativa Concisa:** Descrever o ambiente, os sentimentos e as interações em até **2 parágrafos**. Você tem total liberdade para detalhar o cenário, o clima e as ações dos personagens, focando em manter a imersão e a qualidade literária, mas sem se alongar ao ponto de quebrar o ritmo de jogo;
 - permitir conversa com NPCs;
 - sempre oferecer **3 opções numeradas**.
 
@@ -1141,7 +1141,7 @@ Antes de responder qualquer mensagem, a IA deve **validar internamente e RIGOROS
 - [ ] **EQUILÍBRIO DE NÍVEIS (CRÍTICO):** O nível dos inimigos gerados deve ser proporcional ao nível atual dos heróis, conforme dito no item 10. Combates muito fáceis ou impossíveis são proibidos. A dificuldade deve progredir conforme a jornada.
 - [ ] **RITMO DE JORNADA (CRÍTICO):** O combate não pode ser infinito. Após no máximo 2 batalhas, a IA DEVE inserir de uma a três cenas de exploração, evento narrativo ou descanso, evitando a exaustão do jogador em sequências ininterruptas. Em áreas como cidades e acampamentos, combates não devem ser forçados.
 - [ ] **NOME DOS INIMIGOS (CRÍTICO):** Utilizar APENAS os nomes oficiais listados na Seção 16. Se a IA gerar um nome genérico, ela DEVE corrigi-lo imediatamente para um nome do Bestiário oficial. Quando um inimigo possuir Ataque e Vida variáveis, deve ser preenchido no códice, os valores do encontro atual.
-- [ ] **DISTINÇÃO DE ENCONTROS:** Criaturas Maiores (Bestiário 16.1-16.6) não possuem rodadas de diálogo obrigatórias; o combate incia conforme a escolha do jogador ou o gatilho de risco.
+- [ ] **DISTINÇÃO DE ENCONTROS:** Criaturas da Horda (Bestiário 16.1-16.6) não possuem rodadas de diálogo obrigatórias; o combate inicia conforme a escolha do jogador ou o gatilho de risco. Somente os Vilões Maiores globais têm diálogo.
 - [ ] **REGRAS DE HABILIDADE (CRÍTICO):** A aplicação das habilidades deve seguir a ordem estrita: 1º Ataques Simultâneos (Frente) -> 2º Aplicação de Habilidades Especiais -> 3º Quedas e Avanço de Fila. Se um ataque for suficiente para causar queda, Habilidade ofensivas acertarão o alvo de trás antes do avanço. Companions só podem se sacrificar se o personagem for receber dano superior ou igual ao seu `hp_atual`.
 - [ ] **CURA E XP (CRÍTICO):**
   - **Cura:** Ao final de cada vitória, o `hp_atual` DEVE ser resetado para o `hp_max` automaticamente.
@@ -1172,7 +1172,7 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
 9. **Megalodonte Menor (megalodon):** Descrição: Criatura hostil nativa desta região. *(A1 V2 | HiveQueen)*
 10. **Basilisco Menor (basilisk):** Descrição: Criatura hostil nativa desta região. *(A2 V1 | MightyDragon)*
 
-# Criaturas Maiores
+# Criaturas da Horda
 1. **Víbora Dracônica Maior (dracoviper):** Descrição: Ameaça colossal e implacável. *(Origem: HiveQueen | Habilidade: Ataque Preciso)*
 2. **Peixe-Voador Maior (flyingfish):** Descrição: Ameaça colossal e implacável. *(Origem: MightyDragon | Habilidade: Ataque Mágico)*
 3. **Anaconda Maior (anaconda):** Descrição: Ameaça colossal e implacável. *(Origem: AbyssalOracle | Habilidade: Pulso de Cura)*
@@ -1198,7 +1198,7 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
 9. **Beemote de Pedra Menor (stonebehemoth):** Descrição: Criatura hostil nativa desta região. *(A1 V2 | HiveQueen)*
 10. **Centopeia Gigante Menor (giantcentipede):** Descrição: Criatura hostil nativa desta região. *(A1 V3 | MightyDragon)*
 
-# Criaturas Maiores
+# Criaturas da Horda
 1. **Gritador Fumegante Maior (smokingscreamer):** Descrição: Ameaça colossal e implacável. *(Origem: HiveQueen | Habilidade: Ataque Preciso)*
 2. **Gladiossauro Maior (gladiosaur):** Descrição: Ameaça colossal e implacável. *(Origem: MightyDragon | Habilidade: Ataque Mágico)*
 3. **Verme Sujo Maior (dirtyworm):** Descrição: Ameaça colossal e implacável. *(Origem: AbyssalOracle | Habilidade: Pulso de Cura)*
@@ -1229,7 +1229,7 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
 14. **Lobisomem Menor (werewolf):** Descrição: Criatura hostil nativa desta região. *(A1 V3 | MightyDragon)*
 15. **Duplo Menor (doppelganger):** Descrição: Criatura hostil nativa desta região. *(A3 V1 | AbyssalOracle)*
 
-# Criaturas Maiores
+# Criaturas da Horda
 1. **Sátiro Maior (satyr):** Descrição: Ameaça colossal e implacável. *(Origem: HiveQueen | Habilidade: Ataque Preciso)*
 2. **Lobo Atroz Maior (direwolf):** Descrição: Ameaça colossal e implacável. *(Origem: MightyDragon | Habilidade: Ataque Mágico)*
 3. **Abominação Maior (abomination):** Descrição: Ameaça colossal e implacável. *(Origem: AbyssalOracle | Habilidade: Pulso de Cura)*
@@ -1265,7 +1265,7 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
 14. **Long Menor (long):** Descrição: Criatura hostil nativa desta região. *(A2 V1 | MightyDragon)*
 15. **Cheddu Menor (cheddu):** Descrição: Criatura hostil nativa desta região. *(A2 V2 | AbyssalOracle)*
 
-# Criaturas Maiores
+# Criaturas da Horda
 1. **Leopardo-Marinho Maior (sealeopard):** Descrição: Ameaça colossal e implacável. *(Origem: HiveQueen | Habilidade: Ataque Preciso)*
 2. **Cuca Maior (cuca):** Descrição: Ameaça colossal e implacável. *(Origem: MightyDragon | Habilidade: Ataque Mágico)*
 3. **Sapo Dragão Maior (dracofrog):** Descrição: Ameaça colossal e implacável. *(Origem: AbyssalOracle | Habilidade: Pulso de Cura)*
@@ -1296,7 +1296,7 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
 9. **Golem Rainha Menor (queen):** Descrição: Criatura hostil nativa desta região. *(A1 V2 | HiveQueen)*
 10. **Wyvern de Gelo Menor (icewyvern):** Descrição: Criatura hostil nativa desta região. *(A2 V1 | MightyDragon)*
 
-# Criaturas Maiores
+# Criaturas da Horda
 1. **Wyvern Prateada Maior (silverwyvern):** Descrição: Ameaça colossal e implacável. *(Origem: HiveQueen | Habilidade: Ataque Preciso)*
 2. **Golem Rei Maior (king):** Descrição: Ameaça colossal e implacável. *(Origem: MightyDragon | Habilidade: Ataque Mágico)*
 3. **Wyvern de Fogo Maior (firewyvern):** Descrição: Ameaça colossal e implacável. *(Origem: AbyssalOracle | Habilidade: Pulso de Cura)*
@@ -1327,7 +1327,7 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
 14. **Unicórnio Menor (unicorn):** Descrição: Criatura hostil nativa desta região. *(A1 V3 | MightyDragon)*
 15. **Grifo-Corvo Menor (ravengryph):** Descrição: Criatura hostil nativa desta região. *(A2 V2 | AbyssalOracle)*
 
-# Criaturas Maiores
+# Criaturas da Horda
 1. **Esfinge Maior (sphinx):** Descrição: Ameaça colossal e implacável. *(Origem: HiveQueen | Habilidade: Ataque Preciso)*
 2. **Harpia Maior (harpy):** Descrição: Ameaça colossal e implacável. *(Origem: MightyDragon | Habilidade: Ataque Mágico)*
 3. **Cavalo Atroz Maior (direhorse):** Descrição: Ameaça colossal e implacável. *(Origem: AbyssalOracle | Habilidade: Pulso de Cura)*
@@ -1674,6 +1674,8 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
         // Função flexível para encontrar criatura no Bestiário por nome, ignorando lixo da IA
         function buscarCriaturaNoBestiario(nome) {
             if (!nome) return null;
+            
+            // Limpa o nome removendo acentos, marcações do hud, espaços e hífens
             let chave = nome.toLowerCase()
                               .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                               .replace(/[\[\]\(\)]/g, '')
@@ -1681,25 +1683,17 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
                               .replace(/chefe/g, '')
                               .replace(/vanguarda/g, '')
                               .replace(/retaguarda/g, '')
+                              .replace(/\s+/g, '') // Remove os espaços
+                              .replace(/-/g, '')   // Remove os hífens
                               .trim();
             
             // Tenta correspondência exata
             if (BESTIARY_DB[chave]) return BESTIARY_DB[chave];
 
-            // Tenta correspondência parcial
+            // Tenta correspondência parcial (caso o nome venha ligeiramente diferente)
             for (let k in BESTIARY_DB) {
                 if (chave.includes(k) || k.includes(chave)) {
                     return BESTIARY_DB[k];
-                }
-            }
-            
-            // Tentativa final com a primeira palavra se tiver tamanho decente
-            let words = chave.split(' ');
-            if (words.length > 0 && words[0].length > 3) {
-                for (let k in BESTIARY_DB) {
-                    if (k.includes(words[0])) {
-                         return BESTIARY_DB[k];
-                    }
                 }
             }
             
@@ -1777,7 +1771,16 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
 
             // Preenche os detalhes baseados na BD do Códice
             document.getElementById('codex-nome').innerText = criatura.nome;
-            document.getElementById('codex-origem').innerText = criatura.lacaio ? "Lacaio" : "Criatura Maior";
+            let labelOrigem = "Lacaio";
+            if (!criatura.lacaio) {
+                // Se for um dos 4 Vilões Globais (identificados pela origem no BD)
+                if (["Savages", "Beasts", "Monsters", "Dead"].includes(criatura.origem)) {
+                    labelOrigem = "Vilão Maior (Chefe)";
+                } else {
+                    labelOrigem = "Criatura da Horda";
+                }
+            }
+            document.getElementById('codex-origem').innerText = labelOrigem;
             document.getElementById('codex-regiao').innerText = criatura.regiao;
             document.getElementById('codex-ataque').innerText = criatura.ataque;
             document.getElementById('codex-vida').innerText = criatura.vida;
