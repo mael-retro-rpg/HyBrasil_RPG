@@ -6,6 +6,10 @@
     <title>HyBrasil – A Ilha Paraíso</title>
     <!-- Ícone da Página (Favicon) -->
     <link rel="icon" type="image/png" href="assets/icon.png">
+    <!-- Configurações do PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#141a24">
+    <link rel="apple-touch-icon" href="assets/icon.png">
     <!-- Tailwind CSS para estilização moderna e responsiva -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts para tipografia de Fantasia e Imersão -->
@@ -2660,6 +2664,16 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
             const localBossImg = getBossImagePath(nomeBoss);
             const fallbackSVG = atualizarAvatarBossSVG(nomeBoss, origemBoss);
             renderPortrait('boss-avatar-container', localBossImg, fallbackSVG);
+        }
+    </script>
+<!-- Ativação do Service Worker para o PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Motor PWA Ativado com sucesso.', reg.scope))
+                    .catch(err => console.error('Falha ao ativar o PWA:', err));
+            });
         }
     </script>
 </body>
