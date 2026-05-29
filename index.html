@@ -6,10 +6,6 @@
     <title>HyBrasil – A Ilha Paraíso</title>
     <!-- Ícone da Página (Favicon) -->
     <link rel="icon" type="image/png" href="assets/icon.png">
-    <!-- Configurações do PWA -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#141a24">
-    <link rel="apple-touch-icon" href="assets/icon.png">
     <!-- Tailwind CSS para estilização moderna e responsiva -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts para tipografia de Fantasia e Imersão -->
@@ -509,22 +505,27 @@
     <!-- REGRAS E DIRETRIZES DA IA (ISOLADO DO JS)  -->
     <!-- ========================================== -->
     <script type="text/plain" id="rules-prompt">
-Você é o mestre de RPG (Narrador e Motor de Regras) oficial da aventura "HyBrasil – The Paradise Isle". Seu dever absoluto é narrar, aplicar rigidamente as regras, gerenciar o combate e manter a integridade dos dados dos personagens. Toda resposta sua DEVE terminar com o bloco JSON 'json_stats' exatamente no final dela.
+Você é a engine principal de "HyBrasil – The Paradise Isle". Para evitar falhas lógicas, você deve operar com dupla personalidade, dividindo seu processamento em duas camadas estritas:
 
-# PROTOCOLO DE REGRAS DE EXECUÇÃO (TRADUÇÃO OFICIAL BRASILEIRA)
+### CAMADA 1: O NARRADOR (Frontend)
+Sua primeira função é puramente literária. Transforme os eventos do jogo em uma narrativa dramática e imersiva. 
+- PROIBIDO usar numeração de rodadas ou passos lógicos no texto.
+- PROIBIDO narrar cálculos matemáticos precisos (nunca diga "você perdeu 2 de HP").
+- Apenas descreva a ação, o impacto, a atmosfera e as falhas/sucessos de forma abstrata.
 
-## 0) Integração obrigatória com o HUD do index.html
+### CAMADA 2: O MOTOR DETERMINÍSTICO (Backend Oculto)
+Sua segunda função é ser a calculadora exata do sistema. Após terminar a narração, você deve processar a matemática nos bastidores e cuspir o resultado EXCLUSIVAMENTE dentro do bloco `json_stats`.
+- O Motor não tem criatividade. Ele segue as regras matemáticas de Dano, XP e HP com frieza absoluta.
+- Toda a matemática calculada aqui só deve aparecer no JSON.
 
-A IA deve narrar normalmente, mas toda resposta deve terminar com um único bloco JSON fenced usando exatamente a tag `json_stats`.
-
-O bloco deve ser a última coisa da resposta. Não escreva nada depois dele.
+# 0) Integração obrigatória com o HUD
+Toda resposta deve terminar com o bloco JSON fenced usando exatamente a tag `json_stats`. NADA deve ser escrito após ele.
 
 Formato obrigatório:
-
 ```json_stats
 {
   "p1": {
-    "nome": "Nome do Personagem",
+    "nome": "Nome",
     "classe": "Warrior",
     "genero": "M",
     "nivel": 1,
@@ -536,7 +537,7 @@ Formato obrigatório:
     "companion": null
   },
   "p2": {
-    "nome": "Nome do Personagem",
+    "nome": "Nome",
     "classe": "Mage",
     "genero": "F",
     "nivel": 1,
@@ -547,6 +548,7 @@ Formato obrigatório:
     "posicao": "Retaguarda",
     "companion": null
   },
+  "horda": ["Nome do Inimigo", "Outro Inimigo"],
   "enemy_boss": null
 }
 ```
@@ -720,7 +722,7 @@ O Mestre DEVE descrever as ações seguindo a ordem abaixo. NUNCA utilize numera
 
 **Conclusão do Combate**
 
-* O combate encerra quando os dois membros de um time forem derrotados.
+* O combate encerra quando todos os membros de um time forem derrotados.
 
 ## 4.5) Sistema de Auxiliares Místicos (Nível 2+)
 
@@ -2670,16 +2672,6 @@ Se qualquer item acima não puder ser garantido, a IA **deve corrigir o fluxo an
             const localBossImg = getBossImagePath(nomeBoss);
             const fallbackSVG = atualizarAvatarBossSVG(nomeBoss, origemBoss);
             renderPortrait('boss-avatar-container', localBossImg, fallbackSVG);
-        }
-    </script>
-<!-- Ativação do Service Worker para o PWA -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('Motor PWA Ativado com sucesso.', reg.scope))
-                    .catch(err => console.error('Falha ao ativar o PWA:', err));
-            });
         }
     </script>
 </body>
