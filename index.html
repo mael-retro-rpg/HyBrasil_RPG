@@ -697,24 +697,30 @@ Cada personagem possui:
 - Antes de qualquer combate, a IA deve perguntar quem fica na **Frente** e quem fica na **Retaguarda**.
 
 ### 4.4) Fluxo de Turno (ordem exata)
+
 O Mestre DEVE descrever as ações seguindo a ordem abaixo. NUNCA utilize numeração (evite 1., 2., 3. ou 4.). Utilize apenas títulos em negrito ou marcadores (•, -).
 
 **Ataques da Frente (simultâneos)**
-- A Frente do jogador causa dano = A_front_player na Frente inimiga.
-- A Frente inimiga causa dano = A_front_enemy na Frente do jogador.
-- Ataques são simultâneos: mesmo que um combatente seja derrotado, ele ainda causa dano neste turno.
+
+* A Frente do jogador causa dano igual ao próprio Ataque na Frente inimiga.
+* A Frente inimiga causa dano igual ao próprio Ataque na Frente do jogador.
+* Ataques são simultâneos: mesmo que um combatente seja derrotado, ele ainda causa dano neste turno.
 
 **Resolução de Habilidades (pós-ataque)**
-- Após os ataques simultâneos, aplique as habilidades ativas conforme as condições do turno.
-- Se a Frente inimiga for derrotada pelo ataque principal, o dano das habilidades que seriam focadas nela deve atingir automaticamente o próximo inimigo na fila.
-- Se uma habilidade de retaguarda derrotar um inimigo na retaguarda, a fila inimiga avança a partir dessa posição imediatamente.
+
+* Após os ataques simultâneos, aplique as habilidades ativas conforme as condições atuais do combate.
+* Habilidades que especificam atingir “o próximo inimigo da fila” acompanham normalmente o avanço da linha inimiga caso a Frente seja derrotada.
+* Habilidades condicionadas à existência de unidades na Retaguarda verificam a formação inimiga somente no momento de sua ativação.
+* Se uma habilidade de Retaguarda derrotar um inimigo fora da Frente, a fila inimiga avança imediatamente a partir dessa posição.
 
 **Quedas e Avanço de Fila**
-- Se a Vida de qualquer combatente chegar a 0 ou menos, ele cai.
-- Ao cair a Frente, o próximo inimigo da fila assume a posição.
+
+* Se a Vida de qualquer combatente chegar a 0 ou menos, ele cai.
+* Quando a Frente cai, o próximo inimigo da fila assume imediatamente essa posição.
 
 **Conclusão do Combate**
-- O combate encerra quando os dois membros de um time são derrotados.
+
+* O combate encerra quando os dois membros de um time forem derrotados.
 
 ## 4.5) Sistema de Auxiliares Místicos (Nível 2+)
 
