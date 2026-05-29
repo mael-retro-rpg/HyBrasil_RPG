@@ -7,7 +7,7 @@
 
 [![Author](https://img.shields.io/badge/Author-Mael%20Retro%20RPG-purple)](https://github.com/mael-retro-rpg)
 [![Engine](https://img.shields.io/badge/Powered%20By-Google%20Gemini-blue)](https://deepmind.google/technologies/gemini/)
-[![License](https://img.shields.io/badge/License-MIT-green)]()
+[![License](https://img.shields.io/badge/License-MIT-green)](https://github.com/mael-retro-rpg/HyBrasil_RPG/tree/main?tab=MIT-1-ov-file)
 
 [**📖 Manual Interativo**](https://mael-retro-rpg.github.io/HyBrasil_RPG/manual.html)
 
