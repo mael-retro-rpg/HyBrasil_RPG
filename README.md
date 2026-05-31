@@ -30,7 +30,7 @@ Desenvolvido por **Mael Retro RPG**, o projeto demonstra como integrar IA Genera
 * **Auxiliares Místicos (Companions):** Desbloqueados no Nível 2, fortalecem ataques na Frente, duplicam habilidades na Retaguarda e podem se sacrificar para salvar o herói de um golpe letal.
 * **Sistema de XP gerenciado pelo JS:** A cada 2 vitórias o jogador escolhe qual herói recebe +1 XP. O JS aplica os novos atributos e concede o Companion ao atingir Nível 2.
 * **Barra de Cansaço do grupo:** Drena por ações de exploração e combate. Ao chegar a 0, o grupo desmaia e acorda em local inesperado. Recuperável via Descanso Rápido ou Completo.
-* **Confrontos com Vilões Maiores:** 2 rodadas de diálogo narrativo antes do combate. Os quatro vilões — HiveQueen, MightyDragon, AbyssalOracle e LordOfDarkness — comandam respectivamente Selvagens, Bestas, Monstros e Mortos.
+* **Confrontos com Vilões Maiores:** 2 rodadas de diálogo narrativo antes do combate. Os quatro vilões — Rainha da Colmeia, Poderoso Dragão, Oráculo Abissal e Senhor das Trevas — comandam respectivamente Selvagens, Bestas, Monstros e Mortos.
 * **Sistema de Salvar e Carregar:** Progresso completo (fichas, histórico, cansaço, vitórias, localização) salvo localmente no navegador.
 * **Segurança e Privacidade:** A Chave de API é guardada apenas no `localStorage` do próprio navegador. Nenhum dado é enviado a servidores externos além da API do Gemini.
 
@@ -49,31 +49,6 @@ Desenvolvido por **Mael Retro RPG**, o projeto demonstra como integrar IA Genera
 * `manifest.json` — Configuração PWA para instalação no celular.
 * `sw.js` — Service Worker para funcionamento offline.
 * `assets/` — Pasta raiz com todas as artes do jogo.
-
-### **🎨 Convenções de Nomenclatura dos Assets**
-
-Para adicionar novas imagens, salve-as dentro das subpastas em `assets/` seguindo estas convenções:
-
-**👥 Heróis (`assets/heroes/`):** `[SIGLA_CLASSE]_[GENERO].png`
-
-* **W**: Guerreiro(a) | **H**: Caçador(a) | **M**: Mago(a) | **C**: Clérigo(a) | **P**: Paladino(a)
-* *Exemplo:* `P_F.png` (Paladina Feminina) ou `W_M.png` (Guerreiro Masculino).
-
-**🐾 Auxiliares Místicos (`assets/companions/`):** `[nome_do_companion].png` — minúsculo, sem acentos, espaços viram `_` e hífens são mantidos.
-
-* *Exemplos:* `asa-de-anis.png`, `raposa_astral.png`, `egide_de_marfim.png`.
-
-**👹 Inimigos (`assets/enemies/`):** `bestiary_[grupo]_[lackey|great]_[slug].png`
-
-* *Exemplos:* `bestiary_doglike_lackey_direwolf.png`, `bestiary_golem_great_king.png`.
-
-**👑 Vilões Maiores (`assets/bosses/`):** `BOSS_[NomeChave].png`
-
-* *Exemplos:* `BOSS_HiveQueen.png`, `BOSS_MightyDragon.png`.
-
-**🌄 Backgrounds (`assets/background/`):** `bg_[bioma].png`
-
-* *Exemplos:* `bg_forest.png`, `bg_mine.png`, `bg_snowcity.png`.
 
 ---
 
