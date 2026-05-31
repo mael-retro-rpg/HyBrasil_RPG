@@ -1,4 +1,4 @@
-# **⚔️ HyBrasil RPG \- Aventura de texto com IA**
+# **⚔️ HyBrasil RPG - Aventura de texto com IA**
 <div align="center">
 
 [![JOGUE AGORA](https://img.shields.io/badge/🎮%20PLAY%20NOW-Click%20Here%20to%20Start-red?style=for-the-badge&logo=google-chrome)](https://mael-retro-rpg.github.io/HyBrasil_RPG/)
@@ -7,63 +7,74 @@
 
 [![Author](https://img.shields.io/badge/Author-Mael%20Retro%20RPG-purple)](https://github.com/mael-retro-rpg)
 [![Engine](https://img.shields.io/badge/Powered%20By-Google%20Gemini-blue)](https://deepmind.google/technologies/gemini/)
-[![License](https://img.shields.io/badge/License-MIT-green)](https://github.com/mael-retro-rpg/HyBrasil_RPG/tree/main?tab=MIT-1-ov-file)
+[![License](https://img.shields.io/badge/License-MIT-green)]()
 
 [**📖 Manual Interativo**](https://mael-retro-rpg.github.io/HyBrasil_RPG/manual.html)
 
 ## **🇧🇷 Sobre o Projeto**
 
-**HyBrasil RPG** é um motor de RPG de Texto via navegador impulsionado por Inteligência Artificial (Google Gemini). Ele transforma um livro de regras em uma aventura infinita e dinâmica, onde a IA atua como o Mestre (Dungeon Master), gerenciando combate, narrativa e inventário em tempo real.
+**HyBrasil RPG** é um motor de RPG de texto via navegador impulsionado por Inteligência Artificial (Google Gemini). A IA atua exclusivamente como **Narradora**, enquanto toda a mecânica de jogo — combate, fichas, progressão e dificuldade — é processada diretamente pelo JavaScript do cliente, garantindo resultados precisos e consistentes.
 
-Desenvolvido por **Mael Retro RPG**, este projeto demonstra como integrar IA Generativa com mecânicas clássicas de RPG usando HTML, CSS e JavaScript puro.
+Desenvolvido por **Mael Retro RPG**, o projeto demonstra como integrar IA Generativa com mecânicas clássicas de RPG usando HTML, CSS e JavaScript puro, sem dependências de servidor ou frameworks.
 
 ### **✨ Funcionalidades Principais**
 
-* **Mestre via IA (Gemini):** Utiliza os modelos da família Google Gemini (como o veloz Flash Lite) para narrar a história e aplicar as regras rigorosamente com alta estabilidade.  
-* **HUD Visual e Dinâmico:** Interface em tempo real mostrando nomes, classes, posições (Frente/Retaguarda) e Barras de Vida, que ganham vida através da leitura de blocos de dados (json\_stats) injetados de forma invisível pela IA.  
-* **Auxiliares Místicos:** Desbloqueie mascotes etéreos no Nível 2 que fortalecem ataques, duplicam habilidades e podem se sacrificar para salvar o mestre.  
-* **Arena de Combate Automático:** Durante as batalhas, a interface se transforma: uma fila dinâmica processa e renderiza até 6 inimigos na tela com um pergaminho focado apenas no registro dos golpes e danos.  
-* **Confrontos Épicos (Bosses):** Rastreamento visual de Vilões Maiores, com moldura imersiva e Barra de Vida gigante para os chefes de campanha.  
-* **Sistema de Salvar e Carregar:** Salve o seu progresso da aventura (incluindo todo o histórico do chat e fichas) localmente no navegador e continue de onde parou.  
-* **Regras Embutidas:** A lógica do RPG e o catálogo do Bestiário inteiro estão contidos em um prompt interno seguro que impede a IA de esquecer as regras ao longo do jogo.  
-* **Segurança e Privacidade:** A sua Chave de API é guardada apenas no armazenamento local do seu próprio navegador.
+* **Arquitetura JS + IA separados:** O motor de combate é determinístico e roda inteiramente no navegador. A IA (Gemini) narra exploração, dá voz a NPCs e Vilões Maiores, e recebe os resultados de batalha prontos para narrar dramaticamente.
+* **Criação de personagens interativa:** Pop-up de criação com seleção visual de nome, gênero, classe e formação antes de qualquer chamada à IA.
+* **5 Classes jogáveis:** Guerreiro(a), Caçador(a), Mago(a), Clérigo(a) e Paladino(a) — cada uma com habilidade passiva única e funções narrativas específicas na exploração.
+* **Funções narrativas de classe:** A IA oferece opções de classe (identificar rastros, usar truques arcanos, exercer autoridade, etc.) apenas quando o contexto e a classe do herói forem compatíveis.
+* **Combate automático:** Arena visual com fila dinâmica de até 6 inimigos. O JS resolve todos os turnos, aplica habilidades e exibe o log completo no Pergaminho de Resolução.
+* **Bestiário com 150 criaturas:** 15 grupos de monstros, cada um com 5 lacaios e 5 criaturas maiores, distribuídos por múltiplas regiões da ilha.
+* **Inimigos por região:** A fila de combate é filtrada pelo bioma atual, garantindo coerência temática com o ambiente.
+* **30 ambientes visuais:** Backgrounds dinâmicos por bioma com o nome do local gerado pela IA.
+* **Auxiliares Místicos (Companions):** Desbloqueados no Nível 2, fortalecem ataques na Frente, duplicam habilidades na Retaguarda e podem se sacrificar para salvar o herói de um golpe letal.
+* **Sistema de XP gerenciado pelo JS:** A cada 2 vitórias o jogador escolhe qual herói recebe +1 XP. O JS aplica os novos atributos e concede o Companion ao atingir Nível 2.
+* **Barra de Cansaço do grupo:** Drena por ações de exploração e combate. Ao chegar a 0, o grupo desmaia e acorda em local inesperado. Recuperável via Descanso Rápido ou Completo.
+* **Confrontos com Vilões Maiores:** 2 rodadas de diálogo narrativo antes do combate. Os quatro vilões — HiveQueen, MightyDragon, AbyssalOracle e LordOfDarkness — comandam respectivamente Selvagens, Bestas, Monstros e Mortos.
+* **Sistema de Salvar e Carregar:** Progresso completo (fichas, histórico, cansaço, vitórias, localização) salvo localmente no navegador.
+* **Segurança e Privacidade:** A Chave de API é guardada apenas no `localStorage` do próprio navegador. Nenhum dado é enviado a servidores externos além da API do Gemini.
 
 ### **🚀 Como Jogar**
 
-1. **Obtenha uma Chave API:** Você precisa de uma chave gratuita do Google Gemini no [Google AI Studio](https://aistudio.google.com/app/apikey).  
-2. **Inicie o Jogo:** Clique no botão **PLAY NOW** no topo desta página (ou abra o arquivo index.html no seu navegador).  
-3. **Conecte o Motor:** Cole a sua Chave API do Gemini na janela inicial.  
-4. **Jogue:** Crie a sua dupla de aventureiros (ex: "Mael é o Guerreiro e Emma é a Maga") e explore HyBrasil\!
+1. **Obtenha uma Chave API gratuita** no [Google AI Studio](https://aistudio.google.com/app/apikey).
+2. **Inicie o Jogo:** Clique em **PLAY NOW** ou abra `index.html` no navegador.
+3. **Ative o Motor:** Cole a sua Chave API na janela inicial e clique em *Ativar Motor*.
+4. **Crie a sua dupla:** Preencha nome, gênero, classe e formação no pop-up de criação.
+5. **Explore HyBrasil** e tome decisões — a IA narra, o JS resolve!
 
 ### **📂 Estrutura de Arquivos**
 
-* index.html: O motor principal e único (Interface Visual, Scripts e o Cérebro de Prompt da IA).  
-* manual.html: O guia interativo detalhando regras, personagens e monstros.  
-* assets/: Pasta raiz contendo todas as artes geradas ou vinculadas ao jogo.
+* `index.html` — Motor principal (Interface, JS Engine e Prompt da IA).
+* `manual.html` — Manual interativo com regras, ambientes e bestiário completo.
+* `manifest.json` — Configuração PWA para instalação no celular.
+* `sw.js` — Service Worker para funcionamento offline.
+* `assets/` — Pasta raiz com todas as artes do jogo.
 
-### **🎨 Personalização**
+### **🎨 Convenções de Nomenclatura dos Assets**
 
-Para adicionar novas imagens físicas e substituir os vetores padrão, salve as artes dentro das subpastas em assets/ seguindo rigorosamente estas convenções de nomenclatura:
+Para adicionar novas imagens, salve-as dentro das subpastas em `assets/` seguindo estas convenções:
 
-**👥 Heróis (assets/heroes/):** \[SIGLA\_CLASSE\]\_\[GENERO\].png
+**👥 Heróis (`assets/heroes/`):** `[SIGLA_CLASSE]_[GENERO].png`
 
-* **W**: Guerreiro(a)  
-* **H**: Caçador(a)  
-* **M**: Mago(a)  
-* **C**: Clérigo(a)  
-* **P**: Paladino(a)  
-* *Exemplo:* P\_F.png (Paladina Feminina) ou W\_M.png (Guerreiro Masculino).
+* **W**: Guerreiro(a) | **H**: Caçador(a) | **M**: Mago(a) | **C**: Clérigo(a) | **P**: Paladino(a)
+* *Exemplo:* `P_F.png` (Paladina Feminina) ou `W_M.png` (Guerreiro Masculino).
 
-**🐾 Auxiliares Místicos (assets/companions/):** \[nome\_do\_mascote\].png (Tudo em minúsculo, sem acentos, e espaços viram underline \_)
+**🐾 Auxiliares Místicos (`assets/companions/`):** `[nome_do_companion].png` — minúsculo, sem acentos, espaços viram `_` e hífens são mantidos.
 
-* *Exemplo:* asa-de-anis.png ou serpente\_eterea.png.
+* *Exemplos:* `asa-de-anis.png`, `raposa_astral.png`, `egide_de_marfim.png`.
 
-**👹 Inimigos e Lacaios (assets/enemies/):** \[nome\_do\_monstro\].png (Tudo em minúsculo, sem acentos e espaços viram underline \_)
+**👹 Inimigos (`assets/enemies/`):** `bestiary_[grupo]_[lackey|great]_[slug].png`
 
-* *Exemplo:* zangao\_da\_mare.png ou escaravelho\_de\_vidro.png.
+* *Exemplos:* `bestiary_doglike_lackey_direwolf.png`, `bestiary_golem_great_king.png`.
 
-**👑 Vilões Maiores (assets/bosses/):** BOSS\_\[Nome\].png (Prefixo "BOSS\_" seguido do nome chave do sistema)
+**👑 Vilões Maiores (`assets/bosses/`):** `BOSS_[NomeChave].png`
 
-* *Exemplo:* BOSS\_HiveQueen.png ou BOSS\_MightyDragon.png.
+* *Exemplos:* `BOSS_HiveQueen.png`, `BOSS_MightyDragon.png`.
+
+**🌄 Backgrounds (`assets/background/`):** `bg_[bioma].png`
+
+* *Exemplos:* `bg_forest.png`, `bg_mine.png`, `bg_snowcity.png`.
+
+---
 
 Desenvolvido com ❤️ por **Mael Retro RPG**.

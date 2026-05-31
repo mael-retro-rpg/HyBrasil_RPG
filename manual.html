@@ -3,96 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HyBrasil RPG - Manual</title>
+    <title>HyBrasil RPG — Manual do Aventureiro</title>
     <link rel="icon" href="assets/icon.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* --- ESTILOS PRINCIPAIS --- */
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #121212; 
-            color: #e0e0e0; 
-            margin: 0; 
-            padding: 20px; 
-            line-height: 1.6; 
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Lora', serif;
+            background: radial-gradient(ellipse at top, #0e1020 0%, #05070e 100%);
+            color: #d4d8e8;
+            line-height: 1.7;
+            min-height: 100vh;
         }
-        h1, h2, h3, h4 { color: #bb86fc; }
-        h1 { text-align: center; font-size: 2.2em; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 30px;}
-        h2 { margin-top: 50px; border-bottom: 1px solid #444; padding-bottom: 5px; font-size: 1.8em; }
-        h4 { margin-bottom: 5px; color: #4caf50; }
-        
-        .container { 
-            max-width: 1000px; 
-            margin: auto; 
-            background: #1e1e1e; 
-            padding: 40px; 
-            border-radius: 12px; 
-            box-shadow: 0 8px 25px rgba(0,0,0,0.8); 
+
+        /* NAV */
+        nav {
+            position: sticky; top: 0; z-index: 50;
+            background: #080b14/95; backdrop-filter: blur(12px);
+            border-bottom: 1px solid #2d1f6e40;
+            padding: 10px 24px;
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
+            flex-wrap: wrap;
         }
-        
-        /* --- GRIDS E CARTÕES --- */
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 20px; 
-            margin-top: 20px; 
+        nav .logo { font-family: 'Cinzel', serif; font-size: 1.1em; font-weight: 700; background: linear-gradient(90deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        nav .nav-links { display: flex; gap: 6px; flex-wrap: wrap; }
+        nav a { color: #8b8fac; font-size: 0.75em; font-family: monospace; text-decoration: none; padding: 4px 10px; border-radius: 20px; border: 1px solid #2d2f4a; transition: all .2s; white-space: nowrap; }
+        nav a:hover { color: #a78bfa; border-color: #a78bfa50; background: #a78bfa10; }
+
+        /* CONTAINER */
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+        /* SECTIONS */
+        section { margin-bottom: 70px; scroll-margin-top: 60px; }
+        h1 { font-family: 'Cinzel', serif; font-size: 2.4em; text-align: center; background: linear-gradient(135deg, #a78bfa, #60a5fa, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; }
+        .subtitle { text-align: center; color: #7878a0; font-size: 1em; margin-bottom: 50px; }
+        h2 { font-family: 'Cinzel', serif; font-size: 1.5em; color: #a78bfa; border-bottom: 1px solid #2d1f6e50; padding-bottom: 10px; margin-bottom: 24px; }
+        h3 { font-family: 'Cinzel', serif; font-size: 1.1em; color: #c4b5fd; margin: 24px 0 12px; }
+        p { color: #b0b4cc; margin-bottom: 12px; }
+
+        /* GRID CARDS */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 20px; }
+
+        .card {
+            background: #0d1021; border: 1px solid #2d2f4a; border-left: 4px solid #4caf50;
+            padding: 20px; border-radius: 12px; text-align: center; transition: transform .2s, border-color .2s;
         }
-        .card { 
-            background: #252526; 
-            border: 1px solid #444; 
-            border-left: 4px solid #4caf50; 
-            padding: 20px; 
-            border-radius: 8px; 
-            text-align: center; 
-            transition: transform 0.2s;
-        }
-        .card:hover { transform: translateY(-5px); }
-        .card img { 
-            max-width: 90px; 
-            height: auto; 
-            filter: drop-shadow(0px 3px 5px rgba(236, 64, 122, 0.6)); 
-            margin: 0 5px 15px 5px; 
-            object-fit: contain;
-        }
-        .card h3 { margin: 0 0 10px 0; font-size: 1.2em; color: #fff; }
-        .card p { font-size: 0.9em; color: #ccc; margin: 5px 0; }
-        
-        /* Cores de Borda por Tipo */
-        .boss-card { border-left-color: #bb86fc; }
-        .companion-card { border-left-color: #ff9800; }
-        
-        /* Imagens duplas para classes (M e F) */
+        .card:hover { transform: translateY(-4px); }
+        .card img { max-width: 90px; height: auto; filter: drop-shadow(0 3px 8px rgba(167,139,250,.4)); margin: 0 6px 14px; object-fit: contain; object-position: center; }
+        .card h3 { margin: 0 0 8px; font-size: 1.05em; color: #e2e8f0; }
+        .card p { font-size: 0.85em; color: #94a3b8; margin: 4px 0; }
+        .boss-card { border-left-color: #a78bfa; }
+        .companion-card { border-left-color: #f59e0b; }
         .class-images { display: flex; justify-content: center; gap: 10px; }
-        
-        /* Box de Informação / Regras */
+
+        /* INFO BOX */
         .info-box {
-            background: #1a2332;
-            border: 1px solid #273b5e;
-            border-left: 4px solid #3b82f6;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
+            background: #0d1228; border: 1px solid #1e3a8a40; border-left: 4px solid #3b82f6;
+            padding: 20px 24px; border-radius: 12px; margin: 20px 0;
         }
-        .info-box ul {
-            margin-top: 10px;
-            padding-left: 20px;
-            color: #b0c4de;
+        .info-box h4 { color: #60a5fa; font-size: 0.95em; margin-bottom: 10px; font-family: 'Cinzel', serif; }
+        .info-box ul { padding-left: 20px; color: #94a3b8; }
+        .info-box li { margin-bottom: 8px; }
+
+        /* BIOMES */
+        .biomes-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 32px;
         }
-        .info-box li {
-            margin-bottom: 8px;
+        .biome-card { border-radius: 10px; overflow: hidden; border: 1px solid #2d2f4a; transition: transform .2s; }
+        .biome-card:hover { transform: translateY(-3px); }
+        .biome-img { width: 100%; height: 90px; background-size: cover; background-position: center; }
+        .biome-name { background: #0d1021; text-align: center; font-size: 0.78em; color: #94a3b8; padding: 6px 4px; font-family: monospace; }
+        .region-title { font-family: 'Cinzel', serif; font-size: 1em; color: #a78bfa; margin: 28px 0 12px; padding-bottom: 6px; border-bottom: 1px solid #2d1f6e30; }
+
+        /* BESTIARY */
+        .bestiary-group { margin-bottom: 48px; }
+        .group-title { font-family: 'Cinzel', serif; font-size: 1.1em; color: #e2e8f0; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .origin-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+        .bestiary-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;
         }
-        
-        /* Limpeza de float */
-        .clearfix::after { content: ""; clear: both; display: table; }
+        .bestiary-card {
+            background: #0d1021; border: 1px solid #2d2f4a; border-left: 3px solid #555;
+            border-radius: 10px; padding: 10px 12px; display: flex; gap: 12px; align-items: flex-start;
+            transition: background .15s;
+        }
+        .bestiary-card:hover { background: #111427; }
+        .bestiary-card img { width: 52px; height: 52px; object-fit: contain; object-position: center; border-radius: 8px; background: #0a0d1a; flex-shrink: 0; border: 1px solid #2d2f4a; }
+        .bestiary-info { flex: 1; min-width: 0; }
+        .bestiary-header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+        .bestiary-header strong { color: #e2e8f0; font-size: 0.9em; }
+        .badge { font-size: 0.65em; padding: 2px 7px; border-radius: 10px; font-family: monospace; font-weight: 700; text-transform: uppercase; }
+        .badge-lacaio { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
+        .badge-maior { background: #1e1b4b; color: #a5b4fc; border: 1px solid #4338ca50; }
+        .bestiary-stats { display: flex; gap: 10px; font-size: 0.78em; color: #64748b; margin-bottom: 5px; font-family: monospace; }
+        .bestiary-stats span { color: #7c8db5; }
+        .bestiary-desc { font-size: 0.8em; color: #64748b; line-height: 1.4; }
+
+        /* FILTER BAR */
+        .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+        .filter-btn { background: #0d1021; border: 1px solid #2d2f4a; color: #7878a0; font-size: 0.75em; padding: 5px 14px; border-radius: 20px; cursor: pointer; transition: all .15s; font-family: monospace; }
+        .filter-btn:hover, .filter-btn.active { background: #1e1b4b; border-color: #a78bfa50; color: #a78bfa; }
+
+        /* SCROLL TOP */
+        .scroll-top { position: fixed; bottom: 24px; right: 24px; background: #1e1b4b; border: 1px solid #a78bfa40; color: #a78bfa; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1em; transition: all .2s; z-index: 100; }
+        .scroll-top:hover { background: #2d2770; }
+
+        @media (max-width: 600px) {
+            .container { padding: 24px 14px 60px; }
+            h1 { font-size: 1.7em; }
+            .bestiary-grid { grid-template-columns: 1fr; }
+            .biomes-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+        }
     </style>
 </head>
 <body>
-    <div class="container clearfix">
+
+<nav>
+    <span class="logo">⚔ HyBrasil RPG</span>
+    <div class="nav-links">
+        <a href="#classes">Classes</a>
+        <a href="#combate">Combate</a>
+        <a href="#companions">Companions</a>
+        <a href="#viloes">Vilões</a>
+        <a href="#mundo">Mundo</a>
+        <a href="#ambientes">Ambientes</a>
+        <a href="#bestiario">Bestiário</a>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Manual do Aventureiro</h1>
+    <p class="subtitle">Bem-vindo a <strong>HyBrasil – A Ilha Paraíso</strong>. Este manual contém o conhecimento essencial para guiar a sua jornada.</p>
+
+
         
         <div class="pt">
             <h1>HyBrasil RPG - Manual do Aventureiro</h1>
             <p style="text-align: center; font-size: 1.1em; color: #aaa;">Bem-vindo a <strong>HyBrasil – A Ilha Paraíso</strong>, a única ilha conhecida da existência, cercada por névoas eternas e habitada por criaturas de imenso poder. Este manual contém o conhecimento essencial para guiar a sua jornada e dominar o Motor de Regras.</p>
             
-            <h2>As Ordens de HyBrasil (Classes)</h2>
+            <section id="classes"><h2>As Ordens de HyBrasil (Classes)</h2>
             <p>Em HyBrasil, as Ordens não são simples guildas mercenárias, mas tradições vitais para a contenção das forças naturais hostis. Os heróis pertencem a uma destas cinco frentes, cada uma com o seu papel na sociedade e no campo de batalha.</p>
             
             <div class="grid">
@@ -152,7 +203,7 @@
                 </div>
             </div>
 
-            <h2>O Sistema de Combate Automático</h2>
+            </section><section id="combate"><h2>O Sistema de Combate Automático</h2>
             <p>Em <strong>HyBrasil RPG</strong>, as batalhas são intensas, estratégicas e <strong>resolvidas automaticamente pelo Mestre da IA (Gemini)</strong>. O seu papel como jogador é gerir os atributos, tomar decisões de exploração e, fundamentalmente, escolher a <strong>Formação (Frente ou Retaguarda)</strong> da sua dupla antes dos embates.</p>
 
             <div class="info-box">
@@ -221,7 +272,7 @@
                 </div>
             </div>
 
-            <h2>Vilões Maiores (Chefes de Campanha)</h2>
+            </section><section id="viloes"><h2>Vilões Maiores (Chefes de Campanha)</h2>
             <p>Estas são as quatro forças primordiais que ameaçam desequilibrar a ilha. Encontros com estas entidades são raros, mortais e nunca acontecem sem que a ilha avise primeiro através de pesadelos e sinais.</p>
             
             <div class="grid">
@@ -258,7 +309,7 @@
             <p>A ilha é vista como um <strong>palco de jornadas</strong>, não um paraíso perfeito. Conflitos, monstros e desafios são partes naturais da vida.</p>
         </div>
 
-        <h2>Cidades Principais e Ambientes</h2>
+        </section><section id="mundo"><h2>Cidades Principais e Ambientes</h2>
         <div class="section-box">
             <h3>Cidades</h3>
             <p>Cada região possui uma cidade central: <strong>Marés</strong> (porto e comércio marítimo), <strong>Areias</strong> (cidade-oásis), <strong>Hyron</strong> (centro político e cultural), <strong>Raizterna</strong> (vila em harmonia com árvores), <strong>Ferrocrua</strong> (cidade-fortaleza mineradora) e <strong>Pedralta</strong> (assentamento elevado).</p>
@@ -267,11 +318,11 @@
             <p>Os ambientes variam entre a instabilidade dos mares na <strong>Costa</strong>, o calor e ruínas do <strong>Deserto</strong>, a mística <strong>Floresta</strong>, os túneis e ecos das <strong>Minas</strong>, a altitude das <strong>Montanhas</strong> e a tensão política da <strong>Zona Urbana</strong>.</p>
         </div>
 
-        <h2>Cultura, Magia e Fé</h2>
+        </section><section id="cultura"><h2>Cultura, Magia e Fé</h2>
         <p>A população valoriza <strong>jornadas, resistência e pragmatismo</strong>. Heróis são vistos como necessários, não divinos. A sobrevivência coletiva supera a glória pessoal.</p>
         <p>A <strong>Magia</strong> é um conhecimento profundo e perigoso, visto com receio. Já a <strong>Fé</strong> baseia-se em forças amorais: <strong>O Caminhante</strong> (Jornada/Destino), <strong>A Mãe Silenciosa</strong> (Vida/Morte) e <strong>O Guardião do Véu</strong> (Conhecimento/Magia).</p>
 
-        <h2>A Natureza dos Monstros</h2>
+        </section><section id="monstros"><h2>A Natureza dos Monstros</h2>
         <p>Monstros não são anomalias, mas <strong>forças naturais</strong> de HyBrasil:</p>
         <ul>
             <li><strong>Selvagens (vs Guerreiros):</strong> coletivos agressivos, como colmeias.</li>
@@ -280,7 +331,2512 @@
             <li><strong>Mortos (vs Clérigos):</strong> ecos de vidas passadas.</li>
         </ul>
         <p><em>Nota: Paladinos não possuem contraparte monstruosa direta, atuando como o elo de equilíbrio do sistema.</em></p>
-    </div>
+    
+    </section>
 
+    <!-- AMBIENTES -->
+    <section id="ambientes">
+        <h2>Ambientes de HyBrasil</h2>
+        <p>HyBrasil possui 30 ambientes distintos distribuídos pelas 6 regiões da ilha. O Narrador escolhe automaticamente o cenário com base na localização da dupla.</p>
+        <h3 class="region-title">Marés</h3><div class="biomes-grid">
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_beach.png')"></div>
+                <p class="biome-name">Praia</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_harborcity.png')"></div>
+                <p class="biome-name">Porto</p>
+            </div></div><h3 class="region-title">Areias</h3><div class="biomes-grid">
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_desert.png')"></div>
+                <p class="biome-name">Deserto</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_desertcity.png')"></div>
+                <p class="biome-name">Cidade no Deserto</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_ruins.png')"></div>
+                <p class="biome-name">Ruínas</p>
+            </div></div><h3 class="region-title">Hyron</h3><div class="biomes-grid">
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_bigcity.png')"></div>
+                <p class="biome-name">Grande Cidade</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_castle.png')"></div>
+                <p class="biome-name">Castelo</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_stronghold.png')"></div>
+                <p class="biome-name">Fortaleza</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_throne.png')"></div>
+                <p class="biome-name">Salão do Trono</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_tower.png')"></div>
+                <p class="biome-name">Torre</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_farmcity.png')"></div>
+                <p class="biome-name">Vila Rural</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_village.png')"></div>
+                <p class="biome-name">Aldeia</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_temple.png')"></div>
+                <p class="biome-name">Templo</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_templeinside.png')"></div>
+                <p class="biome-name">Interior do Templo</p>
+            </div></div><h3 class="region-title">Raizterna</h3><div class="biomes-grid">
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_forest.png')"></div>
+                <p class="biome-name">Floresta</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_forestcity.png')"></div>
+                <p class="biome-name">Cidade na Floresta</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_woods.png')"></div>
+                <p class="biome-name">Bosque</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_swamp.png')"></div>
+                <p class="biome-name">Pântano</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_field.png')"></div>
+                <p class="biome-name">Campos Abertos</p>
+            </div></div><h3 class="region-title">Ferrocrua</h3><div class="biomes-grid">
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_mine.png')"></div>
+                <p class="biome-name">Mina</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_minecity.png')"></div>
+                <p class="biome-name">Cidade Mineira</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_dungeon.png')"></div>
+                <p class="biome-name">Masmorra</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_grottocave.png')"></div>
+                <p class="biome-name">Gruta</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_lavacave.png')"></div>
+                <p class="biome-name">Caverna de Lava</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_stonecave.png')"></div>
+                <p class="biome-name">Caverna de Pedra</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_lab.png')"></div>
+                <p class="biome-name">Laboratório</p>
+            </div></div><h3 class="region-title">Pedralta</h3><div class="biomes-grid">
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_montain.png')"></div>
+                <p class="biome-name">Montanha</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_snow.png')"></div>
+                <p class="biome-name">Neve</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_snowcave.png')"></div>
+                <p class="biome-name">Caverna Gelada</p>
+            </div>
+            <div class="biome-card">
+                <div class="biome-img" style="background-image:url('assets/background/bg_snowcity.png')"></div>
+                <p class="biome-name">Cidade Nevada</p>
+            </div></div>
+    </section>
+
+    <!-- BESTIÁRIO -->
+    <section id="bestiario">
+        <h2>Bestiário Completo</h2>
+        <p>Todas as 150 criaturas de HyBrasil, organizadas em 15 grupos. Cada grupo tem 5 lacaios e 5 criaturas maiores.</p>
+
+        <div class="filter-bar" id="filter-bar">
+            <button class="filter-btn active" onclick="filtrarGrupo('todos')">Todos</button>
+            <button class="filter-btn" onclick="filtrarGrupo('lacaio')">Lacaios</button>
+            <button class="filter-btn" onclick="filtrarGrupo('maior')">Maiores</button>
+            <button class="filter-btn" onclick="filtrarOrigem('HiveQueen')" style="border-color:#a855f750;color:#a855f7">Selvagens</button>
+            <button class="filter-btn" onclick="filtrarOrigem('MightyDragon')" style="border-color:#f59e0b50;color:#f59e0b">Bestas</button>
+            <button class="filter-btn" onclick="filtrarOrigem('AbyssalOracle')" style="border-color:#06b6d450;color:#06b6d4">Monstros</button>
+            <button class="filter-btn" onclick="filtrarOrigem('LordOfDarkness')" style="border-color:#94a3b850;color:#94a3b8">Mortos</button>
+        </div>
+
+        <div id="bestiary-container">
+
+        <div class="bestiary-group">
+            <h3 class="group-title">Aquáticos <span class="origin-badges"><span style="background:#06b6d4;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Monstros</span> <span style="background:#f59e0b;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Bestas</span></span></h3>
+            <div class="bestiary-grid">
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_aquatic_lackey_flyingfish.png" alt="Peixe Voador" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Peixe Voador</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 3</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Salta da água em bando e rasga presas com dentes serrilhados antes de mergulhar de volta.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_aquatic_great_dragonfish.png" alt="Dracocarpa" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Dracocarpa</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Carpa com cabeça de dragão e escamas metálicas; devora remos e cascos de barcos por instinto.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_aquatic_lackey_leviathan.png" alt="Filhote de Leviatã" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Leviatã</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Baleia abissal infante que ainda não controla a força; seu coice involuntário afunda botes.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_aquatic_lackey_stonefish.png" alt="Dente de Pedra" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Dente de Pedra</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 3</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Peixe blindado de carapaça óssea que avança devagar e implacavelmente, ignorando golpes rasos.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_aquatic_lackey_megalodon.png" alt="Filhote de Megalodonte" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Megalodonte</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Tubarão primordial ainda jovem; já capaz de partir um remo com uma mordida distraída.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_aquatic_great_flyingfish.png" alt="Peixe Voador Alfa" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Peixe Voador Alfa</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 8</span>
+                            <span title="Vida">❤ 4</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Lidera a revoada com velocidade sobrenatural; seu bote perfura armaduras como agulha em tecido.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_aquatic_great_dragonfish.png" alt="Dracocarpa" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Dracocarpa</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 6</span>
+                            <span title="Vida">❤ 6</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Escamas douradas endurecidas pelo tempo; cospe jatos de água pressurizada que cortam pedra.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_aquatic_great_leviathan.png" alt="Leviatã" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Leviatã</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 5</span>
+                            <span title="Vida">❤ 7</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Massa colossal que respira fogo pela espiradora; sua passagem cria ondas que destroem portos.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_aquatic_great_stonefish.png" alt="Dente de Pedra Ancião" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Dente de Pedra Ancião</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 4</span>
+                            <span title="Vida">❤ 8</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Carapaça ancestral que desvia lâminas; avança sem parar até esmagar tudo em seu caminho.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_aquatic_great_megalodon.png" alt="Megalodonte" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Megalodonte</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 7</span>
+                            <span title="Vida">❤ 5</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Predador completo das profundezas; seus dentes do tamanho de espadas regeneram em horas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bestiary-group">
+            <h3 class="group-title">Bestas <span class="origin-badges"><span style="background:#06b6d4;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Monstros</span> <span style="background:#f59e0b;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Bestas</span></span></h3>
+            <div class="bestiary-grid">
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_beast_lackey_shisa.png" alt="Filhote de Shisa" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Shisa</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Leão mítico jovem de juba dourada; sua mordida ainda é tímida mas seu rugido paralisa.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_beast_lackey_kong.png" alt="Filhote de Kong" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Kong</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Primata jovem de face colorida que imita os gestos dos adultos antes de atacar.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_beast_lackey_kiryu.png" alt="Miniji" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Miniji</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Dragão bípede jovem de escamas negras; já derruba árvores ao tropeçar.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_beast_lackey_dracofrog.png" alt="Filhote de Batrioarchenus" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Batrioarchenus</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 3</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Lagarto alado rechonchudo que usa o corpo inteiro como escudo enquanto morde devagar.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_beast_lackey_long.png" alt="Filhote de Long" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Long</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 3</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Pterossauro filhote de bico afiado que mergulha em picada antes mesmo de aprender a planar.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_beast_great_shisa.png" alt="Shisa" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Shisa</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 5</span>
+                            <span title="Vida">❤ 7</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Leão mítico de juba dourada e cristal na testa; seu rugido cura aliados e aterra inimigos.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_beast_great_kong.png" alt="Kong" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Kong</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 7</span>
+                            <span title="Vida">❤ 5</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Gorila colossal de face azul e vermelha; usa troncos como maças e rugidos como armas.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_beast_great_kiryu.png" alt="Goji" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Goji</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 6</span>
+                            <span title="Vida">❤ 6</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Dragão bípede adulto cujo rugido provoca tremores; pisada deixa crateras no solo.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_beast_great_dracofrog.png" alt="Batrioarchenus" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Batrioarchenus</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 4</span>
+                            <span title="Vida">❤ 8</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Lagarto alado volumoso que usa as asas como escudo e a língua como chicote de longo alcance.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_beast_great_long.png" alt="Long" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Long</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 8</span>
+                            <span title="Vida">❤ 4</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Pterossauro adulto que caça em mergulho rasante; seu bico perfura armadura de placa.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bestiary-group">
+            <h3 class="group-title">Felinos <span class="origin-badges"><span style="background:#06b6d4;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Monstros</span> <span style="background:#94a3b8;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Mortos</span> <span style="background:#f59e0b;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Bestas</span></span></h3>
+            <div class="bestiary-grid">
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_catlike_lackey_sealeopard.png" alt="Leopardo Marinho" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Leopardo Marinho</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Leopardo de manchas turquesa com cauda tentacular; caça tanto na água quanto em terra firme.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_catlike_great_cabbit.png" alt="Gatelho" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Gatelho</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Coelho místico com cristal no peito que absorve golpes; inofensivo na aparência, imprevisível no ataque.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_catlike_great_nekomata.png" alt="Nekomata" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Nekomata</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 3</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Gato espectral de cauda dupla em chamas; desaparece em fumaça ao ser golpeado e reaparece atrás.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_catlike_lackey_displacerbeast.png" alt="Filhote de Fera Teleportadora" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Fera Teleportadora</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Tigre negro jovem com tentáculos que já se teletransporta em curtas distâncias ao sentir perigo.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_catlike_lackey_cheddu.png" alt="Filhote de Cheddu" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Cheddu</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 3</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Leão alado filhote de pelagem branca; suas asas ainda não sustentam voo mas bloqueiam golpes.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_catlike_great_sealeopard.png" alt="Leopardo Marinho Evoluído" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Leopardo Marinho Evoluído</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 6</span>
+                            <span title="Vida">❤ 6</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Predador perfeito de terra e água; usa os tentáculos para imobilizar enquanto as garras finalizam.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_catlike_great_cabbit.png" alt="Gatelho" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Gatelho</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 5</span>
+                            <span title="Vida">❤ 7</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Cristal no peito amplificado pulsa com energia mística; reflete parte do dano recebido nos atacantes.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_catlike_great_nekomata.png" alt="Nekomata" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Nekomata</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 8</span>
+                            <span title="Vida">❤ 4</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Gato morto-vivo envolto em chamas furiosas; cada golpe deixa marcas que não cicatrizam normalmente.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_catlike_great_displacerbeast.png" alt="Fera Teleportadora" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Fera Teleportadora</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 7</span>
+                            <span title="Vida">❤ 5</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Tigre negro adulto com tentáculos que se teleporta entre golpes; nunca está onde parece estar.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_catlike_great_cheddu.png" alt="Cheddu" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Cheddu</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 4</span>
+                            <span title="Vida">❤ 8</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Leão alado majestoso de pelagem prateada; suas asas criam ventos que desviam projéteis e feitiços.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bestiary-group">
+            <h3 class="group-title">Corrompidos <span class="origin-badges"><span style="background:#06b6d4;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Monstros</span> <span style="background:#a855f7;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Selvagens</span> <span style="background:#94a3b8;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Mortos</span></span></h3>
+            <div class="bestiary-grid">
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_corrupted_lackey_abomination.png" alt="Abominação" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Abominação</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Dois corpos costurados que compartilham um único propósito destrutivo; golpes os separam mas não os param.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_corrupted_lackey_vampire.png" alt="Vampiro Jovem" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Vampiro Jovem</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 3</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Vampiro recém-transformado de terno impecável; ainda aprende a controlar a sede mas já é letal.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_corrupted_lackey_ghoul.png" alt="Carniçal" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Carniçal</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Morto-vivo de garras ósseas que se arrasta pelo chão; lento mas não para enquanto houver carne.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_corrupted_lackey_zombie.png" alt="Zumbi" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Zumbi</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Morto-vivo que preserva memória fragmentada; reconhece rostos de quem amou e avança mesmo assim.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_corrupted_lackey_werewolf.png" alt="Lobisomem Jovem" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Lobisomem Jovem</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 3</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Transformação recente e instável; oscila entre forma humana e besta, tornando seus movimentos imprevisíveis.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_corrupted_great_abomination.png" alt="Abominação Suprema" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Abominação Suprema</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 6</span>
+                            <span title="Vida">❤ 6</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Massa de corpos fundidos que absorve os caídos em batalha; cresce a cada vítima incorporada.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_corrupted_great_vampire.png" alt="Nobre Vampira" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Nobre Vampira</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 4</span>
+                            <span title="Vida">❤ 8</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Vampira anciã de capa carmesim; drena vida com o olhar e regenera feridas à vista dos inimigos.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_corrupted_great_ghoul.png" alt="Carniçal Alfa" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Carniçal Alfa</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 5</span>
+                            <span title="Vida">❤ 7</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Líder dos carniçais com garras do tamanho de adagas; ressuscita menores caídos com um uivo gutural.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_corrupted_great_zombie.png" alt="Noiva Cadáver" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Noiva Cadáver</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 7</span>
+                            <span title="Vida">❤ 5</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Espectro de noiva que nunca chegou ao altar; seu toque drena vida e seu véu congela o ar ao redor.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_corrupted_great_werewolf.png" alt="Lobisomem Ancião" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Lobisomem Ancião</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 8</span>
+                            <span title="Vida">❤ 4</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Lobisomem que abraçou completamente a besta; lidera alcateias com uivos que ecoam por léguas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bestiary-group">
+            <h3 class="group-title">Semi-Humanos <span class="origin-badges"><span style="background:#06b6d4;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Monstros</span> <span style="background:#a855f7;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Selvagens</span></span></h3>
+            <div class="bestiary-grid">
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_demihuman_lackey_satyr.png" alt="Filhote de Sátiro" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Sátiro</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Sátiro jovem de chifres ainda curtos; ágil e imprevisível, ataca em revoadas de coices.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_demihuman_lackey_centaur.png" alt="Centauro Fêmea" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Centauro Fêmea</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 3</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Centaura exploradora de tribo selvagem; carrega arco e flecha e dispara em galope sem perder precisão.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_demihuman_lackey_minotaur.png" alt="Minotauro Jovem" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Minotauro Jovem</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 3</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Minotauro ainda em crescimento; sua cabeça de touro já resiste a golpes que derrubariam adultos.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_demihuman_lackey_fairy.png" alt="Filhote de Fada" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Fada</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Fada guerreira jovem de asas translúcidas; usa espinhos do próprio corpo como projéteis.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_demihuman_lackey_doppelganger.png" alt="Filhote de Duplo" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Duplo</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Ser translúcido sem feições que imita silhuetas ao redor; ainda não domina a transformação completa.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_demihuman_great_satyr.png" alt="Sátiro" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Sátiro</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 7</span>
+                            <span title="Vida">❤ 5</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Sátiro adulto de chifres retorcidos que lidera hordas com música caótica e golpes devastadores.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_demihuman_great_centaur.png" alt="Centauro" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Centauro</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 8</span>
+                            <span title="Vida">❤ 4</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Guerreiro centauro adulto de chifres dourados; sua carga rompe formações inteiras com uma passagem.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_demihuman_great_minotaur.png" alt="Minotauro" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Minotauro</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 4</span>
+                            <span title="Vida">❤ 8</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Minotauro adulto de chifres enormes que usa o próprio corpo como aríete contra muros e escudos.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_demihuman_great_fairy.png" alt="Fada Anciã" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Fada Anciã</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 6</span>
+                            <span title="Vida">❤ 6</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Fada anciã de asas iridescentes que comanda enxames; seus espinhos envenenados paralisam em segundos.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_demihuman_great_doppelganger.png" alt="Duplo Perfeito" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Duplo Perfeito</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 5</span>
+                            <span title="Vida">❤ 7</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Ser prateado que assume forma perfeita de qualquer pessoa; sua cópia é indistinguível do original.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bestiary-group">
+            <h3 class="group-title">Dinossauros <span class="origin-badges"><span style="background:#06b6d4;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Monstros</span> <span style="background:#f59e0b;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Bestas</span></span></h3>
+            <div class="bestiary-grid">
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_dinosaur_lackey_walkingshield.png" alt="Filhote de Escudo Andante" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Escudo Andante</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Ceratopsiano filhote cujos chifres já perfuram madeira; carrega de cabeça sem avaliar o tamanho do alvo.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_dinosaur_lackey_firetyrant.png" alt="Filhote de Tirano de Fogo" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Tirano de Fogo</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 3</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Rex jovem de mordida desproporcional ao corpo; já parte ossos com facilidade apesar do tamanho reduzido.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_dinosaur_lackey_gladiosaur.png" alt="Filhote de Gladiossauro" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Gladiossauro</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Espinossauro filhote com vela dorsal ainda translúcida; caça à beira d'água com velocidade surpreendente.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_dinosaur_lackey_musclebrutus.png" alt="Filhote de Bruto Musculoso" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Bruto Musculoso</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Hadrossauro jovem de focinho largo; corre em manada e atropela obstáculos sem perceber.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_dinosaur_lackey_stonebehemoth.png" alt="Filhote de Beemote de Pedra" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Beemote de Pedra</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 3</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Sauropode filhote de pescoço longo; já usa a cauda como chicote e derruba árvores ao se virar.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_dinosaur_great_walkingshield.png" alt="Escudo Andante" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Escudo Andante</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 6</span>
+                            <span title="Vida">❤ 6</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Ceratopsiano adulto com chifres e couraça metálicos; sua carga perfura armaduras como papel.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_dinosaur_great_firetyrant.png" alt="Tirano de Fogo" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Tirano de Fogo</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 8</span>
+                            <span title="Vida">❤ 4</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Rex adulto com olhos incandescentes e rugido que provoca tremores; apex predador de qualquer região.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_dinosaur_great_gladiosaur.png" alt="Gladiossauro" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Gladiossauro</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 7</span>
+                            <span title="Vida">❤ 5</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Espinossauro adulto com vela dorsal de gelo cristalizado; congela rios inteiros ao mergulhar.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_dinosaur_great_musclebrutus.png" alt="Bruto Musculoso" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Bruto Musculoso</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 5</span>
+                            <span title="Vida">❤ 7</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Hadrossauro adulto de musculatura avantajada; lidera manadas e esmaga formações com cargas rasantes.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_dinosaur_great_stonebehemoth.png" alt="Beemote de Pedra" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Beemote de Pedra</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 4</span>
+                            <span title="Vida">❤ 8</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Sauropode adulto com couraça pétrea natural; sua passagem deixa crateras e seu rabo derruba muralhas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bestiary-group">
+            <h3 class="group-title">Caninos <span class="origin-badges"><span style="background:#94a3b8;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Mortos</span> <span style="background:#f59e0b;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Bestas</span></span></h3>
+            <div class="bestiary-grid">
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_doglike_lackey_direwolf.png" alt="Lobo Atroz" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Lobo Atroz</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Lobo negro de porte colossal que caça em duplas; um distrai enquanto o outro ataca pela garganta.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_doglike_lackey_icewolf.png" alt="Lobo Ártico" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Lobo Ártico</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Lobo branco morto-vivo que sopra névoa gélida; seu uivo congela poças e paralisa pelo frio.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_doglike_lackey_warg.png" alt="Filhote de Warg" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Warg</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Filhote de warg já maior que um lobo adulto; aprende a caçar imitando os movimentos da matilha.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_doglike_lackey_cerberus.png" alt="Filhote de Cérbero" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Cérbero</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 3</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Filhote de cérbero de três cabeças que mordem em turnos alternados; difícil de flanquear.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_doglike_lackey_hellhound.png" alt="Cão Infernal" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Cão Infernal</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 3</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Cão negro com rachaduras de brasa no pelo; rasteja pelo esgoto e ataca pelo calor que emana.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_doglike_great_direwolf.png" alt="Lobo Atroz Alfa" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Lobo Atroz Alfa</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 6</span>
+                            <span title="Vida">❤ 6</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Alfa da matilha de cicatrizes profundas; seu rugido faz outros predadores recuarem instintivamente.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_doglike_great_icewolf.png" alt="Lobo Ártico Alfa" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Lobo Ártico Alfa</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 7</span>
+                            <span title="Vida">❤ 5</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Lobo morto-vivo envolto em aura glacial; congela blocos inteiros de terreno com uma exalação.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_doglike_great_warg.png" alt="Warg" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Warg</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 5</span>
+                            <span title="Vida">❤ 7</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Warg adulto que nenhum selvagem domou; lidera matilha mista de lobos e wargs por puro terror.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_doglike_great_cerberus.png" alt="Cérbero" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Cérbero</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 4</span>
+                            <span title="Vida">❤ 8</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Cérbero adulto guardião das catacumbas; suas três cabeças mordem simultaneamente em direções opostas.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_doglike_great_hellhound.png" alt="Cão Infernal Ancião" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Cão Infernal Ancião</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 8</span>
+                            <span title="Vida">❤ 4</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Cão infernal ancião completamente em chamas; seu latido desperta os mortos em cemitérios próximos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bestiary-group">
+            <h3 class="group-title">Equinos <span class="origin-badges"><span style="background:#06b6d4;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Monstros</span> <span style="background:#a855f7;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Selvagens</span> <span style="background:#94a3b8;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Mortos</span> <span style="background:#f59e0b;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Bestas</span></span></h3>
+            <div class="bestiary-grid">
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_equin_lackey_direhorse.png" alt="Cavalo Terrível" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Cavalo Terrível</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Equino selvagem de presas e garras no lugar de cascos; caça em manada e derruba presas pelo peso.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_equin_great_trotter.png" alt="Troteiro" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Troteiro</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Equino ágil de patas extras que nunca tropeça; explora terrenos inóspitos com facilidade absurda.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_equin_lackey_nightmare.png" alt="Filhote de Pesadelo" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Pesadelo</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 3</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Potro morto-vivo com chamas nos cascos; galopa sem parar e seu relincho desperta pesadelos.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_equin_great_warhorse.png" alt="Cavalo de Guerra" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Cavalo de Guerra</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Cavalo blindado que ataca em formação coordenada; usa coices e mordidas com disciplina militar.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_equin_lackey_unicorn.png" alt="Filhote de Unicórnio" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Unicórnio</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 3</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Unicórnio corrompido jovem de aura elétrica; seu chifre drena vida em vez de curar.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_equin_great_direhorse.png" alt="Cavalo Terrível Alfa" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Cavalo Terrível Alfa</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 7</span>
+                            <span title="Vida">❤ 5</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Alfa da manada de presas afiadas; sua carga parte formações e seu rugido paralisa de medo.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_equin_great_trotter.png" alt="Troteiro" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Troteiro</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 5</span>
+                            <span title="Vida">❤ 7</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Equino adulto de seis patas que corre em superfícies verticais; não há terreno que o impeça.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_equin_great_nightmare.png" alt="Pesadelo" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Pesadelo</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 8</span>
+                            <span title="Vida">❤ 4</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Corcel morto-vivo completamente em chamas; qualquer cavaleiro morto ressuscita automaticamente em seu dorso.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_equin_great_warhorse.png" alt="Cavalo de Guerra" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Cavalo de Guerra</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 6</span>
+                            <span title="Vida">❤ 6</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Corcel blindado adulto que lidera cargas coordenadas; aprende táticas de cada batalha que sobrevive.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_equin_great_unicorn.png" alt="Unicórnio" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Unicórnio</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 4</span>
+                            <span title="Vida">❤ 8</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Unicórnio corrompido de asas e aura de relâmpago; drena vida de um raio e regenera a própria.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bestiary-group">
+            <h3 class="group-title">Goblins <span class="origin-badges"><span style="background:#a855f7;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Selvagens</span> <span style="background:#94a3b8;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Mortos</span></span></h3>
+            <div class="bestiary-grid">
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_goblin_great_cuca.png" alt="Cuca" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Cuca</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 3</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Jacaré morto-vivo de escamas iridescentes que finge estar inerte até a presa se aproximar.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_goblin_great_imp.png" alt="Diabrete" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Diabrete</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Criatura azul de faca dupla que trabalha em grupo para roubar provisões e sabotar acampamentos noturnos.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_goblin_great_saci.png" alt="Saci" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Saci</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Espírito de juba vermelha que dribla aventureiros com truques e rouba itens enquanto os distrai.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_goblin_great_catoblepas.png" alt="Trasgo" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Trasgo</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 3</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Cervo selvagem de olhos vazios que corre em manada; usa os chifres para desarmar e derrubar.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_goblin_great_greengoblin.png" alt="Goblin Verde" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Goblin Verde</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Goblin armado com machado tosco que caça em grupos; usa armadilhas de cipó para derrubar cavaleiros.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_goblin_great_cuca.png" alt="Cuca" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Cuca</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 4</span>
+                            <span title="Vida">❤ 8</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Jacaré morto-vivo adulto de escamas multicoloridas; sua mandíbula parte armaduras e não solta a presa.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_goblin_great_imp.png" alt="Diabrete" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Diabrete</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 7</span>
+                            <span title="Vida">❤ 5</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Diabrete adulto de asas de morcego que lidera bandos com táticas militares rudimentares e eficazes.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_goblin_great_saci.png" alt="Saci" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Saci</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 5</span>
+                            <span title="Vida">❤ 7</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Espírito ancião que organiza saques coordenados usando menores como distração enquanto rouba o essencial.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_goblin_great_catoblepas.png" alt="Trasgo" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Trasgo</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 8</span>
+                            <span title="Vida">❤ 4</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Cervo colossal de chifres retorcidos que lidera manadas; sua carga rompe portões de madeira.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_goblin_great_greengoblin.png" alt="Goblin Verde" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Goblin Verde</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 6</span>
+                            <span title="Vida">❤ 6</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Chefe de tribo que negocia alianças mas honra apenas enquanto convém; comanda com violência e astúcia.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bestiary-group">
+            <h3 class="group-title">Construtos <span class="origin-badges"><span style="background:#06b6d4;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Monstros</span></span></h3>
+            <div class="bestiary-grid">
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_golem_lackey_king.png" alt="Peão do Rei" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Peão do Rei</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 3</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Construto robusto de pedra musgo que guarda posição; lento mas praticamente indestrutível.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_golem_lackey_bishop.png" alt="Peão do Bispo" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Peão do Bispo</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Construto esguio de pedra clara com símbolo na testa; move-se em diagonal e ativa outros golems próximos.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_golem_lackey_knight.png" alt="Peão do Cavalo" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Peão do Cavalo</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Construto centauroide de pedra que patrulha em movimentos em L; imprevisível e difícil de flanquear.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_golem_lackey_rook.png" alt="Peão da Torre" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Peão da Torre</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Construto dourado compacto de punhos pesados; avança em linha reta esmagando tudo no caminho.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_golem_lackey_queen.png" alt="Peão da Rainha" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Peão da Rainha</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 3</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Construto feminino de pedra polida que ataca em qualquer direção; o mais versátil dos peões.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_golem_great_king.png" alt="Rei" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Rei</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 4</span>
+                            <span title="Vida">❤ 8</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Construto colossal de pedra e musgo com coroa gravada; destruí-lo paralisa todos os golems do tabuleiro.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_golem_great_bishop.png" alt="Bispo" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Bispo</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 5</span>
+                            <span title="Vida">❤ 7</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Construto sacerdotal de manto de pedra que reativa golems destruídos com um toque; destruí-lo é prioridade.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_golem_great_knight.png" alt="Cavalo" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Cavalo</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 6</span>
+                            <span title="Vida">❤ 6</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Centauroide de pedra adulto com runas ativas; salta sobre obstáculos e esmaga com as patas dianteiras.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_golem_great_rook.png" alt="Torre" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Torre</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 7</span>
+                            <span title="Vida">❤ 5</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Construto maciço com cabeça de fortaleza; lança fragmentos de pedra com precisão de catapulta.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_golem_great_queen.png" alt="Rainha" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Rainha</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 8</span>
+                            <span title="Vida">❤ 4</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Construto feminino esbelto de pedra polida; comanda todos os outros e ataca com precisão absoluta em qualquer direção.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bestiary-group">
+            <h3 class="group-title">Grifos <span class="origin-badges"><span style="background:#f59e0b;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Bestas</span></span></h3>
+            <div class="bestiary-grid">
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_gryphon_lackey_sphinx.png" alt="Filhote de Esfinge" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Esfinge</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Esfinge jovem de face humana que já faz perguntas sem resposta e ataca quem hesita.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_gryphon_lackey_owlgryph.png" alt="Filhote de Coruja" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Coruja</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 3</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Grifo coruja jovem de olhos enormes que enxerga no escuro absoluto; mergulha em silêncio total.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_gryphon_lackey_singergryph.png" alt="Filhote de Canoro" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Canoro</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Grifo colorido jovem cujo canto ressoa entre picos e desorienta grupos inteiros nas trilhas.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_gryphon_lackey_royalgryph.png" alt="Filhote de Grifo Real" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Grifo Real</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 3</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Filhote de grifo real de plumagem branca; sua presença já impõe respeito e outros animais recuam.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_gryphon_lackey_ravengryph.png" alt="Filhote de Raveno" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Raveno</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Grifo negro jovem de bico corvino; silencioso e furtivo, ataca pelo cego sem aviso.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_gryphon_great_sphinx.png" alt="Esfinge" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Esfinge</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 7</span>
+                            <span title="Vida">❤ 5</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Sabe a resposta de todas as perguntas que faz; mata por diversão, não por fome.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_gryphon_great_owlgryph.png" alt="Coruja" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Coruja</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 8</span>
+                            <span title="Vida">❤ 4</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Grifo coruja ancião que enxerga medos de cada oponente; seu mergulho é invisível até o impacto.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_gryphon_great_singergryph.png" alt="Canoro" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Canoro</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 6</span>
+                            <span title="Vida">❤ 6</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Grifo adulto de plumagem iridescente; seu canto pode ser ouvido a quilômetros e convoca a ninhada inteira.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_gryphon_great_royalgryph.png" alt="Grifo Real" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Grifo Real</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 4</span>
+                            <span title="Vida">❤ 8</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Rei das criaturas aladas de montanha; sua presença paralisa animais de carga e silencia multidões.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_gryphon_great_ravengryph.png" alt="Raveno" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Raveno</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 5</span>
+                            <span title="Vida">❤ 7</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Grifo negro adulto que voa sem som; onde pousa, a luz das tochas vacila e o frio aumenta.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bestiary-group">
+            <h3 class="group-title">Serpentes <span class="origin-badges"><span style="background:#06b6d4;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Monstros</span> <span style="background:#94a3b8;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Mortos</span> <span style="background:#f59e0b;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Bestas</span></span></h3>
+            <div class="bestiary-grid">
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_snake_great_dracoviper.png" alt="Serpente-Dragão" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Serpente-Dragão</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Serpente de cabeça dracônica que caça erguida; sua mordida injeta veneno que paralisa membros.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_snake_lackey_anaconda.png" alt="Filhote de Anaconda" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Anaconda</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 3</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Constritora jovem das águas rasas que já imobiliza presas do seu tamanho com facilidade.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_snake_great_coalt.png" alt="Coalt" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Coalt</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Serpente alada morta-viva de plumagem iridescente que ataca em grupos sincronizados silenciosamente.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_snake_great_naga.png" alt="Naga" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Naga</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Híbrido de serpente e torso humanoide morto-vivo; seus olhos vazios hipnotizam presas à beira d'água.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_snake_lackey_basilisk.png" alt="Filhote de Basilisco" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Basilisco</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 3</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Réptil alado jovem cujo olhar já petrifica extremidades; coleciona pequenos troféus de pedra.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_snake_great_dracoviper.png" alt="Serpente-Dragão" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Serpente-Dragão</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 6</span>
+                            <span title="Vida">❤ 6</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Serpente dracônica adulta que emite pulsos vocais coordenando ataques das menores ao redor.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_snake_great_anaconda.png" alt="Anaconda" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Anaconda</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 4</span>
+                            <span title="Vida">❤ 8</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Constritora adulta capaz de quebrar armaduras; engole aventureiros com equipamento completo.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_snake_great_coalt.png" alt="Coalt" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Coalt</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 7</span>
+                            <span title="Vida">❤ 5</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Coalt adulto morto-vivo de plumagem negra; seu voo silencioso precede ataques devastadores em mergulho.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_snake_great_naga.png" alt="Naga" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Naga</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 5</span>
+                            <span title="Vida">❤ 7</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Sacerdotisa morta-viva das profundezas que tece feitiços de ilusão; faz aventureiros se afogar em terra seca.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_snake_great_basilisk.png" alt="Basilisco" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Basilisco</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 8</span>
+                            <span title="Vida">❤ 4</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Petrifica tudo no campo de visão progressivamente; seus troféus de pedra nunca se desfazem naturalmente.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bestiary-group">
+            <h3 class="group-title">Alados <span class="origin-badges"><span style="background:#a855f7;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Selvagens</span> <span style="background:#94a3b8;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Mortos</span></span></h3>
+            <div class="bestiary-grid">
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_winged_great_harpy.png" alt="Harpia" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Harpia</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Harpia jovem que ataca em mergulho rasante roubando itens de aventureiros para decorar ninhos.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_winged_lackey_thunderbird.png" alt="Filhote de Pássaro Trovão" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Pássaro Trovão</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 3</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Ave morta-viva de descargas elétricas que ainda não controla o poder; especialmente perigosa em locais metálicos.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_winged_lackey_warcrow.png" alt="Corvo de Guerra" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Corvo de Guerra</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Corvo morto-vivo de plumagem metálica que coordena ataques em bando com sinais vocais complexos.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_winged_great_cocatrice.png" alt="Cocatriz" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Cocatriz</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Galo morto-vivo de cauda serpentina cujo olhar petrifica progressivamente começando pelos pés.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_winged_lackey_kittoun.png" alt="Filhote de Kittoun" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Kittoun</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 3</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Cisne espectral jovem envolto em névoa gélida; onde pousa a temperatura cai e plantas morrem.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_winged_great_harpy.png" alt="Harpia" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Harpia</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 5</span>
+                            <span title="Vida">❤ 7</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Matriarca da ninhada que controla ventos de montanha com as asas para derrubar aventureiros.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_winged_great_thunderbird.png" alt="Pássaro Trovão" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Pássaro Trovão</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 8</span>
+                            <span title="Vida">❤ 4</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Ave morta-viva que invoca tempestades reais; altera o clima de toda uma cordilheira com um bater de asas.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_winged_great_warcrow.png" alt="Corvo de Guerra Alfa" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Corvo de Guerra Alfa</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 6</span>
+                            <span title="Vida">❤ 6</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Comandante da corvada morta-viva; usa táticas de cerco e aprisionou grupos inteiros de aventureiros.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_winged_great_cocatrice.png" alt="Cocatriz" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Cocatriz</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 7</span>
+                            <span title="Vida">❤ 5</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Cocatriz adulta que petrifica tudo no campo de visão simultaneamente; sua pedra nunca se desfaz.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_winged_great_kittoun.png" alt="Kittoun" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Kittoun</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 4</span>
+                            <span title="Vida">❤ 8</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Cisne espectral adulto de névoa densa; sua passagem congela lagos e apaga fogueiras num raio enorme.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bestiary-group">
+            <h3 class="group-title">Artrópodes <span class="origin-badges"><span style="background:#a855f7;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Selvagens</span></span></h3>
+            <div class="bestiary-grid">
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_worm_lackey_smokingscreamer.png" alt="Filhote de Gritador" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Gritador</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Criatura pequena que libera fumaça tóxica ao morrer, sinalizando a localização de presas para o bando.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_worm_lackey_dirtyworm.png" alt="Filhote de Dragão Sujo" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Dragão Sujo</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 3</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Verme subterrâneo jovem que emerge sem aviso; seu corpo segrega ácido que corrói metal e pedra.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_worm_lackey_hopperoach.png" alt="Filhote de Gafarata" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Gafarata</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Inseto jovem que destrói provisões e plantações em minutos quando em bando coordenado.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_worm_lackey_weaverspider.png" alt="Filhote de Tecelã Atroz" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Tecelã Atroz</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 3</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Aranha jovem que já tece teias resistentes como aço; suas presas morrem presas antes de perceber.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_worm_lackey_giantcentipede.png" alt="Filhote de Giganotopeia" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Giganotopeia</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Centopeia jovem que ataca em cadeia; quando uma morde, dezenas emergem da areia ao redor.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_worm_great_smokingscreamer.png" alt="Fumegante" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Fumegante</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 7</span>
+                            <span title="Vida">❤ 5</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Wyvern verme adulto de asas membranosas; sua fumaça pode cobrir um oásis inteiro e asfixiar grupos.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_worm_great_dirtyworm.png" alt="Dragão Sujo" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Dragão Sujo</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 4</span>
+                            <span title="Vida">❤ 8</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Verme colossal que cresce até o tamanho de uma carroça; seus túneis desestabilizam fortalezas inteiras.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_worm_great_hopperoach.png" alt="Gafarata" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Gafarata</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 5</span>
+                            <span title="Vida">❤ 7</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Rainha do enxame de asas translúcidas; carrega ovos no dorso e os choca em plena batalha.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_worm_great_weaverspider.png" alt="Tecelã Atroz" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Tecelã Atroz</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 8</span>
+                            <span title="Vida">❤ 4</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Aranha de torso humanoide que tece labirintos em ruínas; quem entra raramente encontra a saída.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_worm_great_giantcentipede.png" alt="Giganotopeia" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Giganotopeia</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 6</span>
+                            <span title="Vida">❤ 6</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Centopeia adulta que emerge apenas para caçar grandes presas; coordena bando com feromônios.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bestiary-group">
+            <h3 class="group-title">Serpes <span class="origin-badges"><span style="background:#06b6d4;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Monstros</span> <span style="background:#a855f7;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Selvagens</span> <span style="background:#94a3b8;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Mortos</span> <span style="background:#f59e0b;color:#fff;font-size:0.7em;padding:2px 8px;border-radius:12px;margin-right:4px">Bestas</span></span></h3>
+            <div class="bestiary-grid">
+                <div class="bestiary-card lacaio-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_wyvern_lackey_silverwyvern.png" alt="Filhote de Serpe Prateada" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Serpe Prateada</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 3</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Serpe monstruosa de escamas de prata que reflete ataques mágicos; seu veneno corrói o ferro.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_wyvern_lackey_firewyvern.png" alt="Filhote de Serpe de Fogo" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Serpe de Fogo</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 3</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Dragão bípede jovem que cospe chamas instáveis; incendeia o próprio território sem perceber.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_wyvern_lackey_royalwyvern.png" alt="Filhote de Serpe Real" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Serpe Real</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Serpe híbrida de plumagem e escamas que lidera bandos com gritos agudos; territorial e implacável.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_wyvern_lackey_thunderwyvern.png" alt="Filhote de Serpe de Raio" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Serpe de Raio</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 1</span>
+                            <span title="Vida">❤ 2</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Serpe morta-viva de escamas negras que acumula carga elétrica; seu toque paralisa membros.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card lacaio-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_wyvern_lackey_icewyvern.png" alt="Filhote de Serpe de Gelo" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Filhote de Serpe de Gelo</strong>
+                            <span class="badge badge-lacaio">Lacaio</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 2</span>
+                            <span title="Vida">❤ 1</span>
+                            
+                        </div>
+                        <p class="bestiary-desc">Serpe branca de chifres ramificados que exhala névoa gélida; congela poças ao pousar.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Oráculo Abissal" style="border-left-color:#06b6d4">
+                    <img src="assets/enemies/bestiary_wyvern_great_silverwyvern.png" alt="Serpe Prateada Suprema" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Serpe Prateada Suprema</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 4</span>
+                            <span title="Vida">❤ 8</span>
+                            <span title="Habilidade">✦ Pulso de Cura</span>
+                        </div>
+                        <p class="bestiary-desc">Serpe monstruosa de escamas douradas endurecidas pelo tempo; regenera feridas à vista dos inimigos.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Poderoso Dragão" style="border-left-color:#f59e0b">
+                    <img src="assets/enemies/bestiary_wyvern_great_firewyvern.png" alt="Serpe de Fogo Anciã" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Serpe de Fogo Anciã</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 8</span>
+                            <span title="Vida">❤ 4</span>
+                            <span title="Habilidade">✦ Ataque Mágico</span>
+                        </div>
+                        <p class="bestiary-desc">Dragão bípede ancião cujas chamas derretem pedra; incendeia galerias inteiras como estratégia de caça.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_wyvern_great_royalwyvern.png" alt="Serpe Real" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Serpe Real</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 6</span>
+                            <span title="Vida">❤ 6</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Rainha das serpes de plumagem iridescente; comanda bandos inteiros com gritos que ecoam por léguas.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Senhor das Trevas" style="border-left-color:#94a3b8">
+                    <img src="assets/enemies/bestiary_wyvern_great_thunderwyvern.png" alt="Serpe de Raio Anciã" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Serpe de Raio Anciã</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 5</span>
+                            <span title="Vida">❤ 7</span>
+                            <span title="Habilidade">✦ Ataque Poderoso</span>
+                        </div>
+                        <p class="bestiary-desc">Serpe morta-viva que provoca colapsos elétricos paralisando aventureiros inteiros; usa o tempo para matar devagar.</p>
+                    </div>
+                </div>
+                <div class="bestiary-card maior-card" data-origem="Rainha da Colmeia" style="border-left-color:#a855f7">
+                    <img src="assets/enemies/bestiary_wyvern_great_icewyvern.png" alt="Serpe de Gelo Anciã" onerror="this.style.display='none'">
+                    <div class="bestiary-info">
+                        <div class="bestiary-header">
+                            <strong>Serpe de Gelo Anciã</strong>
+                            <span class="badge badge-maior">Maior</span>
+                        </div>
+                        <div class="bestiary-stats">
+                            <span title="Ataque">⚔ 7</span>
+                            <span title="Vida">❤ 5</span>
+                            <span title="Habilidade">✦ Ataque Preciso</span>
+                        </div>
+                        <p class="bestiary-desc">Serpe branca de chifres enormes que sela entradas de caverna com gelo; territórios marcados com camadas azuis.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+</div>
+
+<button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Voltar ao topo">
+    <i class="fa-solid fa-chevron-up"></i>
+</button>
+
+<script>
+function filtrarGrupo(tipo) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    document.querySelectorAll('.bestiary-card').forEach(c => {
+        if (tipo === 'todos') { c.style.display = ''; return; }
+        const isLacaio = c.classList.contains('lacaio-card');
+        c.style.display = (tipo === 'lacaio' && isLacaio) || (tipo === 'maior' && !isLacaio) ? '' : 'none';
+    });
+    document.querySelectorAll('.bestiary-group').forEach(g => {
+        const vis = [...g.querySelectorAll('.bestiary-card')].some(c => c.style.display !== 'none');
+        g.style.display = vis ? '' : 'none';
+    });
+}
+function filtrarOrigem(origem) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    document.querySelectorAll('.bestiary-card').forEach(c => {
+        c.style.display = c.dataset.origem === origem ? '' : 'none';
+    });
+    document.querySelectorAll('.bestiary-group').forEach(g => {
+        const vis = [...g.querySelectorAll('.bestiary-card')].some(c => c.style.display !== 'none');
+        g.style.display = vis ? '' : 'none';
+    });
+}
+</script>
 </body>
 </html>
